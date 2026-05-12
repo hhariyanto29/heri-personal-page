@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hhariyanto29.github.io/heri-personal-page/sitemap.xml
+Sitemap: https://heri-page.vercel.app/sitemap.xml

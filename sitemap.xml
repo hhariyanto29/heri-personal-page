@@ -2,12 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://hhariyanto29.github.io/heri-personal-page/</loc>
+    <loc>https://heri-page.vercel.app/</loc>
     <lastmod>2026-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://hhariyanto29.github.io/heri-personal-page/assets/author.jpg</image:loc>
+      <image:loc>https://heri-page.vercel.app/assets/author.jpg</image:loc>
       <image:title>Heribertus Hariyanto Atmaja</image:title>
     </image:image>
   </url>
