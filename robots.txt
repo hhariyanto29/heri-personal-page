@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hhariyanto29.github.io/heri-personal-page/sitemap.xml
