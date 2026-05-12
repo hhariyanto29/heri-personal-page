@@ -853,15 +853,21 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   margin:0 auto;
   position:relative;
 }
-.letter .letter-heading{
-  font-family:'Fraunces',serif;
-  font-size:clamp(40px,6vw,72px);
-  font-weight:500;
-  letter-spacing:-0.025em;
-  line-height:1.02;
-  margin-bottom:48px;
-  color:var(--ink);
+.letter .stamp{
+  position:absolute;
+  top:-40px;
+  right:-20px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  color:var(--accent);
+  border:2px solid var(--accent);
+  padding:14px 18px;
+  letter-spacing:0.15em;
+  transform:rotate(8deg);
+  text-transform:uppercase;
+  background:var(--paper);
 }
+@media (max-width:780px){.letter .stamp{position:static;display:inline-block;transform:none;margin-bottom:30px}}
 
 .letter .salutation{
   font-family:'Fraunces',serif;
@@ -1549,7 +1555,7 @@ footer .footer-bottom{
 <!-- ============ LETTER ============ -->
 <section class="letter" id="letter">
   <div class="letter-inner">
-    <h2 class="letter-heading">Untuk Yang Datang Berikutnya</h2>
+    <div class="stamp">Untuk Yang Datang Berikutnya</div>
     <div class="salutation">Untuk kamu yang menerima estafet ini,</div>
     <p>Saya tidak tahu siapa kamu. Tapi saya tahu satu hal: <strong>tantanganmu akan berbeda dari tantangan saya</strong>.</p>
 
