@@ -853,21 +853,15 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   margin:0 auto;
   position:relative;
 }
-.letter .stamp{
-  position:absolute;
-  top:-40px;
-  right:-20px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;
-  color:var(--accent);
-  border:2px solid var(--accent);
-  padding:14px 18px;
-  letter-spacing:0.15em;
-  transform:rotate(8deg);
-  text-transform:uppercase;
-  background:var(--paper);
+.letter .letter-heading{
+  font-family:'Fraunces',serif;
+  font-size:clamp(40px,6vw,72px);
+  font-weight:500;
+  letter-spacing:-0.025em;
+  line-height:1.02;
+  margin-bottom:48px;
+  color:var(--ink);
 }
-@media (max-width:780px){.letter .stamp{position:static;display:inline-block;transform:none;margin-bottom:30px}}
 
 .letter .salutation{
   font-family:'Fraunces',serif;
@@ -1555,17 +1549,35 @@ footer .footer-bottom{
 <!-- ============ LETTER ============ -->
 <section class="letter" id="letter">
   <div class="letter-inner">
-    <div class="stamp">Untuk Yang Datang Berikutnya</div>
+    <h2 class="letter-heading">Untuk Yang Datang Berikutnya</h2>
     <div class="salutation">Untuk kamu yang menerima estafet ini,</div>
-    <p>Saya tidak tahu siapa kamu, tapi saya tahu satu hal: kamu akan menghadapi tantangan yang berbeda dari yang saya hadapi. Itu pasti. Tools akan berubah. Tim akan berubah. <em>Stakeholder</em> akan datang dan pergi. Bahkan definisi "project manager" mungkin akan terlihat aneh dalam 5 tahun.</p>
+    <p>Saya tidak tahu siapa kamu. Tapi saya tahu satu hal: <strong>tantanganmu akan berbeda dari tantangan saya</strong>.</p>
 
-    <p>Apa yang saya tinggalkan bukan peta. Itu kompas. Bab-bab di atas adalah cara saya membaca dunia ini per hari ini — Mei 2026. Sebagian akan tetap relevan. Sebagian akan ketinggalan zaman dalam hitungan bulan. Tugasmu adalah mencari tahu mana yang mana.</p>
+    <p>Tools akan berubah. Tim akan berubah. <em>Stakeholder</em> akan datang dan pergi. Cara kerja akan bergeser lagi. Bahkan definisi "project manager" mungkin akan terlihat aneh lima tahun dari sekarang.</p>
 
-    <p>Tapi <strong>ada satu hal yang tidak akan pernah ketinggalan zaman</strong>: orang-orang di sekitar kamu. Engineer yang stuck pada bug Jumat malam. Designer yang tidak yakin design-nya cukup baik. Stakeholder yang takut akan tampilan buruk di kuartal depan. Mereka semua butuh seseorang yang melihat mereka. Yang membuat mereka aman untuk bersuara. Yang mengingat ulang tahun mereka.</p>
+    <p>Yang saya tinggalkan bukan peta. Ini hanya <em>kompas</em>.</p>
 
-    <p>Itu pekerjaan kita yang sebenarnya. AI tidak akan mengambil itu. AI hanya akan membebaskan lebih banyak waktu kita untuk melakukannya dengan lebih baik.</p>
+    <p>Bab-bab di atas adalah cara saya membaca dunia kerja per Mei 2026. Sebagian akan tetap relevan. Sebagian mungkin akan ketinggalan zaman lebih cepat dari yang saya kira.</p>
 
-    <p>Pergilah membuat sesuatu yang baik. Pergilah merawat orang-orangmu. Pergilah mengecewakan saya dengan menjadi PM yang lebih baik daripada yang pernah saya bisa.</p>
+    <p>Tugasmu adalah mencari tahu mana yang masih berguna dan mana yang harus kamu tinggalkan.</p>
+
+    <p>Tapi <strong>ada satu hal yang saya percaya tidak akan cepat usang</strong>: orang-orang di sekitarmu.</p>
+
+    <p>Engineer yang stuck di bug Jumat malam. Designer yang diam-diam tidak yakin dengan hasilnya. Stakeholder yang takut terlihat gagal di depan atasan. Junior yang sebenarnya butuh arahan, tapi terlalu takut bertanya.</p>
+
+    <p>Mereka semua butuh seseorang yang <em>melihat</em> mereka.</p>
+
+    <p>Seseorang yang membuat mereka aman untuk bicara. Seseorang yang membantu mereka memahami prioritas. Seseorang yang cukup peduli untuk bertanya, bukan hanya menagih.</p>
+
+    <p>Itu pekerjaan kita yang sebenarnya.</p>
+
+    <p>AI tidak mengambil bagian itu. Kalau kita menggunakannya dengan benar, AI justru membebaskan lebih banyak waktu kita untuk melakukannya dengan lebih baik.</p>
+
+    <p>Pergilah membuat sesuatu yang baik.</p>
+
+    <p>Pergilah merawat orang-orangmu.</p>
+
+    <p>Dan semoga kamu menjadi PM yang lebih baik daripada saya.</p>
 
     <div class="signoff">
       <div class="signoff-text">Salam hangat,</div>
