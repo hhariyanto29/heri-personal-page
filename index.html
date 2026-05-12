@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Catatan personal Heribertus Hariyanto Atmaja — Project Manager di Emveep — untuk PM penerus di era ketika AI mulai mengambil alih eksekusi teknis.">
+<meta name="theme-color" content="#f5f1ea">
+<meta property="og:title" content="The Handover — Catatan untuk PM Penerus di Era AI">
+<meta property="og:description" content="Sebuah arsip pribadi dari ruang kerja sebuah software house — tentang menjadi project manager di era AI.">
+<meta property="og:type" content="article">
+<title>The Handover — Catatan untuk PM Penerus di Era AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1ea;
+  --bg-alt:#ebe5d8;
+  --ink:#1a1814;
+  --ink-soft:#3d3a33;
+  --muted:#6b6558;
+  --rule:#1a1814;
+  --accent:#c8553d;
+  --accent-soft:#e8a87c;
+  --paper:#fdfaf3;
+  --highlight:#fff3a8;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+.chapter,.intro,.toolstack,.portfolio,.manifesto,.letter{scroll-margin-top:80px}
+@media (max-width:780px){
+  .chapter,.intro,.toolstack,.portfolio,.manifesto,.letter{scroll-margin-top:64px}
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Fraunces',Georgia,serif;
+  font-weight:400;
+  line-height:1.6;
+  overflow-x:hidden;
+  font-feature-settings:"ss01","ss02";
+}
+
+/* Paper grain overlay */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(0,0,0,0.015) 1px, transparent 1px),
+    radial-gradient(circle at 80% 70%, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size:3px 3px, 5px 5px;
+  opacity:0.6;
+}
+
+a{color:inherit;text-decoration:none}
+a.ref{
+  border-bottom:1px solid rgba(200,85,61,0.55);
+  color:var(--accent);
+  transition:all .2s ease;
+  font-style:italic;
+}
+a.ref:hover{
+  background:var(--accent);
+  color:var(--paper);
+  border-bottom-color:var(--accent);
+}
+a.ref:focus-visible{outline-offset:1px}
+
+/* === MASTHEAD === */
+.masthead{
+  border-bottom:2px solid var(--ink);
+  padding:18px 5vw;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  background:var(--bg);
+  z-index:50;
+  font-family:'Inter',sans-serif;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.18em;
+}
+.masthead .vol{display:flex;gap:24px;color:var(--muted)}
+.masthead .vol span:nth-child(2){color:var(--accent);font-weight:500}
+.masthead .logo{
+  font-family:'Fraunces',serif;
+  font-size:22px;
+  font-weight:600;
+  font-style:italic;
+  letter-spacing:-0.01em;
+  text-transform:none;
+}
+.masthead nav{display:flex;gap:28px}
+.masthead nav a{transition:color .2s;color:var(--ink-soft)}
+.masthead nav a:hover{color:var(--accent)}
+
+@media (max-width:780px){
+  .masthead{flex-wrap:wrap;gap:10px;padding:14px 5vw}
+  .masthead nav{display:none}
+  .masthead .vol{font-size:10px;gap:14px}
+}
+
+/* === HERO === */
+.hero{
+  padding:60px 5vw 80px;
+  border-bottom:1px solid var(--ink);
+  position:relative;
+  overflow:hidden;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:60px;
+  align-items:end;
+  max-width:1400px;
+  margin:0 auto;
+}
+.hero .kicker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:0.15em;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:28px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.hero .kicker::before{
+  content:"";
+  width:40px;
+  height:1px;
+  background:var(--accent);
+}
+.hero h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(48px,8vw,128px);
+  line-height:0.92;
+  font-weight:400;
+  letter-spacing:-0.035em;
+  margin-bottom:32px;
+}
+.hero h1 em{
+  font-style:italic;
+  font-weight:300;
+  color:var(--accent);
+}
+.hero h1 .ampersand{
+  font-style:italic;
+  font-weight:300;
+  font-size:0.85em;
+  color:var(--muted);
+}
+.hero .deck{
+  font-size:21px;
+  line-height:1.5;
+  color:var(--ink-soft);
+  max-width:560px;
+  font-weight:300;
+  margin-bottom:40px;
+}
+.hero .byline{
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:0.15em;
+  border-top:1px solid var(--ink);
+  padding-top:18px;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.hero .byline strong{color:var(--ink);font-weight:500}
+
+.hero-aside{
+  border-left:1px solid var(--ink);
+  padding-left:40px;
+  padding-bottom:20px;
+}
+.hero-aside .label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.2em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+.hero-aside .author-name{
+  font-family:'Fraunces',serif;
+  font-size:32px;
+  font-weight:500;
+  letter-spacing:-0.02em;
+  margin-bottom:6px;
+  line-height:1.1;
+}
+.hero-aside .author-role{
+  font-style:italic;
+  color:var(--muted);
+  font-size:16px;
+  margin-bottom:24px;
+}
+.hero-aside .avatar{
+  width:100%;
+  aspect-ratio:4/5;
+  background:var(--ink);
+  margin-bottom:20px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  filter:contrast(1.05) saturate(0.85);
+}
+.hero-aside .avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  display:block;
+  mix-blend-mode:normal;
+}
+.hero-aside .avatar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg, transparent 50%, rgba(26,24,20,0.4) 100%),
+    radial-gradient(circle at 70% 20%, rgba(232,168,124,0.18), transparent 65%);
+  z-index:2;
+  pointer-events:none;
+}
+.hero-aside .avatar::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:radial-gradient(circle at 20% 30%, rgba(0,0,0,0.08) 1px, transparent 1px);
+  background-size:3px 3px;
+  z-index:3;
+  pointer-events:none;
+  opacity:0.6;
+}
+.hero-aside .avatar-frame{
+  position:absolute;
+  top:14px;
+  left:14px;
+  right:14px;
+  bottom:14px;
+  border:1px solid rgba(245,241,234,0.25);
+  z-index:4;
+  pointer-events:none;
+}
+.hero-aside .avatar-tag{
+  position:absolute;
+  bottom:24px;
+  left:24px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.2em;
+  color:var(--paper);
+  text-transform:uppercase;
+  z-index:5;
+  opacity:0.9;
+}
+.hero-aside .quote{
+  font-style:italic;
+  font-size:15px;
+  line-height:1.5;
+  color:var(--ink-soft);
+  padding-left:14px;
+  border-left:3px solid var(--accent);
+}
+
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-aside{border-left:none;border-top:1px solid var(--ink);padding-left:0;padding-top:32px;max-width:340px}
+}
+
+/* === DROPCAP INTRO === */
+.intro{
+  padding:80px 5vw;
+  border-bottom:1px solid var(--ink);
+  background:var(--paper);
+}
+.intro-inner{
+  max-width:780px;
+  margin:0 auto;
+}
+.intro .section-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.2em;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:40px;
+  text-align:center;
+}
+.intro p{
+  font-size:22px;
+  line-height:1.65;
+  margin-bottom:24px;
+  color:var(--ink-soft);
+  font-weight:300;
+}
+.intro p:first-of-type::first-letter{
+  font-family:'Fraunces',serif;
+  float:left;
+  font-size:96px;
+  line-height:0.85;
+  font-weight:500;
+  padding:6px 14px 0 0;
+  color:var(--accent);
+  font-style:italic;
+}
+.intro p strong{
+  font-weight:500;
+  color:var(--ink);
+  background:linear-gradient(transparent 65%, var(--highlight) 65%);
+  padding:0 2px;
+}
+.intro p strong.no-mark{background:none;padding:0}
+
+/* === CHAPTER === */
+.chapter{
+  padding:100px 5vw;
+  border-bottom:1px solid var(--ink);
+  position:relative;
+}
+.chapter:nth-child(even){background:var(--bg-alt)}
+.chapter-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:80px;
+}
+.chapter-meta{
+  position:sticky;
+  top:120px;
+  align-self:start;
+}
+.chapter-number{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:96px;
+  line-height:0.9;
+  font-weight:300;
+  color:var(--accent);
+  margin-bottom:14px;
+}
+.chapter-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding-top:14px;
+  border-top:1px solid var(--ink);
+}
+.chapter-tag span{display:block;color:var(--ink);margin-top:4px;font-weight:500}
+
+.chapter-body h2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(36px,5vw,64px);
+  line-height:1.02;
+  font-weight:400;
+  letter-spacing:-0.025em;
+  margin-bottom:28px;
+  max-width:680px;
+}
+.chapter-body h2 em{font-style:italic;color:var(--accent);font-weight:300}
+.chapter-body .lede{
+  font-size:20px;
+  line-height:1.55;
+  color:var(--ink-soft);
+  margin-bottom:40px;
+  max-width:640px;
+  font-weight:300;
+  font-style:italic;
+}
+.chapter-body p{
+  font-size:17px;
+  line-height:1.75;
+  margin-bottom:20px;
+  max-width:640px;
+  color:var(--ink-soft);
+}
+.chapter-body p strong{color:var(--ink);font-weight:600}
+.chapter-body h3{
+  font-family:'Fraunces',serif;
+  font-size:24px;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  margin:40px 0 14px;
+  color:var(--ink);
+}
+.chapter-body h3::before{
+  content:"§ ";
+  color:var(--accent);
+  font-style:italic;
+  font-weight:300;
+}
+
+.pullquote{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:32px;
+  line-height:1.3;
+  color:var(--ink);
+  margin:48px 0;
+  padding:32px 0;
+  border-top:2px solid var(--ink);
+  border-bottom:2px solid var(--ink);
+  font-weight:400;
+  max-width:680px;
+  position:relative;
+}
+.pullquote::before{
+  content:"\201C";
+  font-size:80px;
+  position:absolute;
+  top:-8px;
+  left:-50px;
+  color:var(--accent);
+  line-height:1;
+  font-style:normal;
+}
+.pullquote.side{
+  border-top:none;
+  border-bottom:none;
+  border-left:3px solid var(--accent);
+  padding:8px 0 8px 28px;
+  font-size:28px;
+}
+.pullquote.side::before{display:none}
+.pullquote.minimal{
+  border:none;
+  padding:8px 0;
+  font-size:30px;
+  text-align:center;
+  max-width:560px;
+  margin:48px auto;
+}
+.pullquote.minimal::before{
+  position:static;
+  display:block;
+  font-size:48px;
+  text-align:center;
+  margin-bottom:-12px;
+}
+@media (max-width:780px){
+  .pullquote::before{display:none}
+  .pullquote.side{padding-left:18px}
+}
+
+ul.notes{
+  list-style:none;
+  margin:24px 0 32px;
+  padding:0;
+  max-width:640px;
+}
+ul.notes li{
+  padding:14px 0 14px 32px;
+  border-bottom:1px dotted var(--muted);
+  font-size:16px;
+  line-height:1.6;
+  color:var(--ink-soft);
+  position:relative;
+}
+ul.notes li::before{
+  content:"❦";
+  position:absolute;
+  left:0;
+  top:14px;
+  color:var(--accent);
+  font-size:16px;
+}
+ul.notes li:last-child{border-bottom:none}
+ul.notes li strong{color:var(--ink);font-weight:600}
+
+/* Reference box at end of each chapter */
+.refs{
+  margin-top:48px;
+  padding:24px 28px;
+  background:var(--paper);
+  border-left:3px solid var(--accent);
+  max-width:640px;
+}
+.refs .refs-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:14px;
+}
+.refs ol{
+  list-style:none;
+  counter-reset:refs;
+  padding:0;
+}
+.refs ol li{
+  counter-increment:refs;
+  padding:8px 0 8px 32px;
+  position:relative;
+  font-size:14px;
+  line-height:1.5;
+  color:var(--ink-soft);
+  border-bottom:1px dotted #d0c8b5;
+}
+.refs ol li:last-child{border-bottom:none}
+.refs ol li::before{
+  content:"[" counter(refs) "]";
+  position:absolute;
+  left:0;
+  top:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--accent);
+  font-weight:500;
+}
+
+@media (max-width:980px){
+  .chapter-inner{grid-template-columns:1fr;gap:30px}
+  .chapter-meta{position:static;display:flex;align-items:baseline;gap:14px}
+  .chapter-number{font-size:42px;margin-bottom:0}
+  .chapter-tag{border-top:none;padding-top:0;font-size:10px}
+  .chapter-tag span{display:inline;margin-top:0;margin-left:6px}
+}
+
+/* === TOOL STACK SECTION === */
+.toolstack{
+  padding:100px 5vw;
+  background:var(--ink);
+  color:var(--bg);
+  border-bottom:1px solid var(--ink);
+}
+.toolstack-inner{max-width:1200px;margin:0 auto}
+.toolstack .section-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.2em;
+  color:var(--accent-soft);
+  text-transform:uppercase;
+  margin-bottom:30px;
+}
+.toolstack h2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(36px,5vw,72px);
+  font-weight:300;
+  letter-spacing:-0.025em;
+  line-height:1.02;
+  margin-bottom:60px;
+  max-width:900px;
+}
+.toolstack h2 em{font-style:italic;color:var(--accent-soft)}
+
+.tool-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:rgba(245,241,234,0.15);
+  border:1px solid rgba(245,241,234,0.15);
+}
+.tool-card{
+  background:var(--ink);
+  padding:32px 28px;
+  transition:background .3s;
+  cursor:default;
+  position:relative;
+}
+.tool-card:hover{background:#252118}
+.tool-card .tool-cat{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.18em;
+  color:var(--accent-soft);
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.tool-card h4{
+  font-family:'Fraunces',serif;
+  font-size:24px;
+  font-weight:500;
+  margin-bottom:8px;
+  letter-spacing:-0.01em;
+}
+.tool-card h4 a{
+  border-bottom:1px solid transparent;
+  transition:border-color .2s;
+}
+.tool-card h4 a:hover{border-bottom-color:var(--accent-soft)}
+.tool-card p{
+  font-size:14px;
+  line-height:1.55;
+  color:#c8c2b3;
+  font-weight:300;
+}
+.tool-card .use-case{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px dotted rgba(245,241,234,0.2);
+  font-size:13px;
+  font-style:italic;
+  color:var(--accent-soft);
+}
+
+@media (max-width:780px){.tool-grid{grid-template-columns:1fr}}
+
+/* === PORTFOLIO / SELECTED WORK === */
+.portfolio{
+  padding:100px 5vw;
+  background:var(--paper);
+  border-bottom:1px solid var(--ink);
+  position:relative;
+}
+.portfolio-inner{max-width:1200px;margin:0 auto}
+.portfolio .section-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.2em;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:30px;
+}
+.portfolio h2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(36px,5vw,72px);
+  font-weight:400;
+  letter-spacing:-0.025em;
+  line-height:1.02;
+  margin-bottom:24px;
+  max-width:900px;
+}
+.portfolio h2 em{font-style:italic;color:var(--accent);font-weight:300}
+.portfolio .portfolio-lede{
+  font-size:19px;
+  line-height:1.6;
+  color:var(--ink-soft);
+  max-width:680px;
+  margin-bottom:70px;
+  font-style:italic;
+  font-weight:300;
+}
+
+.project-list{
+  display:flex;
+  flex-direction:column;
+  border-top:2px solid var(--ink);
+}
+.project{
+  display:grid;
+  grid-template-columns:80px 1fr 1.5fr 180px;
+  gap:40px;
+  padding:36px 0 32px;
+  border-bottom:1px solid var(--ink);
+  align-items:start;
+  transition:background .3s, padding-left .3s;
+  position:relative;
+}
+.project:hover{
+  background:var(--bg-alt);
+  padding-left:16px;
+}
+.project::after{
+  content:"→";
+  position:absolute;
+  right:0;
+  top:36px;
+  font-size:24px;
+  color:var(--muted);
+  opacity:0;
+  transition:opacity .3s, transform .3s;
+  font-family:'Fraunces',serif;
+}
+.project:hover::after{opacity:1; transform:translateX(4px)}
+
+.project-number{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:36px;
+  font-weight:300;
+  color:var(--accent);
+  line-height:1;
+}
+.project-title{
+  font-family:'Fraunces',serif;
+  font-size:26px;
+  font-weight:500;
+  letter-spacing:-0.015em;
+  line-height:1.15;
+  color:var(--ink);
+}
+.project-title .project-status{
+  display:inline-block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  background:var(--accent);
+  color:var(--paper);
+  padding:3px 8px;
+  margin-left:10px;
+  vertical-align:middle;
+  font-weight:500;
+  border-radius:2px;
+}
+.project-title .project-status.current{background:var(--ink)}
+.project-desc{
+  font-size:15px;
+  line-height:1.65;
+  color:var(--ink-soft);
+}
+.project-desc .project-stack{
+  display:block;
+  margin-top:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.08em;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+.project-meta{
+  text-align:right;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.12em;
+  color:var(--muted);
+  text-transform:uppercase;
+  line-height:1.8;
+}
+.project-meta strong{
+  display:block;
+  color:var(--ink);
+  font-weight:500;
+}
+.project-meta .meta-flag{
+  display:inline-block;
+  width:18px;
+  height:12px;
+  margin-right:6px;
+  vertical-align:-1px;
+  border:1px solid rgba(26,24,20,0.2);
+}
+
+@media (max-width:980px){
+  .project{
+    grid-template-columns:50px 1fr;
+    gap:18px 20px;
+    padding:30px 0 26px;
+  }
+  .project-number{font-size:28px}
+  .project-title{font-size:22px; grid-column:2}
+  .project-desc{grid-column:1 / -1; padding-left:0; margin-top:6px}
+  .project-meta{grid-column:1 / -1; text-align:left; margin-top:8px}
+  .project::after{display:none}
+  .project:hover{padding-left:0}
+}
+
+.portfolio-note{
+  margin-top:50px;
+  padding-top:30px;
+  border-top:1px dotted var(--muted);
+  font-size:15px;
+  line-height:1.6;
+  color:var(--ink-soft);
+  font-style:italic;
+  max-width:680px;
+}
+.portfolio-note strong{
+  font-style:normal;
+  color:var(--ink);
+  font-weight:500;
+}
+
+/* === MANIFESTO === */
+.manifesto{
+  padding:120px 5vw;
+  background:var(--paper);
+  border-bottom:1px solid var(--ink);
+  text-align:center;
+}
+.manifesto-inner{max-width:900px;margin:0 auto}
+.manifesto .section-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.2em;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:40px;
+}
+.manifesto h2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(40px,6vw,88px);
+  font-weight:300;
+  font-style:italic;
+  letter-spacing:-0.03em;
+  line-height:1.05;
+  margin-bottom:48px;
+}
+.manifesto h2 strong{
+  font-style:normal;
+  font-weight:500;
+  background:linear-gradient(transparent 65%, var(--highlight) 65%);
+  padding:0 4px;
+}
+.manifesto .principles{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:48px 60px;
+  text-align:left;
+  margin-top:60px;
+}
+.principle{position:relative;padding-top:16px}
+.principle::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:40px;
+  height:2px;
+  background:var(--accent);
+}
+.principle h3{
+  font-family:'Fraunces',serif;
+  font-size:22px;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  margin-bottom:10px;
+}
+.principle p{
+  font-size:15px;
+  line-height:1.6;
+  color:var(--ink-soft);
+}
+@media (max-width:780px){.manifesto .principles{grid-template-columns:1fr}}
+
+/* === CLOSING LETTER === */
+.letter{
+  padding:120px 5vw;
+  background:var(--bg);
+}
+.letter-inner{
+  max-width:680px;
+  margin:0 auto;
+  position:relative;
+}
+.letter .stamp{
+  position:absolute;
+  top:-40px;
+  right:-20px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  color:var(--accent);
+  border:2px solid var(--accent);
+  padding:14px 18px;
+  letter-spacing:0.15em;
+  transform:rotate(8deg);
+  text-transform:uppercase;
+  background:var(--paper);
+}
+@media (max-width:780px){.letter .stamp{position:static;display:inline-block;transform:none;margin-bottom:30px}}
+
+.letter .salutation{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:36px;
+  font-weight:400;
+  margin-bottom:32px;
+  letter-spacing:-0.01em;
+}
+.letter p{
+  font-family:'Fraunces',serif;
+  font-size:19px;
+  line-height:1.7;
+  color:var(--ink-soft);
+  margin-bottom:22px;
+  font-weight:400;
+}
+.letter p strong{color:var(--ink);font-weight:500}
+.letter .signoff{
+  margin-top:48px;
+  padding-top:32px;
+  border-top:1px solid var(--ink);
+}
+.letter .signoff-text{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:22px;
+  margin-bottom:8px;
+}
+.letter .signature{
+  font-family:'Fraunces',serif;
+  font-size:42px;
+  font-weight:500;
+  font-style:italic;
+  color:var(--accent);
+  letter-spacing:-0.02em;
+  margin-bottom:6px;
+}
+.letter .signature-role{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.contact-strip{
+  margin-top:60px;
+  padding:32px;
+  border:1px solid var(--ink);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:24px;
+  background:var(--paper);
+}
+.contact-strip .ct-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.contact-strip .ct-links{display:flex;gap:24px;flex-wrap:wrap}
+.contact-strip .ct-links a{
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  letter-spacing:0.05em;
+  border-bottom:1px solid var(--ink);
+  padding-bottom:2px;
+  transition:all .2s;
+}
+.contact-strip .ct-links a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* === COLOPHON === */
+footer{
+  background:var(--ink);
+  color:var(--bg);
+  padding:50px 5vw 30px;
+  font-family:'Inter',sans-serif;
+  font-size:12px;
+  letter-spacing:0.05em;
+}
+footer .colophon{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  gap:30px;
+  padding-bottom:30px;
+  border-bottom:1px solid rgba(245,241,234,0.2);
+}
+footer .colophon-block{max-width:280px}
+footer .colophon-block .ttl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--accent-soft);
+  margin-bottom:10px;
+}
+footer .colophon-block p{
+  font-size:13px;
+  line-height:1.6;
+  color:#c8c2b3;
+}
+footer .footer-bottom{
+  max-width:1200px;
+  margin:24px auto 0;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:14px;
+  color:#8a8475;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.15em;
+}
+
+/* === RESPONSIVE TYPOGRAPHY === */
+@media (max-width:600px){
+  .hero{padding:40px 5vw 60px}
+  .chapter{padding:70px 5vw}
+  .intro,.toolstack,.manifesto,.letter{padding:70px 5vw}
+  .tool-card{padding:24px 20px}
+}
+
+/* === SCROLL REVEAL === */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease}
+.reveal.show{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ MASTHEAD ============ -->
+<header class="masthead">
+  <div class="vol">
+    <span>Vol. 01 · 2026</span>
+    <span>The Handover Issue</span>
+  </div>
+  <div class="logo">The Handover</div>
+  <nav>
+    <a href="#intro">Prolog</a>
+    <a href="#ch1">Bab</a>
+    <a href="#stack">Stack</a>
+    <a href="#portfolio">Work</a>
+    <a href="#manifesto">Manifesto</a>
+    <a href="#letter">Surat</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="kicker" lang="en">An essay for whoever takes this seat next</div>
+      <h1 lang="en">The Things I Wish <em>Someone Told Me</em> <span class="ampersand">&amp;</span> Wish I Knew Sooner.</h1>
+      <p class="deck">Sebuah arsip pribadi dari ruang kerja sebuah <em>software house</em> — tentang menjadi <em>project manager</em> di era ketika AI tidak hanya membantu, tetapi mulai mengambil alih pekerjaan teknis. Dan kenapa peran kita justru menjadi <em>lebih penting</em>, bukan sebaliknya.</p>
+      <div class="byline">
+        <span>Sebuah catatan dari <strong>Heribertus Hariyanto Atmaja</strong></span>
+        <span>Estimasi membaca · 14 menit</span>
+        <span>Ditulis · 2026</span>
+      </div>
+    </div>
+    <aside class="hero-aside">
+      <div class="label">— The Author</div>
+      <div class="avatar">
+        <img src="assets/author.jpg" alt="Foto Heribertus Hariyanto Atmaja" loading="lazy" decoding="async" width="559" height="619">
+        <div class="avatar-frame"></div>
+        <div class="avatar-tag">— PM · 2026</div>
+      </div>
+      <div class="author-name">Heribertus Hariyanto Atmaja</div>
+      <div class="author-role">Project Manager · Emveep · Software House</div>
+      <div class="quote">"Pekerjaan terbaik seorang PM bukan mengatur orang — tapi membuat mereka tidak perlu diatur."</div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ PROLOG ============ -->
+<section class="intro" id="intro">
+  <div class="intro-inner">
+    <div class="section-label">— Prolog —</div>
+    <p>Tulisan ini bukan tutorial. Bukan juga buku teks tentang <em>Agile</em>, <em>Scrum</em>, atau metodologi proyek yang bisa kamu pelajari dari <a class="ref" href="https://www.pmi.org/learning/library" target="_blank" rel="noopener">PMI Knowledge Library</a> atau <a class="ref" href="https://www.atlassian.com/agile" target="_blank" rel="noopener">Atlassian Agile Coach</a>. Ini adalah catatan personal — kumpulan hal yang saya pelajari setelah bertahun-tahun mengoordinasikan tim, menggagalkan beberapa proyek, dan menyelamatkan lebih banyak lagi.</p>
+
+    <p>Saya menulisnya karena <strong>industri kita berubah lebih cepat dari yang saya antisipasi</strong>. Di Emveep, saya menyaksikan langsung pergeserannya — dua tahun lalu, MVP klien butuh 6 minggu dan tim 4 orang. Hari ini, satu engineer dengan <em>Claude Code</em>, <em>Codex</em>, dan <em>Lovable</em> bisa <em>shipping</em> dalam akhir pekan. Pertanyaannya bukan lagi "bagaimana kita membangun ini" — tapi "apakah ini layak dibangun, dan untuk siapa".</p>
+
+    <p>Di situlah PM mendapatkan tempatnya kembali. Bukan sebagai <em>task tracker</em> — Trello, Notion, dan AI agent sudah membantu hal itu — tapi sebagai <strong>orang yang bertanggung jawab atas konteks</strong>. Konteks bisnis, konteks pengguna, konteks tim, konteks waktu. Konteks yang tidak ada di prompt manapun.</p>
+
+    <p>Yang akan kamu baca selanjutnya bukan kebenaran absolut. Hanya hal-hal yang saya harap seseorang katakan kepada saya lebih awal. Ambil yang berguna, abaikan sisanya. Kamu akan menemukan jalanmu sendiri.</p>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 1 — FUNDAMENTAL ============ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">01</div>
+      <div class="chapter-tag">Bab Pertama<span>Fundamental</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Planning bukan tentang <em>jadwal</em>. Tentang <em>asumsi</em>.</h2>
+      <p class="lede">Setiap Gantt chart yang pernah saya buat di awal karier ternyata fiksi. Bukan karena timnya buruk — tapi karena saya pikir <em>planning</em> adalah memprediksi waktu, padahal sebenarnya adalah memetakan ketidakpastian.</p>
+
+      <p>Pelajaran termahal saya: <strong>jadwal proyek bukan kontrak dengan realita</strong>. Itu adalah hipotesis. Setiap deadline yang kamu tulis sebenarnya mengandung asumsi tersembunyi — bahwa <em>dependency</em> akan selesai tepat waktu, bahwa <em>requirement</em> tidak berubah, bahwa orangnya tidak sakit, bahwa <em>scope creep</em> tidak terjadi. Ini yang dijelaskan <a class="ref" href="https://en.wikipedia.org/wiki/Hofstadter%27s_law" target="_blank" rel="noopener">Hofstadter's Law</a> dengan sempurna: "It always takes longer than you expect, even when you take into account Hofstadter's Law."</p>
+
+      <p>Jadi sekarang saya melakukan dua hal yang berbeda dari kebanyakan PM:</p>
+
+      <h3>Saya membuat asumsi <em>eksplisit</em>, bukan jadwal</h3>
+      <p>Setiap milestone diikat dengan asumsi yang harus benar. Kalau asumsinya berubah, jadwalnya otomatis berubah. Ini bukan ide saya — saya pinjam dari <a class="ref" href="https://www.bcg.com/publications/2023/managing-uncertainty-in-projects" target="_blank" rel="noopener">framework BCG tentang Discovery-Driven Planning</a> dan konsep <em>assumption mapping</em> yang juga dibahas di <a class="ref" href="https://strategyzer.com/library/assumptions-mapping" target="_blank" rel="noopener">Strategyzer</a>.</p>
+
+      <h3>Saya selalu memisahkan <em>komitmen</em> dari <em>perkiraan</em></h3>
+      <p>Stakeholder boleh tahu perkiraan, tapi hanya boleh diikat oleh komitmen. Perkiraan adalah pekerjaan Anda. Komitmen adalah janji. Banyak konflik PM-stakeholder muncul karena dua hal ini dicampur.</p>
+
+      <div class="pullquote">Stakeholder tidak frustrasi karena Anda terlambat. Mereka frustrasi karena mereka <em>tahu terlambat</em> belakangan.</div>
+
+      <h3>Risk register itu bukan dokumen — tapi <em>kebiasaan</em></h3>
+      <p>Format risk register yang paling efektif yang saya temukan bukan tabel di Confluence yang tidak pernah diupdate. Tapi <strong>5 menit di awal setiap weekly</strong>: "Apa yang membuat kamu khawatir minggu ini?" Itu saja. Jawaban tim selalu lebih jujur daripada apapun yang ditulis di dokumen formal. Pendekatan ini sangat dipengaruhi oleh konsep <em>psychological safety</em> dari risetnya <a class="ref" href="https://www.hbs.edu/faculty/Pages/profile.aspx?facId=6451" target="_blank" rel="noopener">Amy Edmondson di Harvard</a> dan studi <a class="ref" href="https://rework.withgoogle.com/print/guides/5721312655835136/" target="_blank" rel="noopener">Project Aristotle Google</a>.</p>
+
+      <h3>Stakeholder mapping dilakukan <em>sebelum</em> Anda butuh</h3>
+      <p>Pelajaran lain yang mahal: mengelola stakeholder bukan keterampilan komunikasi, tapi <strong>keterampilan politik</strong> — dan saya tidak bermaksud kotor. Setiap stakeholder punya KPI sendiri, tekanan dari atasannya sendiri, dan ketakutan sendiri. Tugas PM adalah memahami semua itu sebelum harus minta sesuatu. <a class="ref" href="https://www.mindtools.com/aol0rms/stakeholder-analysis" target="_blank" rel="noopener">Stakeholder Analysis dari MindTools</a> adalah titik awal yang baik, dan <a class="ref" href="https://hbr.org/2007/11/influence-management-the-art-of-creating-and-sharing-value" target="_blank" rel="noopener">artikel HBR tentang influence management</a> mengisi sisanya.</p>
+
+      <div class="refs">
+        <div class="refs-title">— Bacaan Lanjutan</div>
+        <ol>
+          <li><a class="ref" href="https://www.pmi.org/pmbok-guide-standards" target="_blank" rel="noopener">PMBOK Guide 7th Edition</a> — Standar global PM, terutama bagian <em>principles-based approach</em>.</li>
+          <li><a class="ref" href="https://www.shapeup.com/" target="_blank" rel="noopener">Shape Up — Basecamp</a> — Alternatif planning yang lebih realistis daripada Sprint biasa.</li>
+          <li><a class="ref" href="https://hbr.org/1995/05/discovery-driven-planning" target="_blank" rel="noopener">Discovery-Driven Planning — McGrath &amp; MacMillan, HBR</a></li>
+          <li><a class="ref" href="https://www.amazon.com/Making-Things-Happen-Mastering-Management/dp/0596517718" target="_blank" rel="noopener">"Making Things Happen" — Scott Berkun</a> — Buku PM terbaik yang pernah saya baca.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 2 — AI TOOLS ============ -->
+<section class="chapter" id="ch2">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">02</div>
+      <div class="chapter-tag">Bab Kedua<span>AI Tools</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>AI tools tidak menggantikanmu. Tapi PM yang <em>tidak pakai AI</em> akan tergantikan.</h2>
+      <p class="lede">Ini bukan opini saya — ini observasi yang sudah dikonfirmasi oleh banyak laporan industri. Yang paling jelas: World Economic Forum's Future of Jobs Report 2025 menyebut <em>AI literacy</em> sebagai skill #2 yang paling dicari tahun ini.</p>
+
+      <p>Tapi saya ingin jujur: saya pernah skeptis. Saya pikir AI hanya akan menghasilkan ringkasan rapat yang dangkal dan email yang terdengar palsu. Saya salah. Bukan karena AI-nya hebat — tapi karena <strong>saya salah memikirkan caranya</strong>. Saya pakai AI seperti asisten yang mengerjakan tugas. Yang benar: pakai AI seperti <em>thinking partner</em> yang menantang asumsimu.</p>
+
+      <h3>Pergeseran mental: dari <em>prompt</em> ke <em>konteks</em></h3>
+      <p>Mantra lama "prompt engineering" sudah mati. Yang penting sekarang adalah <strong>context engineering</strong> — bagaimana kamu memberi AI cukup latar belakang untuk berpikir bersamamu. Ini dijelaskan dengan sangat baik di <a class="ref" href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener">artikel Anthropic tentang Contextual Retrieval</a>, dan juga di <a class="ref" href="https://www.latent.space/p/context-engineering" target="_blank" rel="noopener">esai Latent Space tentang Context Engineering</a>.</p>
+
+      <p>Dalam praktiknya: saya tidak pernah lagi mengetik "buatkan saya project plan". Saya menulis konteks selama 5–10 menit — siapa stakeholder-nya, batasannya, sejarah masalahnya, gaya komunikasi tim — baru meminta bantuan. Outputnya berbeda drastis.</p>
+
+      <div class="pullquote minimal">AI memperbesar apa yang kamu bawa ke meja. Kalau pemikiranmu dangkal, AI hanya akan menghasilkan kedangkalan yang lebih cepat.</div>
+
+      <h3>Empat tempat AI mengubah pekerjaan harian saya</h3>
+
+      <ul class="notes">
+        <li><strong>Synthesis rapat &amp; dokumen</strong> — Saya pakai <a class="ref" href="https://claude.ai" target="_blank" rel="noopener">Claude</a> untuk merangkum 1 jam rapat menjadi <em>action items</em>, <em>open questions</em>, dan <em>decision log</em>. Bukan hanya transkrip. Risetnya <a class="ref" href="https://www.microsoft.com/en-us/worklab/work-trend-index/" target="_blank" rel="noopener">Microsoft Work Trend Index</a> menunjukkan rata-rata pekerja menghemat 30 menit per hari dari ini saja.</li>
+        <li><strong>Stakeholder communication</strong> — Drafting email sulit. AI membantu saya mengatur ulang nada — dari "frustrasi" ke "profesional yang asertif" — tanpa kehilangan substansi. Lihat <a class="ref" href="https://hbr.org/2024/05/how-people-are-really-using-genai" target="_blank" rel="noopener">survey HBR "How People Are Really Using GenAI"</a> — komunikasi adalah use case #1.</li>
+        <li><strong>Risk &amp; pre-mortem analysis</strong> — Saya minta AI berperan sebagai "PM senior yang skeptis" dan mengkritik rencana saya. Teknik <em>pre-mortem</em> dari <a class="ref" href="https://hbr.org/2007/09/performing-a-project-premortem" target="_blank" rel="noopener">Gary Klein di HBR</a> jadi 10x lebih kuat dengan AI.</li>
+        <li><strong>Knowledge retrieval di tools</strong> — <a class="ref" href="https://www.notion.so/help/notion-ai" target="_blank" rel="noopener">Notion AI</a> dan <a class="ref" href="https://www.atlassian.com/software/artificial-intelligence" target="_blank" rel="noopener">Atlassian Intelligence</a> sudah mencari konteks lintas dokumen. "Apa keputusan kita tentang X 3 bulan lalu?" — jawaban dalam 5 detik.</li>
+      </ul>
+
+      <h3>Tools yang saya pakai aktif setiap hari</h3>
+      <p>Saya akan menulis daftar lengkapnya di bagian Stack — tapi prinsipnya: <strong>pilih 3–4 tools, bukan 15</strong>. Penggunaan dalam adalah cara mendapatkan nilai, bukan koleksi. Ini juga argumen utama di <a class="ref" href="https://a16z.com/the-economic-case-for-generative-ai-and-foundation-models/" target="_blank" rel="noopener">esai a16z tentang ekonomi GenAI</a>.</p>
+
+      <div class="refs">
+        <div class="refs-title">— Referensi &amp; Riset</div>
+        <ol>
+          <li><a class="ref" href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener">WEF Future of Jobs Report 2025</a></li>
+          <li><a class="ref" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener">McKinsey — The State of AI 2024/2025</a></li>
+          <li><a class="ref" href="https://www.anthropic.com/news/prompt-engineering-for-business-performance" target="_blank" rel="noopener">Anthropic — Prompting Best Practices</a></li>
+          <li><a class="ref" href="https://hbr.org/2024/05/how-people-are-really-using-genai" target="_blank" rel="noopener">HBR — How People Are Really Using GenAI</a> (Marc Zao-Sanders)</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 3 — AGENTS ============ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">03</div>
+      <div class="chapter-tag">Bab Ketiga<span>Agents &amp; Automation</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Tahun 2026 adalah tahun <em>agen</em>. Tapi mereka butuh PM.</h2>
+      <p class="lede">Jika 2023 adalah tentang <em>chat</em>, 2024 tentang <em>tools</em>, maka 2025–2026 adalah tentang <em>agents</em>. AI yang tidak hanya menjawab, tapi <em>mengeksekusi</em>. Ini mengubah definisi "tim" yang kamu kelola.</p>
+
+      <p>Beberapa bulan lalu, saya menjalankan eksperimen kecil: saya men-<em>deploy</em> sebuah agen otonom di Raspberry Pi saya — namanya <strong>Openclaw</strong> — dan menugaskannya satu <em>workflow</em> kompetitif intelligence yang biasanya butuh 3 hari analis junior. Agen ini berjalan 24/7, menelusuri sumber, mengirim ringkasan harian ke WhatsApp saya, dan mengeksekusi task ringan di laptop saya. Hasil pertama selesai dalam 40 menit, kualitas yang setara. Tapi yang menarik bukan itu. Yang menarik: <strong>saya tetap perlu mereview, mengarahkan ulang, dan memutuskan</strong>. Agen tidak menggantikan saya. Mereka menggantikan <em>eksekusi</em> saya. Penilaian masih pekerjaan saya.</p>
+
+      <h3>Apa itu "agen" sebenarnya?</h3>
+      <p>Definisi yang saya pakai datang dari <a class="ref" href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener">"Building Effective Agents" oleh Anthropic</a>: agen adalah sistem dimana LLM secara dinamis mengarahkan proses dan penggunaan toolnya sendiri, mempertahankan kontrol atas bagaimana mereka menyelesaikan tugas. Ini berbeda dengan <em>workflow</em> yang prosesnya sudah ditentukan kode di luar.</p>
+
+      <div class="pullquote side">Agen tidak menggantikan pekerjaanmu. Mereka menggantikan <em>eksekusi</em>. Penilaian masih pekerjaanmu.</div>
+
+      <h3>Mengelola agen = mengelola tim baru</h3>
+      <p>Anehnya, prinsip mengelola agen mirip dengan mengelola anggota tim baru:</p>
+
+      <ul class="notes">
+        <li><strong>Onboarding adalah investasi besar di depan.</strong> Beri agen konteks lengkap — dokumen, contoh hasil yang baik, batas yang jelas. Riset <a class="ref" href="https://arxiv.org/abs/2302.11382" target="_blank" rel="noopener">"Prompt Patterns" di arXiv</a> mendukung ini.</li>
+        <li><strong>Tetapkan "definition of done" yang ketat.</strong> Agen sangat baik mengejar metrik, sangat buruk menebak intent. Eksplisit selalu menang.</li>
+        <li><strong>Review awal, kemudian sampling.</strong> Awal-awal: review 100% output. Setelah kepercayaan terbangun: sample 10–20%. Sama seperti mengelola junior.</li>
+        <li><strong>Human-in-the-loop di setiap titik tinggi-resiko.</strong> Approval, eksekusi yang tidak bisa dibatalkan, atau keputusan dengan implikasi reputasi — selalu human gate. Ini adalah inti rekomendasi <a class="ref" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI Risk Management Framework</a>.</li>
+      </ul>
+
+      <h3>Stack agen sederhana yang saya jalankan</h3>
+      <p>Untuk PM yang baru mulai, ada dua jalur — pilih sesuai kebutuhan dan kontrol yang kamu inginkan atas data:</p>
+
+      <p><strong>Jalur 1 — Managed &amp; visual</strong> (lebih cepat untuk mulai, tapi data ada di server pihak ketiga):</p>
+      <ul class="notes">
+        <li><strong><a class="ref" href="https://zapier.com/agents" target="_blank" rel="noopener">Zapier Agents</a></strong> atau <strong><a class="ref" href="https://make.com" target="_blank" rel="noopener">Make</a></strong> — Automation visual untuk task berulang.</li>
+        <li><strong><a class="ref" href="https://www.lindy.ai" target="_blank" rel="noopener">Lindy</a></strong> atau <strong><a class="ref" href="https://relay.app" target="_blank" rel="noopener">Relay.app</a></strong> — Workflow AI-first yang lebih natural.</li>
+        <li><strong><a class="ref" href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP (Model Context Protocol)</a></strong> — Standar terbuka dari Anthropic untuk menghubungkan AI ke tools yang sudah Anda pakai (Jira, Notion, Linear, Gmail). Ini akan menjadi standar industri.</li>
+      </ul>
+
+      <p><strong>Jalur 2 — Self-hosted &amp; otonom</strong> (kontrol penuh atas data, butuh sedikit setup teknis):</p>
+      <ul class="notes">
+        <li><strong>Openclaw</strong> — Agen AI otonom open-source yang berjalan di mesin sendiri (PC, VPS, atau Raspberry Pi). Yang menarik: ia bukan sekadar chatbot — ia bisa mengeksekusi aksi nyata (membaca/menulis file, menjalankan skrip, mengirim pesan) lewat WhatsApp atau Discord. Saya pakai ini sebagai asisten pribadi 24/7 — monitoring sumber riset, ringkasan harian, dan eksekusi task ringan. Yang paling penting: <em>data tidak pernah meninggalkan mesin saya</em>.</li>
+        <li><strong><a class="ref" href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a></strong> — Akses ke berbagai LLM (GPT, Claude, Gemini) dalam satu API. Berguna untuk agen self-hosted yang butuh fleksibilitas model.</li>
+      </ul>
+
+      <p>Pilihan saya pribadi: <strong>kombinasi keduanya</strong>. Tools managed untuk workflow yang melibatkan service eksternal (Notion, email klien). Self-hosted untuk hal yang sensitif atau yang saya ingin kontrol penuh.</p>
+
+      <div class="refs">
+        <div class="refs-title">— Referensi Esensial</div>
+        <ol>
+          <li><a class="ref" href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener">Anthropic — Building Effective Agents</a></li>
+          <li><a class="ref" href="https://openai.com/index/practices-for-governing-agentic-ai-systems/" target="_blank" rel="noopener">OpenAI — Practices for Governing Agentic AI Systems</a></li>
+          <li><a class="ref" href="https://www.deeplearning.ai/the-batch/issue-241/" target="_blank" rel="noopener">DeepLearning.AI The Batch — Agentic Workflows (Andrew Ng)</a></li>
+          <li><a class="ref" href="https://huyenchip.com/2025/01/07/agents.html" target="_blank" rel="noopener">Chip Huyen — Agents (2025)</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 4 — MVP CREATORS ============ -->
+<section class="chapter" id="ch4">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">04</div>
+      <div class="chapter-tag">Bab Keempat<span>AI as MVP Creator</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Ketika MVP dibuat dalam <em>akhir pekan</em>, peran PM berubah.</h2>
+      <p class="lede">Saya akan blak-blakan: tools seperti Lovable, Claude Code, dan Codex sudah mengubah ekonomi pembuatan MVP. Yang dulu butuh 2 sprint sekarang butuh 2 hari. Kalau Anda PM yang masih mengukur produktivitas berdasarkan <em>velocity story points</em>, Anda mengukur hal yang salah.</p>
+
+      <p>Saya pernah skeptis. Sampai saya melihat sendiri di Emveep — engineer di tim membangun fitur internal yang lengkap (frontend, auth, database) dalam satu malam dengan <a class="ref" href="https://lovable.dev" target="_blank" rel="noopener">Lovable</a>. Bukan <em>prototype</em>. <em>Functional MVP</em>. Yang dulu butuh tim 3 orang × 4 minggu.</p>
+
+      <h3>Tools yang saya pakai dan untuk apa</h3>
+      <ul class="notes">
+        <li><strong><a class="ref" href="https://lovable.dev" target="_blank" rel="noopener">Lovable</a></strong> — Aplikasi full-stack lengkap dengan database &amp; auth. Bagus untuk MVP SaaS dan demo cepat ke klien. Ini favorit saya untuk validasi konsep awal.</li>
+        <li><strong><a class="ref" href="https://www.anthropic.com/claude-code" target="_blank" rel="noopener">Claude Code</a></strong> — Terminal-based, paling kuat untuk codebase yang sudah ada. Saya pakai untuk <em>internal tools</em> dan diskusi teknis dengan tim engineering.</li>
+        <li><strong><a class="ref" href="https://openai.com/index/openai-codex/" target="_blank" rel="noopener">Codex</a></strong> — Sebagai pelengkap Claude Code. Pendekatan yang berbeda terhadap masalah yang sama sering memberi insight baru.</li>
+        <li>Tools lain yang relevan untuk diketahui: <a class="ref" href="https://v0.dev" target="_blank" rel="noopener">v0 by Vercel</a> (komponen UI), <a class="ref" href="https://bolt.new" target="_blank" rel="noopener">Bolt.new</a> (browser-based full-stack), <a class="ref" href="https://www.cursor.com" target="_blank" rel="noopener">Cursor</a> (IDE AI-native). Pilih yang sesuai konteks pekerjaanmu.</li>
+      </ul>
+
+      <div class="pullquote">PM yang dulu menulis PRD 20 halaman sekarang membangun <em>prototype-nya sendiri</em> sebagai PRD. Spesifikasi yang dieksekusi adalah spesifikasi yang dipahami.</div>
+
+      <h3>Apa artinya bagi peran PM?</h3>
+
+      <p><strong>Pertama: Discovery jadi jauh lebih penting daripada delivery.</strong> Kalau membangun mudah, pertanyaan kritis bergeser ke "haruskah kita membangun ini?" Ini sudah dibahas berulang oleh <a class="ref" href="https://www.svpg.com/inspired-how-to-create-products-customers-love/" target="_blank" rel="noopener">Marty Cagan di buku Inspired</a> dan komunitas <a class="ref" href="https://www.producttalk.org" target="_blank" rel="noopener">Product Talk milik Teresa Torres</a>. Hari ini argumennya lebih kuat lagi.</p>
+
+      <p><strong>Kedua: PM bisa — dan harus — bisa membuat prototype sendiri.</strong> Bukan untuk menggantikan engineer, tapi untuk:</p>
+      <ul class="notes">
+        <li>Memvalidasi ide tanpa mengantri ke tim development</li>
+        <li>Berkomunikasi spesifikasi dengan demo, bukan dokumen</li>
+        <li>Mengetes asumsi UX dengan user nyata dalam jam, bukan minggu</li>
+        <li>Memahami batasan teknis dengan sungguh-sungguh, bukan teoritis</li>
+      </ul>
+
+      <p><strong>Ketiga: definisi "ready" untuk development berubah.</strong> Karena MVP murah, saya sekarang menyaring lebih ketat di tahap discovery. Lebih baik membatalkan 3 ide buruk dengan AI prototype dalam seminggu daripada membangun 1 ide buruk selama sebulan dengan tim penuh. <a class="ref" href="https://andrewchen.com/the-cold-start-problem/" target="_blank" rel="noopener">Andrew Chen — The Cold Start Problem</a> membahas mengapa ini penting di tahap awal.</p>
+
+      <h3>Catatan penting: <em>vibe coding</em> bukan rekayasa perangkat lunak</h3>
+      <p>Saya melihat banyak PM bersemangat lalu menggunakan AI MVP tools untuk produksi tanpa pemahaman teknis. Itu berbahaya. Output AI tools ini bagus untuk prototype, validation, dan internal tools — tapi <strong>untuk produksi customer-facing</strong>, kamu masih butuh engineer yang melakukan review keamanan, skalabilitas, dan maintainability. Pendiri Vercel sendiri, Guillermo Rauch, menulis tentang ini di <a class="ref" href="https://vercel.com/blog/ai-and-the-future-of-the-web" target="_blank" rel="noopener">esainya tentang masa depan web</a>.</p>
+
+      <div class="refs">
+        <div class="refs-title">— Bacaan &amp; Eksperimen</div>
+        <ol>
+          <li><a class="ref" href="https://www.svpg.com/" target="_blank" rel="noopener">Silicon Valley Product Group (Marty Cagan)</a> — Esensi discovery vs delivery.</li>
+          <li><a class="ref" href="https://www.producttalk.org/continuous-discovery-habits/" target="_blank" rel="noopener">Continuous Discovery Habits — Teresa Torres</a></li>
+          <li><a class="ref" href="https://www.lennysnewsletter.com/" target="_blank" rel="noopener">Lenny's Newsletter</a> — Studi kasus PM modern.</li>
+          <li><a class="ref" href="https://every.to/chain-of-thought" target="_blank" rel="noopener">Every — Chain of Thought (Dan Shipper)</a> — Eksperimen aktual menggunakan AI untuk produk.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 5 — SOFT SKILLS ============ -->
+<section class="chapter" id="ch5">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">05</div>
+      <div class="chapter-tag">Bab Kelima<span>Soft Skills &amp; Team</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Hal yang AI <em>tidak akan pernah</em> bisa lakukan untukmu.</h2>
+      <p class="lede">Semua bab sebelumnya tentang tools dan pergeseran. Tapi kebenaran pahit yang saya pelajari: kemampuan paling penting seorang PM justru hal yang paling sulit dipindahkan ke AI. Membaca ruangan. Membangun kepercayaan. Tahu kapan harus diam.</p>
+
+      <h3>Membaca ruangan bukan keterampilan lunak — itu pekerjaan kerasmu</h3>
+      <p>Ketika engineer senior tiba-tiba diam di meeting padahal biasanya vokal — itu sinyal. Ketika designer menggunakan kata "menarik" untuk merespons ide — itu sinyal. Ketika stakeholder hanya membalas email kamu dengan "Noted." — itu sinyal. PM yang baik membaca semua ini secara real-time, dan AI tidak melihatnya. <a class="ref" href="https://hbr.org/2017/02/the-leader-as-coach" target="_blank" rel="noopener">Riset HBR tentang "The Leader as Coach"</a> menyebut ini <em>contextual intelligence</em>.</p>
+
+      <div class="pullquote minimal">Trust dibangun di rapat 1:1, bukan di Slack. Dan trust adalah satu-satunya mata uang yang tidak terdevaluasi oleh AI.</div>
+
+      <h3>Tiga hal yang saya lakukan untuk membangun trust dengan tim</h3>
+      <ul class="notes">
+        <li><strong>1:1 yang sungguh-sungguh, bukan status update.</strong> Saya tidak pernah membuka 1:1 dengan "bagaimana progress X?". Saya buka dengan "bagaimana kabarmu minggu ini?". Status ada di tools. 1:1 untuk hal yang tidak ada di tools. Lihat <a class="ref" href="https://lattice.com/library/the-ultimate-guide-to-1-1-meetings-for-managers-and-employees" target="_blank" rel="noopener">panduan 1:1 dari Lattice</a> untuk frameworknya.</li>
+        <li><strong>Mengakui ketidaktahuan secara publik.</strong> "Saya tidak tahu, mari kita cari tahu" mengembalikan banyak <em>credibility</em>, bukan menghilangkannya. Konsep ini diteliti oleh <a class="ref" href="https://www.brenebrown.com/book/dare-to-lead/" target="_blank" rel="noopener">Brené Brown di "Dare to Lead"</a>.</li>
+        <li><strong>Mengambil tanggung jawab penuh ketika ada masalah, kredit penuh untuk tim ketika berhasil.</strong> Sederhana. Sulit dipraktikkan. Tapi tidak ada substitusinya.</li>
+      </ul>
+
+      <h3>Memberikan feedback adalah keterampilan, bukan bakat</h3>
+      <p>Saya butuh waktu bertahun-tahun untuk belajar memberi feedback dengan baik. Dua framework yang paling membantu:</p>
+      <ul class="notes">
+        <li><strong><a class="ref" href="https://www.radicalcandor.com/our-approach/" target="_blank" rel="noopener">Radical Candor — Kim Scott</a></strong> — "Care personally, challenge directly". Salah satu pilar boleh tanpa yang lain.</li>
+        <li><strong><a class="ref" href="https://hbr.org/2019/03/the-feedback-fallacy" target="_blank" rel="noopener">The Feedback Fallacy — HBR (Buckingham &amp; Goodall)</a></strong> — Argumen kontra-intuitif bahwa banyak praktik feedback standard justru merusak.</li>
+      </ul>
+
+      <h3>Konflik adalah informasi, bukan masalah</h3>
+      <p>Ketika dua engineer berdebat tentang arsitektur, itu bukan drama yang harus diredakan. Itu informasi penting tentang trade-off teknis yang sedang dipertaruhkan. Pekerjaan PM bukan menghentikan konflik, tapi <strong>memastikan konflik ada di tempatnya — soal ide, bukan soal orang</strong>. Framework yang berguna: <a class="ref" href="https://www.tablegroup.com/topics-and-resources/teamwork-5-dysfunctions/" target="_blank" rel="noopener">"Five Dysfunctions of a Team" oleh Patrick Lencioni</a>.</p>
+
+      <div class="refs">
+        <div class="refs-title">— Referensi tentang Manusia</div>
+        <ol>
+          <li><a class="ref" href="https://rework.withgoogle.com/print/guides/5721312655835136/" target="_blank" rel="noopener">Google re:Work — Project Aristotle</a></li>
+          <li><a class="ref" href="https://www.radicalcandor.com/" target="_blank" rel="noopener">Radical Candor — Kim Scott</a></li>
+          <li><a class="ref" href="https://www.brenebrown.com/book/dare-to-lead/" target="_blank" rel="noopener">Dare to Lead — Brené Brown</a></li>
+          <li><a class="ref" href="https://fs.blog/" target="_blank" rel="noopener">Farnam Street</a> — Mental models untuk pengambilan keputusan.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 6 — CAREER MINDSET ============ -->
+<section class="chapter" id="ch6">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">06</div>
+      <div class="chapter-tag">Bab Keenam<span>Growth &amp; Mindset</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Berhentilah mencari "<em>career path</em>". Bangun <em>career portfolio</em>.</h2>
+      <p class="lede">Nasihat paling tidak berguna yang saya terima di awal karier adalah "rencanakan jenjang kamu 5 tahun ke depan". Dunia bergerak terlalu cepat. Yang saya pelajari justru sebaliknya: jangan optimasi untuk posisi, optimasi untuk <em>kemampuan dan jangkauan</em>.</p>
+
+      <h3>Tiga jenis modal yang harus dikembangkan PM</h3>
+      <p>Saya mencuri framework ini dari <a class="ref" href="https://www.henrikkarlsson.xyz/" target="_blank" rel="noopener">Henrik Karlsson</a> dan menyesuaikan untuk PM:</p>
+      <ul class="notes">
+        <li><strong>Modal pengetahuan</strong> — Pemahaman teknis, industri, dan domain. Investasi: belajar terus-menerus. Sumber favorit saya: <a class="ref" href="https://stratechery.com/" target="_blank" rel="noopener">Stratechery (Ben Thompson)</a> untuk strategi, <a class="ref" href="https://www.notboring.co/" target="_blank" rel="noopener">Not Boring (Packy McCormick)</a> untuk industri, <a class="ref" href="https://www.lennysnewsletter.com/" target="_blank" rel="noopener">Lenny's Newsletter</a> untuk PM craft.</li>
+        <li><strong>Modal jaringan</strong> — Bukan hanya jumlah koneksi, tapi <em>kualitas dan keragaman</em>. PM yang baik tahu cara mendapat jawaban dari orang yang tepat, cepat. <a class="ref" href="https://www.amazon.com/Never-Eat-Alone-Expanded-Updated/dp/0553418769" target="_blank" rel="noopener">"Never Eat Alone" — Keith Ferrazzi</a> klasik di topik ini.</li>
+        <li><strong>Modal reputasi</strong> — Apa yang orang katakan tentang kamu saat kamu tidak ada di ruangan. Bangun ini dengan: pengiriman konsisten, transparansi tentang kegagalan, dan kemurahan hati.</li>
+      </ul>
+
+      <h3>Belajarlah <em>output secara publik</em>, bukan hanya konsumsi</h3>
+      <p>Saya menyesali tidak menulis lebih awal. Setiap PM hebat yang saya kenal: menulis, ngobrol, atau membuat sesuatu di publik. Bukan untuk influence — untuk <strong>kejelasan berpikir</strong>. <a class="ref" href="http://www.paulgraham.com/words.html" target="_blank" rel="noopener">"Putting Ideas into Words" — Paul Graham</a> menjelaskan kenapa lebih baik daripada saya bisa.</p>
+
+      <div class="pullquote side">Cara tercepat berhenti menjadi <em>generalist yang dangkal</em> adalah menulis. Menulis memaksamu menjadi spesifik. Spesifik memaksa kedalaman.</div>
+
+      <h3>Pertanyaan untuk menemukan kelebihanmu sendiri</h3>
+      <p>Setiap kuartal saya menulis ulang jawaban untuk 4 pertanyaan ini. Mereka membantu saya tetap jujur:</p>
+      <ul class="notes">
+        <li>Apa yang saya kerjakan dengan mudah, padahal orang lain susah?</li>
+        <li>Topik apa yang saya bicarakan tanpa lelah, di mana pun?</li>
+        <li>Skill apa yang akan jadi langka 3 tahun lagi, dan saya bisa kembangkan sekarang?</li>
+        <li>Siapa yang saya iri padanya — dan apa sebenarnya yang saya iri?</li>
+      </ul>
+
+      <h3>Dan akhirnya: tentang ambisi yang masuk akal</h3>
+      <p>Industri tech mencintai narasi <em>"10x harder, 10x faster"</em>. Saya pernah hidup demikian. Saya juga pernah burnout. Yang saya pelajari: <strong>karier panjang dibangun oleh keberlanjutan, bukan intensitas</strong>. <a class="ref" href="https://www.amazon.com/Slow-Productivity-Burnout-Accomplishment-Without/dp/0593544854" target="_blank" rel="noopener">Cal Newport's "Slow Productivity"</a> jadi bacaan yang penting untuk saya tahun lalu. Tidak semua hal harus dikerjakan sekarang. Tidak semua kesempatan harus diambil.</p>
+
+      <div class="refs">
+        <div class="refs-title">— Mentor yang Tidak Pernah Bertemu</div>
+        <ol>
+          <li><a class="ref" href="https://www.lennysnewsletter.com/" target="_blank" rel="noopener">Lenny Rachitsky</a> — Konten PM modern paling konsisten.</li>
+          <li><a class="ref" href="https://stratechery.com/" target="_blank" rel="noopener">Ben Thompson — Stratechery</a> — Cara berpikir tentang strategi tech.</li>
+          <li><a class="ref" href="https://www.calnewport.com/" target="_blank" rel="noopener">Cal Newport</a> — Karier &amp; produktivitas yang berkelanjutan.</li>
+          <li><a class="ref" href="https://www.henrikkarlsson.xyz/" target="_blank" rel="noopener">Henrik Karlsson</a> — Esai jangka panjang tentang berpikir &amp; karier.</li>
+          <li><a class="ref" href="http://www.paulgraham.com/articles.html" target="_blank" rel="noopener">Paul Graham — Essays</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOOL STACK ============ -->
+<section class="toolstack" id="stack">
+  <div class="toolstack-inner">
+    <div class="section-label">— Apendiks A · Tool Stack</div>
+    <h2>Yang sebenarnya saya pakai. <em>Tidak lebih, tidak kurang.</em></h2>
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-cat">— Thinking Partner · Primary</div>
+        <h4><a href="https://claude.ai" target="_blank" rel="noopener">Claude</a></h4>
+        <p>Reasoning panjang, analisis dokumen, drafting komunikasi sensitif, dan deep research. Context window besar membuat analisis lintas dokumen tetap menjaga nuansa.</p>
+        <div class="use-case">Pre-mortem, stakeholder communication, synthesis, research</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-cat">— Thinking Partner · Secondary</div>
+        <h4><a href="https://chat.openai.com" target="_blank" rel="noopener">ChatGPT</a></h4>
+        <p>Saya pakai sebagai second opinion. Ketika satu model setuju, oke. Ketika dua model setuju di sudut yang berbeda — saya lebih percaya keputusan saya.</p>
+        <div class="use-case">Cross-check reasoning, alternative framing</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-cat">— Task Board</div>
+        <h4><a href="https://trello.com" target="_blank" rel="noopener">Trello</a></h4>
+        <p>Visual kanban yang sudah teruji. Untuk proyek klien dan tim yang butuh lihat status dengan cepat tanpa belajar tool baru. Simpel, jelas, langsung jalan.</p>
+        <div class="use-case">Sprint board, client task tracking, roadmap visual</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-cat">— Workspace &amp; Docs</div>
+        <h4><a href="https://www.notion.so" target="_blank" rel="noopener">Notion</a></h4>
+        <p>Single source of truth untuk semua dokumentasi proyek. PRD, retrospective, knowledge base klien, hingga personal SOP — semua di satu tempat.</p>
+        <div class="use-case">PRD, retrospective, knowledge base, SOP</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-cat">— MVP &amp; Prototype</div>
+        <h4><a href="https://lovable.dev" target="_blank" rel="noopener">Lovable</a></h4>
+        <p>Untuk validasi konsep klien dalam hitungan jam, bukan minggu. Sebagai PM di software house, ini mengubah cara saya melakukan <em>scoping</em> — saya bisa menunjukkan demo, bukan mockup.</p>
+        <div class="use-case">MVP validation, client demo, internal tool</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-cat">— Autonomous Agent</div>
+        <h4>Openclaw</h4>
+        <p>Agen AI otonom <em>self-hosted</em> yang bisa mengeksekusi aksi nyata — bukan sekadar chatbot. Berjalan di mesin sendiri, terintegrasi dengan WhatsApp/Discord, dan punya akses ke tools seperti browsing, email, dan kalender. Inilah yang membuat "agen" bukan hanya konsep.</p>
+        <div class="use-case">Personal AI assistant 24/7, task execution, monitoring</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-cat">— Research Stack</div>
+        <h4><a href="https://claude.ai" target="_blank" rel="noopener">Claude Research</a> + Openclaw</h4>
+        <p>Kombinasi yang saya pakai untuk competitive intelligence. Claude untuk reasoning &amp; sintesis mendalam, Openclaw sebagai agen yang menelusuri internet real-time, memonitor sumber, dan mengirim hasilnya langsung ke WhatsApp saya.</p>
+        <div class="use-case">Market research, competitor monitoring, trend tracking</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-cat">— Code &amp; Technical</div>
+        <h4><a href="https://www.anthropic.com/claude-code" target="_blank" rel="noopener">Claude Code</a> + <a href="https://github.com/openai/codex" target="_blank" rel="noopener">Codex</a></h4>
+        <p>Untuk PM software house, kemampuan membaca dan mendiskusikan kode bukan opsional. Dua tools ini membantu saya tetap relevan dalam diskusi teknis dengan tim engineering.</p>
+        <div class="use-case">Code review, technical scoping, learning</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-cat">— Meeting Intelligence</div>
+        <h4><a href="https://fathom.video" target="_blank" rel="noopener">Fathom</a></h4>
+        <p>Transcription + action items otomatis untuk setiap meeting klien dan internal. Saya tidak perlu sibuk mencatat — saya bisa hadir dan benar-benar mendengarkan.</p>
+        <div class="use-case">Meeting notes, action items, decision log</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-inner">
+    <div class="section-label">— Apendiks B · Selected Work</div>
+    <h2>Bukti dalam <em>pengiriman.</em></h2>
+    <p class="portfolio-lede">Teori yang tidak diuji adalah opini. Berikut beberapa proyek yang saya tangani — masing-masing mengajari saya pelajaran yang berbeda. Beberapa berhasil. Beberapa hampir gagal. Semua mengubah cara saya berpikir.</p>
+
+    <div class="project-list">
+
+      <div class="project">
+        <div class="project-number">01</div>
+        <div class="project-title">
+          Booking System
+          <span class="project-status current">Active</span>
+        </div>
+        <div class="project-desc">
+          Membangun sistem booking untuk klien di Belanda. Proyek yang sedang berjalan saat tulisan ini dibuat — penuh dengan tantangan kompleksitas regulasi lintas batas, multi-bahasa, dan ekspektasi pengguna Eropa yang demanding terhadap UX dan privasi data.
+          <span class="project-stack">Sector: Travel &amp; Hospitality · Region: Netherlands</span>
+        </div>
+        <div class="project-meta">
+          <svg class="meta-flag" viewBox="0 0 9 6" aria-hidden="true" focusable="false"><rect width="9" height="2" fill="#ae1c28"/><rect y="2" width="9" height="2" fill="#fff"/><rect y="4" width="9" height="2" fill="#21468b"/></svg><strong>Netherlands</strong>
+          2026 · Ongoing
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-number">02</div>
+        <div class="project-title">
+          AI Voice Ordering Platform
+        </div>
+        <div class="project-desc">
+          Sistem pemesanan berbasis suara dengan AI untuk klien di Amerika Serikat. Tantangan utamanya bukan pada teknologi — tapi pada <em>edge cases</em> bahasa: aksen, kata sambung, noise, dan multi-intent dalam satu kalimat. Mengajari saya bahwa <em>voice UX</em> adalah disiplin tersendiri.
+          <span class="project-stack">Sector: Food &amp; Retail · Tech: LLM · Voice AI · NLU</span>
+        </div>
+        <div class="project-meta">
+          <svg class="meta-flag" viewBox="0 0 19 10" aria-hidden="true" focusable="false"><rect width="19" height="10" fill="#fff"/><g fill="#b22234"><rect y="0" width="19" height="0.77"/><rect y="1.54" width="19" height="0.77"/><rect y="3.08" width="19" height="0.77"/><rect y="4.62" width="19" height="0.77"/><rect y="6.15" width="19" height="0.77"/><rect y="7.69" width="19" height="0.77"/><rect y="9.23" width="19" height="0.77"/></g><rect width="7.6" height="5.38" fill="#3c3b6e"/></svg><strong>United States</strong>
+          AI Product
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-number">03</div>
+        <div class="project-title">
+          AI Game Design &amp; Maker
+        </div>
+        <div class="project-desc">
+          Platform AI untuk membuat dan mendesain game — pengguna mendeskripsikan game yang mereka inginkan, sistem yang menghasilkan asset, logika, dan struktur. Proyek paling ambisius secara teknis. Pelajaran terbesar: <em>scope discipline</em>. Setiap minggu ada ide baru yang menggoda — tugas PM adalah menjaga fokus tanpa membunuh kreativitas.
+          <span class="project-stack">Sector: Gaming &amp; Creative · Tech: Generative AI · Multi-modal</span>
+        </div>
+        <div class="project-meta">
+          <svg class="meta-flag" viewBox="0 0 19 10" aria-hidden="true" focusable="false"><rect width="19" height="10" fill="#fff"/><g fill="#b22234"><rect y="0" width="19" height="0.77"/><rect y="1.54" width="19" height="0.77"/><rect y="3.08" width="19" height="0.77"/><rect y="4.62" width="19" height="0.77"/><rect y="6.15" width="19" height="0.77"/><rect y="7.69" width="19" height="0.77"/><rect y="9.23" width="19" height="0.77"/></g><rect width="7.6" height="5.38" fill="#3c3b6e"/></svg><strong>United States</strong>
+          AI · Creative Tools
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-number">04</div>
+        <div class="project-title">
+          Web3 Web Application
+        </div>
+        <div class="project-desc">
+          Aplikasi web berbasis teknologi blockchain. Dari proyek ini saya belajar bahwa stakeholder management di ruang Web3 sangat berbeda — komunitas adalah stakeholder, bukan hanya klien. Transparansi bukan pilihan, tapi keharusan. <em>Decentralization</em> juga berarti keputusan tidak bisa di-rollback dengan mudah.
+          <span class="project-stack">Tech: Smart Contract · Wallet Integration · dApp</span>
+        </div>
+        <div class="project-meta">
+          <strong>Web3 Native</strong>
+          Blockchain
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-number">05</div>
+        <div class="project-title">
+          Community Engagement Mobile App
+        </div>
+        <div class="project-desc">
+          Aplikasi mobile untuk <em>community engagement</em> dengan integrasi teknologi Web3 — gamifikasi, reward system on-chain, dan mekanisme partisipasi yang transparan. Pelajaran inti: teknologi blockchain hanya bernilai kalau memecahkan masalah yang nyata. Kalau tidak, itu hanya komplikasi tambahan.
+          <span class="project-stack">Tech: Mobile (iOS/Android) · Web3 · Token Mechanics</span>
+        </div>
+        <div class="project-meta">
+          <strong>Mobile + Web3</strong>
+          Community Tech
+        </div>
+      </div>
+
+    </div>
+
+    <p class="portfolio-note"><strong>Catatan:</strong> Sebagian besar proyek di atas berada di bawah NDA, jadi nama klien dan detail teknis spesifik tidak bisa saya bagikan secara publik. Tapi pelajarannya — itu yang ingin saya wariskan. Untuk diskusi lebih mendalam tentang salah satu proyek di atas, silakan hubungi saya langsung.</p>
+  </div>
+</section>
+
+<!-- ============ MANIFESTO ============ -->
+<section class="manifesto" id="manifesto">
+  <div class="manifesto-inner">
+    <div class="section-label">— Apendiks C · Prinsip</div>
+    <h2>Enam <strong>prinsip</strong> untuk PM<br>di era yang penuh ketidakpastian.</h2>
+    <div class="principles">
+      <div class="principle">
+        <h3>I. Konteks &gt; Tools</h3>
+        <p>Tools bisa diganti besok. Konteks bisnis, pengguna, dan tim yang kamu bangun — itu yang tahan lama.</p>
+      </div>
+      <div class="principle">
+        <h3>II. Bertanya &gt; Memberitahu</h3>
+        <p>PM yang baik bertanya 5x lebih banyak daripada memberi pernyataan. Pertanyaan yang baik membuka, pernyataan yang buruk menutup.</p>
+      </div>
+      <div class="principle">
+        <h3>III. Iterasi &gt; Sempurna</h3>
+        <p>Versi 1 yang dikirim mengalahkan versi sempurna yang tidak pernah ada. Selalu.</p>
+      </div>
+      <div class="principle">
+        <h3>IV. Sistem &gt; Heroik</h3>
+        <p>Kalau proyek bergantung pada satu orang menjadi pahlawan, sistemnya rusak. Bangun proses, bukan ketergantungan.</p>
+      </div>
+      <div class="principle">
+        <h3>V. Tulis &gt; Bicara</h3>
+        <p>Tulisan memaksa kejelasan. Pikiran yang tidak bisa ditulis biasanya pikiran yang tidak jelas.</p>
+      </div>
+      <div class="principle">
+        <h3>VI. Trust &gt; Otoritas</h3>
+        <p>Sebagian besar PM tidak punya otoritas formal. Kekuatan datang dari kredibilitas. Bangun perlahan, lindungi seperti emas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LETTER ============ -->
+<section class="letter" id="letter">
+  <div class="letter-inner">
+    <div class="stamp">Untuk Yang Datang Berikutnya</div>
+    <div class="salutation">Untuk kamu yang menerima estafet ini,</div>
+    <p>Saya tidak tahu siapa kamu, tapi saya tahu satu hal: kamu akan menghadapi tantangan yang berbeda dari yang saya hadapi. Itu pasti. Tools akan berubah. Tim akan berubah. <em>Stakeholder</em> akan datang dan pergi. Bahkan definisi "project manager" mungkin akan terlihat aneh dalam 5 tahun.</p>
+
+    <p>Apa yang saya tinggalkan bukan peta. Itu kompas. Bab-bab di atas adalah cara saya membaca dunia ini per hari ini — Mei 2026. Sebagian akan tetap relevan. Sebagian akan ketinggalan zaman dalam hitungan bulan. Tugasmu adalah mencari tahu mana yang mana.</p>
+
+    <p>Tapi <strong>ada satu hal yang tidak akan pernah ketinggalan zaman</strong>: orang-orang di sekitar kamu. Engineer yang stuck pada bug Jumat malam. Designer yang tidak yakin design-nya cukup baik. Stakeholder yang takut akan tampilan buruk di kuartal depan. Mereka semua butuh seseorang yang melihat mereka. Yang membuat mereka aman untuk bersuara. Yang mengingat ulang tahun mereka.</p>
+
+    <p>Itu pekerjaan kita yang sebenarnya. AI tidak akan mengambil itu. AI hanya akan membebaskan lebih banyak waktu kita untuk melakukannya dengan lebih baik.</p>
+
+    <p>Pergilah membuat sesuatu yang baik. Pergilah merawat orang-orangmu. Pergilah mengecewakan saya dengan menjadi PM yang lebih baik daripada yang pernah saya bisa.</p>
+
+    <div class="signoff">
+      <div class="signoff-text">Salam hangat,</div>
+      <div class="signature">Heribertus Hariyanto Atmaja</div>
+      <div class="signature-role">Project Manager · Emveep · Mei 2026</div>
+    </div>
+
+    <div class="contact-strip">
+      <div class="ct-label">— Mari berbicara</div>
+      <div class="ct-links">
+        <a href="mailto:heribertushhariyanto@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/heribertus-hariyanto-atmaja-a29b63199/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/heribertusha/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COLOPHON ============ -->
+<footer>
+  <div class="colophon">
+    <div class="colophon-block">
+      <div class="ttl">— Colophon</div>
+      <p>Diset dalam Fraunces &amp; Inter. Dibuat sebagai catatan personal untuk siapa saja yang menerima estafet menjadi project manager — di era apapun.</p>
+    </div>
+    <div class="colophon-block">
+      <div class="ttl">— Lisensi</div>
+      <p>Semua isi di sini gratis untuk dibagikan, dikutip, dimodifikasi. Atribusi dihargai, tidak diwajibkan. Pengetahuan tidak boleh dipenjara.</p>
+    </div>
+    <div class="colophon-block">
+      <div class="ttl">— Versi</div>
+      <p>v1.0 · Mei 2026 · Living document. Akan diperbarui ketika dunia berubah — yang berarti, segera.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Heribertus Hariyanto Atmaja</span>
+    <span>The Handover Issue · Vol. 01</span>
+  </div>
+</footer>
+
+<script>
+// Soft reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+    }
+  });
+}, {threshold: 0.1});
+
+document.querySelectorAll('.chapter, .intro-inner, .toolstack-inner, .portfolio-inner, .manifesto-inner, .letter-inner').forEach(el => {
+  el.classList.add('reveal');
+  observer.observe(el);
+});
+
+// Smooth scroll already enabled via CSS
+</script>
+
+</body>
+</html>
