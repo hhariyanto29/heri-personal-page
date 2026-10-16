@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dua Kursi: Operasi, Produk, dan Kecepatan AI — The Handover Vol. 02 · Heribertus Hariyanto Atmaja</title>
+<meta name="description" content="Catatan seorang COO merangkap product lead di dua perusahaan baru tentang tanggung jawab yang naik, iterasi yang makin cepat, dan utang perusahaan kepada orang-orang yang belum sempat fasih bekerja dengan AI.">
+<meta name="author" content="Heribertus Hariyanto Atmaja">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://heri-page.vercel.app/vol-02-dua-kursi/">
+<meta name="theme-color" content="#f5f1ea">
+<meta name="color-scheme" content="light">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f5f1ea'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='22' font-weight='600' font-style='italic' fill='%23c8553d' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/assets/author.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/shaders/threeui.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="has-hero">
+<script>if ("IntersectionObserver" in window) document.documentElement.classList.add("js");</script>
+
+<!-- ============ MASTHEAD ============ -->
+<header class="masthead">
+  <div class="vol">
+    <span>Vol. 02 · 2026</span>
+    <span>Dua Kursi</span>
+  </div>
+  <div class="logo"><a href="/">The Handover</a></div>
+  <nav>
+    <a href="#intro">Prolog</a>
+    <a href="#ch1">Bab</a>
+    <a href="#letter">Surat</a>
+    <a href="/arsip/">Arsip</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<!-- Teks di lembar kaca diisi lewat atribut data-sheet-*; "|" memisahkan baris.
+     Ubah judul kerja "Dua Kursi" di sini dan di h1 bila judul final sudah ada.
+     Wordmark di belakang kertas tetap HANDOVER (nama penerbitan); tambahkan data-sheet-wordmark bila ingin kata lain. -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-text">
+    <p class="hero-kicker" lang="en">On running two companies at the speed of AI</p>
+    <h1 id="hero-title">Dua Kursi: Operasi, Produk, dan Kecepatan AI</h1>
+    <p class="hero-byline">Sebuah catatan dari Heribertus Hariyanto Atmaja · Chief Operating Officer &amp; Product Lead · Nemu Marketplace · Nourri Active · Ditulis Oktober 2026 · Estimasi membaca · 14 menit</p>
+    <blockquote lang="id">“Kamu tidak tertinggal. Kamu belum diajak.”</blockquote>
+  </div>
+  <div class="hero-stage" aria-hidden="true">
+    <div class="shader-frame">
+      <div class="threeui-background three-d-paper" data-variant="original" data-state="loading"
+           data-sheet-title="Dua Kursi.|Operasi, produk,|dan kecepatan AI."
+           data-sheet-vol="Vol. 02 · 2026"
+           data-sheet-role="COO &amp; Product Lead · Nemu Marketplace · Nourri Active"
+           data-sheet-kicker="On running two companies at the speed of AI"
+           data-sheet-side="COO · 2026"
+           data-sheet-issue="The Dua Kursi Issue."
+           data-sheet-meta="Estimasi membaca · 14 menit"
+           data-sheet-quote="“Kamu tidak tertinggal. Kamu belum diajak.”"
+           style="position:relative;overflow:hidden;background:#08080a;pointer-events:auto"></div>
+    </div>
+  </div>
+  <a class="hero-cue" href="#intro">Scroll · Prolog</a>
+</section>
+
+<!-- ============ PROLOG ============ -->
+<section class="intro" id="intro">
+  <div class="intro-inner">
+    <div class="section-label">— Prolog —</div>
+    <p>Tulisan ini saya tujukan ke satu orang: kamu, yang akhir-akhir ini merasa dunia kerja bergerak lebih cepat daripada kemampuanmu mengejar. Yang melihat rekan di meja sebelah selesai dalam sejam, lalu diam-diam bertanya: ini masalah saya, atau masalah zaman? Saya tidak punya jawaban rapi. Saya punya catatan, dan catatan ini untukmu.</p>
+    
+    <p>Di Vol. 01 saya menulis sebagai project manager di Emveep. Sejak itu kursinya ganti. Sekarang saya Chief Operating Officer sekaligus <em>product lead</em> di dua perusahaan baru: Nemu Marketplace dan Nourri Active. Dua kursi, dua perusahaan, satu orang. Saya tidak bilang itu ide bagus. Itu yang terjadi, dan saya masih belajar dari situ.</p>
+    
+    <p>Tiga hal terasa berubah sekaligus. <strong>Tanggung jawabnya naik, iterasinya makin cepat, dan jarak antara orang yang sudah fasih bekerja dengan AI dan yang belum rasanya makin lebar.</strong> Dua yang pertama soal saya. Yang ketiga soal kamu, dan soal apa yang mungkin saya utang ke orang-orang seperti kamu di sekitar saya. Jujur saja, yang ketiga ini yang paling bikin saya tidak tenang. Jadi anggap ini surat panjang yang kebetulan punya bab. Ambil yang berguna. Sisanya tinggalkan, seperti biasa.</p>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 1 — DUA TOPI ============ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">01</div>
+      <div class="chapter-tag">Bab Pertama<span>Dua Topi</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Di perusahaan kecil, operasi dan produk adalah dua cara melihat <em>satu</em> pekerjaan.</h2>
+      <p class="lede">Kalau ada yang tanya gimana ceritanya COO merangkap product lead, jawaban paling jujur biasanya memalukan: di perusahaan yang masih baru, belum ada orang lain. Lama-lama saya curiga ini bukan kebetulan yang terpaksa. Ini kebetulan yang berguna.</p>
+      
+      <p>Di perusahaan baru, operasi dan produk adalah pertanyaan yang sama dari dua sisi. Produk bertanya: apa yang layak dibuat? Operasi bertanya: apa yang sanggup dijalankan tiap hari tanpa roboh? <strong>Kalau dijawab orang yang berbeda, mereka saling kirim email. Kalau dijawab satu orang, mereka bertengkar di kepalanya.</strong> Saya lebih suka yang kedua. Setidaknya bertengkarnya cepat.</p>
+      
+      <h3>Satu topi cukup untuk satu hari</h3>
+      <p>Paul Graham menulis bahwa jadwal <em>maker</em> dan <em>manager</em> tidak bisa dipakai bergantian tiap jam. Dua topi pun begitu. Jadi yang saya coba: satu topi untuk satu hari penuh. Hari angka, proses, dan orang untuk operasi. Hari pengguna, prototipe, dan keputusan "ini masuk, itu tidak" untuk produk. <!-- CERITA (opsional, untuk Heri): satu kalimat tentang bagaimana minggu kerja nyata di Nemu atau Nourri dibagi antara hari operasi dan hari produk. --> Belahannya pasti tidak pernah bersih. Tapi taruhan saya, niatnya saja sudah cukup untuk menyelamatkan beberapa jam berpikir yang utuh.</p>
+      
+      <h3>Benturannya selalu di tempat yang sama</h3>
+      <p>Topi produk ingin mencoba. Topi operasi ingin bisa diulang. Setiap fitur yang bisa dirilis cepat karena AI punya proses di belakangnya yang belum tentu siap diulang seratus kali. Di situ godaan terbesarnya: <strong>merilis sesuatu yang sanggup dibangun, sebelum sanggup dijalankan.</strong> Saya tidak yakin saya kebal. Di perusahaan kecil, "selesai" artinya operasi bisa menanganinya saat saya tidak ada. Kebiasaan yang ingin saya pegang:</p>
+      
+      <ul class="notes">
+        <li><strong>Satu dokumen, dua kolom.</strong> Kolom "apa yang dibangun" dan kolom "apa yang harus berjalan supaya ini hidup". Tebakan saya, kolom kedua yang paling sering kosong.</li>
+        <li><strong>Topi disebut dengan nama.</strong> Bilang terang-terangan di rapat, "ini saya bicara sebagai COO". Tim bisa membantah sudut itu tanpa harus membantah saya.</li>
+        <li><strong>Satu hari tanpa rapat.</strong> Untuk topi produk. Keputusan produk yang dibuat di sela rapat biasanya yang paling cepat disesali.</li>
+      </ul>
+      
+      <div class="pullquote">Dua topi di satu kepala punya satu aturan: kamu tidak boleh berbohong pada salah satunya.</div>
+      
+      <div class="refs">
+        <div class="refs-title">— Bacaan Lanjutan</div>
+        <ol>
+          <li><a class="ref" href="https://paulgraham.com/makersschedule.html" target="_blank" rel="noopener">Maker's Schedule, Manager's Schedule — Paul Graham</a> — Esai pendek yang menjelaskan kenapa dua topi tidak bisa dipakai bergantian tiap jam.</li>
+          <li><a class="ref" href="https://press.stripe.com/scaling-people" target="_blank" rel="noopener">Scaling People — Claire Hughes Johnson</a> — Mantan COO Stripe soal membangun operasi dari nol; buku paling praktis yang saya temukan untuk kursi ini.</li>
+          <li><a class="ref" href="https://hbr.org/2006/05/second-in-command-the-misunderstood-role-of-the-chief-operating-officer" target="_blank" rel="noopener">Second in Command — Bennett &amp; Miles, HBR</a> — Tidak ada dua pekerjaan COO yang sama; artikel ini menjelaskan kenapa.</li>
+          <li><a class="ref" href="https://www.svpg.com/" target="_blank" rel="noopener">Silicon Valley Product Group — Marty Cagan</a> — Standar kerja product lead yang layak dipakai sebagai pembanding, supaya tidak jadi sekadar pencatat fitur.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 2 — ITERASI ============ -->
+<section class="chapter" id="ch2">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">02</div>
+      <div class="chapter-tag">Bab Kedua<span>Iterasi</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Build-measure-learn tidak lagi diukur dalam kuartal. Diukur dalam <em>hari</em>.</h2>
+      <p class="lede">Di Vol. 01 saya menulis bahwa MVP yang dulu enam minggu kini bisa selesai satu akhir pekan. Sekarang saya hidup di dalam kalimat itu. Rasanya tidak seindah bunyinya.</p>
+      
+      <p>Siklus yang Eric Ries bayangkan — bangun, ukur, belajar — dulu dibatasi oleh seberapa cepat kita membangun. Sekarang membangun bukan lagi leher botolnya. Dengan alat seperti <em>Claude Code</em>, versi pertama sebuah ide bisa dicoba dalam hitungan hari. Leher botolnya pindah ke dua tempat yang lebih manusiawi: <strong>seberapa cepat kita bisa mengukur dengan jujur, dan seberapa cepat kita sanggup belajar tanpa saling menyalahkan.</strong></p>
+      
+      <h3>Rencana kuartalan jadi lucu</h3>
+      <p>Asumsinya biasanya sudah gugur sebelum kuartal berjalan separuh. Rencana adalah hipotesis, itu pelajaran Bab 1 Vol. 01, dan sekarang hipotesisnya bisa diuji tiap minggu. Jadi rencananya harus lebih pendek dan siap lebih sering salah. <!-- CERITA (opsional, untuk Heri): satu kalimat tentang satu rencana yang berubah dalam hitungan hari karena hasil uji pertama, cukup ceritanya, tanpa angka. --> Yang perlu dijaga cuma satu: arah besarnya jangan ikut berganti tiap minggu, atau tim akan mengira pimpinannya cuma sedang berubah pikiran.</p>
+      
+      <h3>Tim butuh tahu kapan siklus ditutup</h3>
+      <p>Di siklus panjang, tim punya waktu pulih di antara rilis. Di siklus harian, tidak ada "antara". Yang bikin lelah adalah tidak pernah selesai. Saya curiga kecepatan iterasi harus dibayar dengan satu hal yang membosankan: <strong>batas yang jelas kapan sebuah siklus ditutup, meskipun hasilnya belum sempurna.</strong> Basecamp menyebutnya <em>calm</em>. Saya menyebutnya bernapas.</p>
+      
+      <h3>Hasil datang lebih cepat daripada kemampuan menilainya</h3>
+      <p>Saya jadi lebih cepat memutuskan dan lebih lambat yakin. Cepat memutuskan karena biaya mencoba sudah murah. Lambat yakin karena data yang datang cepat sering dangkal. Kamu mungkin merasakan hal yang sama begitu mulai bekerja dengan AI: hasilnya datang lebih cepat daripada kemampuanmu menilainya. Itu normal. Jaraknya yang harus dikelola. Beberapa rem yang ingin saya pasang, sengaja di langkah "ukur" dan "belajar":</p>
+      
+      <ul class="notes">
+        <li><strong>Setiap percobaan punya syarat mati.</strong> Kalau dalam waktu tertentu tidak ada sinyal, dihentikan. Tulis sebelum dibangun, supaya tidak ditawar setelah sayang dibuang.</li>
+        <li><strong>Siklus ditutup oleh kalender.</strong> Apa pun hasilnya, ditulis dan ditutup di hari yang disepakati. Yang belum selesai masuk siklus berikutnya, jangan ke akhir pekan.</li>
+        <li><strong>Changelog untuk manusia.</strong> Setiap perubahan ditulis dalam bahasa yang bisa dibaca mitra dan tim operasi. Kecepatan yang tidak dikomunikasikan terasa seperti kekacauan bagi orang lain.</li>
+      </ul>
+      
+      <div class="pullquote side">Membangun sudah murah. Yang sekarang mahal adalah sempat tahu kenapa versi yang salah itu salah.</div>
+      
+      <div class="refs">
+        <div class="refs-title">— Referensi</div>
+        <ol>
+          <li><a class="ref" href="https://theleanstartup.com/" target="_blank" rel="noopener">The Lean Startup — Eric Ries</a> — Asal-usul build-measure-learn; dibaca ulang dengan kacamata 2026, bagian "ukur" jadi yang paling penting.</li>
+          <li><a class="ref" href="https://www.shapeup.com/" target="_blank" rel="noopener">Shape Up — Basecamp</a> — Siklus tetap dengan <em>appetite</em> alih-alih estimasi; masih yang paling masuk akal untuk tim kecil.</li>
+          <li><a class="ref" href="https://basecamp.com/books/calm" target="_blank" rel="noopener">It Doesn't Have to Be Crazy at Work — Basecamp</a> — Argumen bahwa kecepatan tanpa batas itu kelalaian.</li>
+          <li><a class="ref" href="https://www.anthropic.com/claude-code" target="_blank" rel="noopener">Claude Code — Anthropic</a> — Alat yang saya sebut di Vol. 01; contoh paling jelas kenapa membangun bukan lagi leher botol.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 3 — TANGGUNG JAWAB ============ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">03</div>
+      <div class="chapter-tag">Bab Ketiga<span>Tanggung Jawab</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Kecepatan itu murah. Yang mahal adalah keputusan yang <em>tidak bisa ditarik</em>.</h2>
+      <p class="lede">Sebagai PM saya mengelola risiko proyek. Sebagai COO saya ikut memegang keputusan yang akibatnya punya nama orang dan tanggal gajian. Beda jenis, dan kecepatan tidak mengubah bedanya.</p>
+      
+      <p>Jeff Bezos membagi keputusan jadi dua: pintu satu arah dan pintu dua arah. Yang dua arah boleh dilewati cepat; salah tinggal balik. Masalahnya, di era AI hampir semua yang menyangkut membangun jadi pintu dua arah. Kode bisa ditulis ulang dalam sejam. <strong>Yang tetap pintu satu arah adalah uang yang sudah keluar, orang yang sudah direkrut atau dilepas, dan janji yang sudah diucapkan ke mitra.</strong> Ketiganya sekarang ikut jadi urusan saya.</p>
+      
+      <h3>Uang yang sudah keluar tidak ikut cepat</h3>
+      <p>Di software house, biaya terbesar adalah waktu engineer, dan klien yang membayarnya. Di perusahaan baru, setiap keputusan produk adalah keputusan kas. Pertanyaannya bergeser dari "apakah ini untung?" ke "kalau ini salah, berapa lama kita masih bisa bernapas?" Pertanyaan kedua jauh lebih tidak enak, dan saya kira memang harus begitu. <!-- CERITA (opsional, untuk Heri): satu kalimat tentang satu keputusan pengeluaran yang sengaja dibuat lebih pelan karena tidak bisa ditarik, tanpa menyebut nominal. --></p>
+      
+      <h3>Keputusan tentang orang jangan di hari yang sama</h3>
+      <p>Merekrut dan melepas orang adalah keputusan yang paling tidak bisa dipercepat AI, dan paling sering dicoba dipercepat. Godaannya jelas: satu orang dengan alat yang tepat bisa menggantikan tiga. Tapi orang itu konteks, dan konteks tidak masuk <em>prompt</em>. Jadi aturan yang ingin saya pegang sengaja lambat: bicara dulu, tulis, tidur satu malam, baru putuskan. Tidak ada keputusan tentang manusia di hari yang sama dengan pemicunya. Kalau esok paginya masih sama, barulah itu layak disebut keputusan.</p>
+      
+      <h3>Margin adalah harga supaya tim boleh salah</h3>
+      <p>Saya tidak percaya "move fast and break things" di perusahaan yang keputusannya menyangkut gaji dan uang orang lain. Saya percaya cepat di tempat yang boleh rusak, dan sengaja lambat di tempat yang tidak boleh. Annie Duke menyebutnya berpikir dalam taruhan: nilai keputusan dari prosesnya, bukan hasilnya. <strong>Margin adalah harga yang harus dibayar supaya tim boleh salah tanpa perusahaan ikut salah.</strong> Cara menjaganya tidak canggih:</p>
+      
+      <ul class="notes">
+        <li><strong>Tandai pintu satu arah.</strong> Secara tertulis. Catat "kenapa" dan "apa yang akan membuat kami menyesal", lalu baca lagi beberapa bulan kemudian.</li>
+        <li><strong>Pre-mortem untuk uang.</strong> "Enam bulan lagi ini gagal. Kenapa?" dijawab sebelum transfer, selagi masih bisa dibatalkan.</li>
+        <li><strong>Cadangan dihitung sebagai fitur.</strong> Waktu luang tim dan kas yang tidak dialokasikan harus disengaja. Kalau cadangan terpakai, catat sebagai utang.</li>
+      </ul>
+      
+      <div class="pullquote">Tanggung jawab yang naik tidak terasa seperti beban. Terasa seperti daftar orang yang kena akibatnya kalau saya keliru.</div>
+      
+      <div class="refs">
+        <div class="refs-title">— Referensi</div>
+        <ol>
+          <li><a class="ref" href="https://www.aboutamazon.com/news/company-news/2016-letter-to-shareholders" target="_blank" rel="noopener">2016 Letter to Shareholders — Jeff Bezos</a> — Asal konsep pintu satu arah dan dua arah; pendek, dan lebih berguna dari kebanyakan buku manajemen.</li>
+          <li><a class="ref" href="https://www.amazon.com/Thinking-Bets-Making-Smarter-Decisions/dp/0735216355" target="_blank" rel="noopener">Thinking in Bets — Annie Duke</a> — Memisahkan kualitas keputusan dari kualitas hasil; wajib untuk siapa pun yang ikut memegang kas.</li>
+          <li><a class="ref" href="https://hbr.org/2007/09/performing-a-project-premortem" target="_blank" rel="noopener">Performing a Project Premortem — Gary Klein, HBR</a> — Teknik yang sama dari Vol. 01, sekarang untuk uang.</li>
+          <li><a class="ref" href="https://hbr.org/2006/01/the-hidden-traps-in-decision-making" target="_blank" rel="noopener">The Hidden Traps in Decision Making — HBR</a> — Jebakan klasik dalam mengambil keputusan; makin gampang diinjak kalau terburu-buru.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 4 — YANG TERTINGGAL ============ -->
+<section class="chapter" id="ch4">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">04</div>
+      <div class="chapter-tag">Bab Keempat<span>Yang Tertinggal</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Orangnya tidak tertinggal. <em>Sistemnya</em> yang tidak pernah mengajak.</h2>
+      <p class="lede">Ini bab yang membuat saya menulis seluruh edisi ini. Kalau kamu cuma sempat baca satu bab, baca yang ini.</p>
+      
+      <p>Bayangkan dua orang dengan kemampuan setara mengerjakan tugas yang sama. Yang satu terbiasa bekerja berdampingan dengan AI: menulis konteks, mendelegasikan draf, memeriksa hasil. Yang satu lagi mengerjakannya seperti tahun lalu. Yang pertama selesai sebelum makan siang. Yang kedua selesai besok, dengan baik. <strong>Di perusahaan yang beriterasi harian, "besok" adalah satu siklus penuh yang terlewat.</strong> Beberapa bulan begitu, orang kedua mulai merasa dirinya yang salah. Saya tidak yakin kantor saya pengecualian.</p>
+      
+      <p>Kalau kamu orang kedua itu: kamu tidak salah. Saya ingin kalimat itu dibaca pelan. Yang terjadi adalah <strong>tidak ada yang pernah duduk di sebelahmu dan menunjukkan caranya</strong>, dengan pekerjaanmu sendiri di layar. Orang yang "sudah fasih" kebanyakan juga tidak belajar dari kursus. Mereka kebetulan punya waktu luang, atau teman yang lebih dulu mencoba. Itu keberuntungan, dan keberuntungan bukan dasar yang adil untuk memilah siapa maju dan siapa tertinggal.</p>
+      
+      <h3>Ini masalah onboarding biasa</h3>
+      <p>Perusahaan sudah lama tahu cara mengajari orang sistem baru: ada jadwal, ada orang yang bisa ditanya. Untuk AI, kebanyakan perusahaan berasumsi orang akan belajar sendiri. Asumsi itu tidak adil, meskipun tidak ada yang berniat begitu. Orang belajar sendiri kalau punya waktu lebih, dan orang yang paling sibuk justru yang paling tidak punya. Jadi yang tertinggal sering kali orang yang paling bisa diandalkan. <!-- CERITA (opsional, untuk Heri): satu kalimat tentang satu orang di tim, tanpa nama, yang paling diandalkan tapi paling tertinggal soal alat, dan apa yang berubah setelah diajak duduk. --></p>
+      
+      <h3>Mitra dan vendor mengalami jarak yang sama</h3>
+      <p>Jaraknya tidak berhenti di dalam tim. Bayangkan mitra yang membalas dalam hitungan hari, atau vendor yang butuh seminggu untuk revisi. Mereka tidak lambat. Mereka bekerja dengan ritme yang belum lama ini masih normal untuk semua orang, termasuk saya. <strong>Meminta orang lain ikut cepat tanpa memberi mereka cara untuk cepat itu tidak adil, cuma tidak kelihatan.</strong> Yang ingin saya biasakan: bertanya dulu alat apa yang mereka pakai, dan apa yang bisa saya bagikan.</p>
+      
+      <h3>Yang saya utang</h3>
+      <p>Saya duduk di kursi yang ikut menentukan ritme perusahaan. Kalau ritmenya terlalu cepat untuk sebagian orang, itu kegagalan saya membangun tangga. Jadi ini yang saya anggap utang: waktu belajar yang dijadwalkan, contoh dari pekerjaan nyata mereka, dan satu orang yang mau duduk di sebelah mereka selama seminggu. Kamu berhak meminta ketiganya ke atasanmu. Kalau kamu atasannya, kamu berutang ketiganya. Kalau kamu merasa kamulah yang tertinggal: kamu tidak tertinggal, kamu belum diajak. Itu beda, dan yang kedua bukan salahmu.</p>
+      
+      <div class="pullquote">Orang yang fasih dengan AI cuma punya satu kelebihan: mereka sempat. Tugas perusahaan adalah membuat semua orang sempat.</div>
+      
+      <h3>Jalan masuk, kalau kamu mau mulai minggu ini</h3>
+      <ul class="notes">
+        <li><strong>Mulai dari pekerjaan yang membosankan.</strong> Ringkasan, draf pertama, format ulang. Biasanya kelar lebih cepat hari itu juga, dan itu sudah cukup oke buat mulai.</li>
+        <li><strong>Cari satu orang, satu jam.</strong> Rekan yang sudah terbiasa, dengan file-mu sendiri di layar. Lebih berharga dari sepuluh video.</li>
+        <li><strong>Tulis konteks dulu, baru bertanya.</strong> Siapa pembacanya, apa batasannya, apa yang sudah dicoba. Bagian ini kamu sudah jago; kamu cuma belum pernah menulisnya untuk mesin.</li>
+        <li><strong>Periksa seperti memeriksa pekerjaan junior.</strong> Di sini pengalamanmu jadi keunggulan. Orang baru tidak bisa membedakan draf yang bagus dan draf yang kedengarannya bagus. Kamu bisa.</li>
+      </ul>
+      
+      <div class="refs">
+        <div class="refs-title">— Referensi</div>
+        <ol>
+          <li><a class="ref" href="https://www.anthropic.com/economic-index" target="_blank" rel="noopener">The Anthropic Economic Index</a> — Data tentang bagaimana AI benar-benar dipakai di pekerjaan; adopsinya jauh dari merata.</li>
+          <li><a class="ref" href="https://www.nber.org/papers/w31161" target="_blank" rel="noopener">Generative AI at Work — Brynjolfsson, Li &amp; Raymond, NBER</a> — Temuan bahwa manfaat AI paling besar justru pada pekerja yang paling sedikit pengalamannya, kalau diberi akses.</li>
+          <li><a class="ref" href="https://en.wikipedia.org/wiki/Diffusion_of_innovations" target="_blank" rel="noopener">Diffusion of Innovations — Everett Rogers</a> — Teori klasik kenapa adopsi teknologi selalu bertahap, dan kenapa itu soal akses dan jaringan, bukan kecerdasan.</li>
+          <li><a class="ref" href="https://www.amazon.com/Fearless-Organization-Psychological-Workplace-Innovation/dp/1119477247" target="_blank" rel="noopener">The Fearless Organization — Amy Edmondson</a> — <em>Psychological safety</em>: orang tidak akan bilang "saya belum bisa" di tim yang menghukumnya.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 5 — KONTRAK BARU ============ -->
+<section class="chapter" id="ch5">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">05</div>
+      <div class="chapter-tag">Bab Kelima<span>Kontrak Baru</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Yang saya minta dari tim naik. Maka yang saya <em>janjikan</em> juga harus naik.</h2>
+      <p class="lede">Kontrak kerja tidak berubah. Tapi kontrak yang tidak tertulis, apa yang diharapkan dan apa yang dibalas, sudah berubah. Kebanyakan perusahaan cuma mengubah separuhnya.</p>
+      
+      <p>Jujur saja soal apa yang sekarang diminta dari orang seperti kamu. Belajar alat baru di sela pekerjaan. Menerima bahwa pekerjaanmu minggu depan mungkin beda dari minggu ini. Memeriksa hasil mesin yang lebih cepat darimu, dan tetap bertanggung jawab atas kesalahannya. Itu banyak. <strong>Kalau perusahaan meminta semua itu dan membalasnya dengan gaji yang sama dan kesabaran yang sama, itu bukan kontrak. Itu pemerasan yang sopan.</strong></p>
+      
+      <h3>Yang saya janjikan balik</h3>
+      <p>Ada empat hal. Pegang saya pada keempatnya. Yang pertama paling sering kalah dari pekerjaan yang punya deadline: waktu belajar harus ada di kalender, dengan izin untuk tidak menghasilkan apa-apa di jam itu. <!-- CERITA (opsional, untuk Heri): satu kalimat tentang bentuk konkret waktu belajar yang dijalankan atau direncanakan di tim, misalnya blok mingguan, tanpa mengarang jumlah jam kalau belum pasti. --> Kalau saya sendiri yang menggeser jam itu, kamu boleh menagih. Tiga sisanya saya tulis supaya gampang ditunjuk:</p>
+      
+      <ul class="notes">
+        <li><strong>Toleransi gagal yang ditulis.</strong> Mana eksperimen yang boleh gagal, mana yang tidak, ditulis sebelum kejadian. Kalau batasnya tidak jelas, orang akan memilih tidak mencoba, dan itu rasional.</li>
+        <li><strong>Kejelasan sebelum kecepatan.</strong> Setiap siklus harus dimulai dengan satu halaman: apa yang kita coba, kenapa, dan apa yang membuat kita berhenti. Kalau saya tidak sanggup menulisnya, siklusnya belum layak dimulai.</li>
+        <li><strong>Tanpa lelucon soal yang belum bisa.</strong> Satu komentar sinis cukup untuk menutup kemauan belajar berbulan-bulan. Ini harus jadi aturan, dan saya yang pertama kena.</li>
+      </ul>
+      
+      <h3>Yang tidak bisa saya janjikan</h3>
+      <p>Saya tidak bisa menjanjikan pekerjaan ini akan terasa stabil. Tidak akan. Yang bisa saya janjikan: <strong>tidak ada yang ditinggalkan dalam diam.</strong> Kalau ada yang tertinggal, kita bicara lebih dulu, jauh sebelum itu jadi urusan performa. Gary Pisano menulis bahwa budaya inovatif menoleransi kegagalan tapi tidak menoleransi inkompetensi. Setuju, dengan satu catatan: belum fasih dengan alat baru belum tentu inkompetensi. Sering kali orangnya cuma belum diajak.</p>
+      
+      <div class="pullquote minimal">Toleransi terhadap kegagalan yang tidak ditulis akan dicabut pada hari pertama kegagalan itu mahal.</div>
+      
+      <div class="refs">
+        <div class="refs-title">— Referensi</div>
+        <ol>
+          <li><a class="ref" href="https://hbr.org/2019/01/the-hard-truth-about-innovative-cultures" target="_blank" rel="noopener">The Hard Truth About Innovative Cultures — Gary Pisano, HBR</a> — Toleransi gagal tanpa toleransi inkompetensi; dua hal yang sering tertukar.</li>
+          <li><a class="ref" href="https://www.radicalcandor.com/our-approach/" target="_blank" rel="noopener">Radical Candor — Kim Scott</a> — Masih kerangka paling jujur untuk percakapan "kamu tertinggal, dan itu bukan salahmu".</li>
+          <li><a class="ref" href="https://rework.withgoogle.com/" target="_blank" rel="noopener">Google re:Work</a> — Panduan soal manajer, 1:1, dan efektivitas tim; tempat kontrak semacam ini benar-benar diuji.</li>
+          <li><a class="ref" href="https://www.atlassian.com/team-playbook" target="_blank" rel="noopener">Atlassian Team Playbook</a> — Kumpulan ritual tim yang bisa langsung dicoba; bagian <em>working agreements</em> paling cocok untuk kontrak semacam ini.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 6 — YANG TIDAK BERUBAH ============ -->
+<section class="chapter" id="ch6">
+  <div class="chapter-inner">
+    <div class="chapter-meta">
+      <div class="chapter-number">06</div>
+      <div class="chapter-tag">Bab Keenam<span>Yang Tidak Berubah</span></div>
+    </div>
+    <div class="chapter-body">
+      <h2>Kursinya ganti, kecepatannya ganti. Enam prinsip itu <em>tidak</em>.</h2>
+      <p class="lede">Di akhir Vol. 01 saya menulis enam prinsip sebagai PM. Apakah masih berlaku setelah kursinya beda? Ternyata ya. Tapi masing-masing berubah arti, dan harganya naik.</p>
+      
+      <p><em>Konteks &gt; Tools</em> dan <em>Tulis &gt; Bicara</em> ternyata satu paket. Sebagai PM, soal memberi AI konteks yang cukup. Sebagai COO, soal memastikan konteks tidak cuma ada di kepala saya. Perusahaan yang konteksnya tinggal di satu orang tidak punya operasi; dia punya ketergantungan. Dengan dua perusahaan, saya tidak bisa hadir di semua tempat. Yang tertulis bisa. <strong>Kalau belum ditulis, anggap belum ada.</strong></p>
+      
+      <p><em>Bertanya &gt; Memberitahu</em> dan <em>Trust &gt; Otoritas</em> ternyata jadi lebih sulit. Dulu bertanya untuk stakeholder; sekarang untuk orang yang saya pimpin, dan mereka cenderung menjawab apa yang ingin saya dengar. Otoritas membuat orang patuh. Trust membuat orang bilang saya salah sebelum terlambat. <strong>Dari kursi ini, yang kedua satu-satunya yang menyelamatkan.</strong> Yang pertama cuma membuat kesalahan saya dijalankan lebih rapi.</p>
+      
+      <p><em>Iterasi &gt; Sempurna</em> dapat catatan kaki dari Bab 3. Iterasi untuk pintu dua arah; untuk pintu satu arah, sempurna masih layak ditunggu. Sebagai PM, hampir semua yang saya kerjakan bisa diulang kalau salah. Dari kursi ini, sebagian tidak bisa. Jadi murahnya versi pertama belum tentu alasan untuk mengirimnya. Kadang justru alasan untuk menahannya sehari lagi, supaya sempat dibaca orang lain.</p>
+      
+      <p><em>Sistem &gt; Heroik</em> punya bentuk baru di perusahaan baru: saya kerjakan sendiri karena lebih cepat. Rasanya produktif. Padahal tidak bisa diulang, dan tidak mengajari siapa pun. AI bikin godaan ini makin masuk akal, karena dengan alatnya, mengerjakan sendiri memang sering terasa lebih cepat. Jujur saja, saya tidak yakin saya menang tiap kali. Yang saya coba: tiap kali tergoda, tanya dulu siapa yang seharusnya belajar dari pekerjaan ini.</p>
+      
+      <h3>Satu hal lagi yang tidak berubah: penilaian</h3>
+      <p>AI memberi pilihan lebih banyak dan lebih cepat. Tapi memilih tetap pekerjaan manusia, dan memilih dengan benar butuh sesuatu yang tidak bisa dipercepat: pengalaman pernah salah. <strong>Kecepatan membuat pengalaman makin berharga, karena makin banyak keputusan per hari yang harus dinilai.</strong> Kalau kamu merasa pengalamanmu tidak laku lagi karena belum fasih dengan alatnya, kamu sedang salah hitung.</p>
+      
+      <p>Drucker menulis bahwa kebanyakan orang salah menilai kekuatannya sendiri. Kamu yang merasa tertinggal mungkin sedang salah ke arah sebaliknya. Kamu tahu persis apa yang belum bisa. Kamu lupa apa yang sudah bisa. Supaya saya sendiri tidak lupa, tiga kebiasaan yang ingin saya pasang:</p>
+      
+      <ul class="notes">
+        <li><strong>Apa yang membuat saya berubah pikiran.</strong> Ditulis di setiap keputusan penting. Kalau tidak bisa dijawab, itu belum penilaian. Itu keyakinan.</li>
+        <li><strong>Prinsip dibaca ulang dengan pelanggarannya.</strong> Prinsip yang paling sering dilanggar biasanya yang paling mahal.</li>
+        <li><strong>Satu orang yang tugasnya membantah.</strong> Dicari sebelum butuh, dan boleh salah tanpa konsekuensi. Kalau sebulan tidak ada yang membantah, belum tentu saya benar.</li>
+      </ul>
+      
+      <div class="pullquote">AI mempercepat hampir semuanya. Memilih mana yang boleh salah masih pekerjaan saya, dan masih lambat.</div>
+      
+      <div class="refs">
+        <div class="refs-title">— Referensi</div>
+        <ol>
+          <li><a class="ref" href="https://hbr.org/2005/01/managing-oneself" target="_blank" rel="noopener">Managing Oneself — Peter Drucker, HBR</a> — Esai klasik soal bekerja dari kekuatan; lebih relevan ketika alat berubah tiap bulan.</li>
+          <li><a class="ref" href="https://www.amazon.com/High-Output-Management-Andrew-Grove/dp/0679762884" target="_blank" rel="noopener">High Output Management — Andy Grove</a> — Buku operasi yang masih paling jujur soal apa yang sebenarnya dikerjakan manajer.</li>
+          <li><a class="ref" href="https://www.amazon.com/Turn-Ship-Around-Turning-Followers/dp/1591846404" target="_blank" rel="noopener">Turn the Ship Around! — L. David Marquet</a> — Soal memberi otoritas ke orang yang punya informasi, bukan menarik informasi ke orang yang punya otoritas.</li>
+          <li><a class="ref" href="https://www.amazon.com/Thinking-Fast-Slow-Daniel-Kahneman/dp/0374533555" target="_blank" rel="noopener">Thinking, Fast and Slow — Daniel Kahneman</a> — Kenapa penilaian cepat sering salah, dan kapan harus sengaja diperlambat.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LETTER ============ -->
+<section class="letter" id="letter">
+  <div class="letter-inner">
+    <div class="stamp">Untuk Yang Merasa Tertinggal</div>
+    <div class="salutation">Untuk kamu yang merasa tertinggal,</div>
+    <p>Saya sudah bicara padamu sepanjang tulisan ini. Saya mau tutup pelan-pelan saja.</p>
+    
+    <p>Kamu tidak tertinggal. Kamu berdiri di tempat yang sama dengan kemarin, dan dunia di sekitarmu yang bergeser. Itu dua hal yang beda, meskipun rasanya sama.</p>
+    
+    <p>Saya kira semua orang pernah mengangguk di rapat sambil tidak sepenuhnya mengerti. Lalu mulai curiga bahwa pengalamannya, bertahun-tahun belajar membaca orang dan membaca ruangan, sekarang tidak laku lagi.</p>
+    
+    <p>Dengar: <strong>pengalamanmu adalah bagian yang paling susah dihasilkan mesin.</strong> Alatnya bisa kamu pelajari dalam hitungan minggu, dengan satu orang yang duduk di sebelahmu. Penilaianmu butuh bertahun-tahun, dan kamu sudah punya.</p>
+    
+    <p>Yang kamu butuhkan cuma tiga: waktu yang diberikan, satu orang yang sabar, dan izin untuk terlihat belum bisa selama beberapa minggu. Kalau tempat kerjamu tidak memberikannya, mintalah. Kalau tetap tidak, itu kekurangan sistemnya. Bukan kekuranganmu.</p>
+    
+    <p>Dan kalau kamu membaca ini sebagai orang yang memimpin: kamu berutang ketiganya pada orang-orangmu. Saya juga. Saya masih mencicilnya.</p>
+    
+    <p>Pergilah belajar satu hal kecil minggu ini. Cukup satu.</p>
+    
+    <p>Lalu ajak satu orang lagi.</p>
+    <div class="signoff">
+      <div class="signoff-text">Salam hangat,</div>
+      <div class="signature">Heribertus Hariyanto Atmaja</div>
+      <div class="signature-role">Chief Operating Officer &amp; Product Lead · Nemu Marketplace · Nourri Active · 2026</div>
+    </div>
+    <div class="contact-strip">
+      <div class="ct-label">— Mari berbicara</div>
+      <div class="ct-links">
+        <a href="mailto:heribertushhariyanto@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/heribertus-hariyanto-atmaja-a29b63199/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/heribertusha/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EDISI LAIN ============ -->
+<section class="issues-next" aria-labelledby="issues-next-title">
+  <div class="issues-next-inner">
+    <div class="section-label" id="issues-next-title">— Edisi Lain</div>
+    <div class="issues-next-grid">
+      <a class="issues-next-item" href="/">
+        <span class="dir">← Edisi sebelumnya</span>
+        <span class="num">01</span>
+        <span class="t">The Handover</span>
+        <span class="m">Mei 2026 · 14 menit</span>
+      </a>
+      <a class="issues-next-item" href="/arsip/">
+        <span class="dir">Arsip</span>
+        <span class="num">02</span>
+        <span class="t">Semua edisi The Handover</span>
+        <span class="m">Vol. 01 · Vol. 02</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COLOPHON ============ -->
+<footer>
+  <div class="colophon">
+    <div class="colophon-block">
+      <div class="ttl">— Colophon</div>
+      <p>Diset dalam Fraunces &amp; Inter. Dibuat sebagai catatan personal untuk siapa saja yang menerima estafet menjadi project manager — di era apapun.</p>
+    </div>
+    <div class="colophon-block">
+      <div class="ttl">— Lisensi</div>
+      <p>Semua isi di sini gratis untuk dibagikan, dikutip, dimodifikasi. Atribusi dihargai, tidak diwajibkan. Pengetahuan tidak boleh dipenjara.</p>
+    </div>
+    <div class="colophon-block">
+      <div class="ttl">— Versi</div>
+      <p>v1.0 · Mei 2026 · Living document. Akan diperbarui ketika dunia berubah — yang berarti, segera.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Heribertus Hariyanto Atmaja</span>
+    <span>The Handover Issue · Vol. 02</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js" defer></script>
+
+</body>
+</html>
