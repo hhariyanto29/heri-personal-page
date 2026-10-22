@@ -1,0 +1,9 @@
+# Cloudflare Pages response headers (consumed as config, not served)
+# The WebGL scene is ~630 KB and changes rarely: let browsers keep it for a day.
+/src/shaders/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+# Issue posters and share images: regenerated only when an issue's cover changes.
+/assets/covers/*
+  Cache-Control: public, max-age=604800
+/assets/og/*
+  Cache-Control: public, max-age=604800

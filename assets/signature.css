@@ -1,0 +1,102 @@
+/* The Handover — signature visuals (see signature.js). */
+.sig{
+  --sig-acc:var(--accent);
+  --sig-acc-text:var(--accent-text,var(--accent));
+  margin:48px 0 56px;
+  max-width:760px;
+  padding-top:18px;
+  border-top:1px solid var(--ink);
+}
+/* wide desktops: the figure shares the pullquotes' and subheads' 680px measure (one right edge
+   besides the body text's) and keeps a full gutter from the reader's chapter rail */
+@media (min-width:1180px){.sig{max-width:680px}}
+.sig-stage{
+  position:relative;margin:0 0 22px;
+  scroll-margin-top:env(safe-area-inset-top,0px);   /* read by signature.js: where a tucked masthead leaves the top */
+}
+.sig-stage:empty{display:none}
+/* drawn at the figure's width in whole CSS px (signature.js) and shown at that size, never stretched */
+.sig-stage svg{display:block;max-width:100%;height:auto;overflow:visible}
+
+/* caption: the text equivalent of the drawing */
+.sig-cap{
+  /* the rule spans the whole figure; the text keeps the 620px measure */
+  padding-top:12px;
+  padding-right:max(0px,calc(100% - 620px));
+  border-top:1px solid rgba(26,24,20,.16);
+  border-top:1px solid color-mix(in srgb,var(--ink) 16%,transparent);   /* follows the ink token (dark mode too) */
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:13.5px;
+  line-height:1.6;
+  color:var(--muted);
+  text-wrap:pretty;
+}
+.sig-cap::before{
+  content:"Gambar";
+  content:"Gambar" / "";                       /* decorative: kept out of the accessible name */
+  margin-right:10px;
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--sig-acc-text);
+}
+/* JS off (empty stage, not mounted by signature.js): no drawing to caption, so the text stands
+   alone as a short ruled note */
+.sig:not(.sig-live):has(> .sig-stage:empty){max-width:620px}
+.sig:not(.sig-live):has(> .sig-stage:empty) .sig-cap{border-top:none;padding:0;font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:17px;line-height:1.6;color:var(--ink-soft)}
+.sig:not(.sig-live):has(> .sig-stage:empty) .sig-cap::before{content:none}
+
+/* drawing vocabulary */
+.sig text{font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:400;fill:var(--ink)}
+.sig text.m{letter-spacing:.18em}
+.sig text.b{font-weight:500}
+.sig text.mu{fill:var(--muted)}
+.sig text.ac{fill:var(--sig-acc-text)}
+.sig text.ink-s{fill:var(--ink-soft)}
+.sig text.n{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:300;letter-spacing:-.02em}
+.sig text.n.ac{fill:var(--sig-acc)}
+.sig text.w{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-.005em}
+.sig text.halo{paint-order:stroke;stroke:var(--paper);stroke-width:5px;stroke-linejoin:round}
+
+.sig .hair{stroke:var(--ink);stroke-opacity:.22;stroke-width:1;fill:none}
+.sig .hair.dash{stroke-dasharray:2 3}
+.sig .ink-1{stroke:var(--ink);stroke-width:1;fill:none}
+.sig .acc-1{stroke:var(--sig-acc);stroke-width:1.25;fill:none}
+.sig .acc-2{stroke:var(--sig-acc);stroke-width:2;fill:none}
+.sig .head{fill:var(--sig-acc);stroke:var(--paper);stroke-width:2.5}
+
+/* agent-trust */
+.sig .doc{fill:var(--paper);stroke:var(--muted);stroke-opacity:.45;stroke-width:1}
+.sig .doc-ink{fill:none;stroke:var(--ink);stroke-width:1}
+.sig .doc-head{fill:var(--ink)}
+.sig .doc-line{stroke:var(--muted);stroke-width:1}
+.sig .chk{fill:var(--sig-acc)}
+.sig .chk-tick{fill:none;stroke:var(--paper);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sig .stamp-o{fill:var(--paper);stroke:var(--sig-acc);stroke-width:1.4}
+.sig .stamp-i{fill:none;stroke:var(--sig-acc);stroke-width:.6}
+.sig text.stamp-t{fill:var(--sig-acc-text);font-weight:500;letter-spacing:.12em}
+
+/* bottleneck */
+.sig .seg-fill{fill:var(--paper)}
+.sig .seg{fill:none;stroke:var(--ink);stroke-width:1}
+.sig .ghost{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3}
+.sig .hatch{stroke:var(--sig-acc);stroke-width:1.25;stroke-opacity:.8}
+.sig .loop{fill:none;stroke:var(--ink);stroke-opacity:.55;stroke-width:1}
+.sig .loop-head{fill:none;stroke:var(--ink);stroke-opacity:.55;stroke-width:1;stroke-linejoin:round;stroke-linecap:round}
+.sig .dim-now{fill:none;stroke:var(--ink);stroke-width:1}
+.sig .dim-ghost{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3}
+.sig .echo-br{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:3 2}
+.sig .echo-st{stroke:var(--muted);stroke-width:1}
+
+@media (max-width:780px){
+  .sig{margin:40px 0 48px;padding-top:14px}
+  .sig-stage{margin-bottom:18px}
+}
+
+/* print: the drawing is left out (site.css), so the caption stands alone as in the JS-off case */
+@media print{
+  .sig{max-width:620px}
+  .sig-cap{border-top:0;padding-top:0;font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:17px;line-height:1.6;color:var(--ink-soft)}
+  .sig-cap::before{content:none}
+}

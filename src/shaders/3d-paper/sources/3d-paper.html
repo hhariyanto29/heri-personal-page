@@ -1,10 +1,12 @@
+<!doctype html>
+<html lang="id">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>3D Paper</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0d'/%3E%3Ccircle cx='13' cy='19' r='6' fill='%23fff'/%3E%3Ccircle cx='25' cy='23' r='2.6' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{ --bg:#08080a; --ink:#f2f2f0; --dim:rgba(242,242,240,.38); }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -23,15 +25,23 @@ body{
 #bg h1{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   font-family:"Inter Tight",sans-serif;font-weight:600;letter-spacing:-.055em;
-  font-size:clamp(56px,18.6vw,420px);line-height:.8;white-space:nowrap; /* 56px floor: the word stays whole in a phone-wide frame */
-  color:rgba(242,242,240,.125);
+  /* height-bound like the sheet, so the wide poster (drawn height-fit by the host) matches
+     the live frame at 4:3 as well as 16:10 (29.8vh = 18.6vw at 16:10); 24vw stops a portrait
+     tablet frame from cropping it hard */
+  font-size:clamp(56px,min(29.8vh,24vw),420px);line-height:.8;white-space:nowrap;
+  color:rgba(242,242,240,.119);
+  will-change:transform,opacity;   /* scroll parallax runs on the compositor */
   -webkit-user-select:none;user-select:none;
 }
+/* a phone hero or a plate: the host draws those posters width-fit, so the word follows the
+   width; the 56px floor keeps it whole in a phone-wide frame */
+@media (max-width:780px){ #bg h1{font-size:clamp(56px,18.6vw,420px)} }
+/* depth of field: a static blur on the word itself. The span is not a layer of its
+   own, so the blur is rasterised once into the h1's layer (it used to be a
+   full-frame backdrop-filter, recomposited under every WebGL frame) */
+#bg h1 span{display:inline-block;filter:blur(2.4px)}
 
 /* ---------- layers over it ---------- */
-#dof{position:fixed;inset:-30px;z-index:2;pointer-events:none;
-     backdrop-filter:blur(2.4px);-webkit-backdrop-filter:blur(2.4px);
-     background:rgba(8,8,10,.05)}
 #gl{position:fixed;top:0;left:0;width:100%;height:100%;z-index:3;
     pointer-events:none;display:block}
 #grain,#grain2{position:fixed;inset:0;z-index:4;pointer-events:none;
@@ -40,22 +50,29 @@ body{
 #grain2{opacity:.02}
 #vig{position:fixed;inset:0;z-index:5;pointer-events:none;
      background:radial-gradient(120% 90% at 50% 45%,rgba(0,0,0,0) 42%,rgba(0,0,0,.52) 100%)}
-#hint{position:fixed;left:0;right:0;bottom:64px;z-index:6;pointer-events:none;
-      text-align:center;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
-      color:rgba(242,242,240,.30);opacity:0;transition:opacity .8s ease}
-#hint b{font-weight:500;color:rgba(242,242,240,.58)}
-@media(hover:none){ #hint{display:none} } /* the host page disables touch input on the banner */
+/* the site's mono label voice. The script parks it under the sheet's lowest reach (on a
+   hero: on the line of the host's "Scroll · Prolog" cue) and hides it when the frame has no
+   room. Plain words ~7:1 on the ground, bold words brighter. */
+#hint{position:fixed;left:50%;top:0;z-index:6;pointer-events:none;
+      transform:translate(-50%,-100px);white-space:nowrap;
+      font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:500;
+      font-size:11px;line-height:16px;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(245,241,234,.62);opacity:0;visibility:hidden;   /* the host cue's grey */
+      transition:opacity .8s ease,visibility 0s linear .8s}
+#hint.on{opacity:1;visibility:visible;transition:opacity .8s ease}
+#hint b{font-weight:600;color:rgba(245,241,234,.94)}
+/* the host turns pointer input on the banner off for coarse pointers: same rule here */
+@media (hover:none),(pointer:coarse){ #hint{display:none} }
 
 </style>
 
-<div id="bg"><h1>HANDOVER</h1></div>
+<div id="bg"><h1><span>HANDOVER</span></h1></div>
 
-<div id="dof"></div>
 <canvas id="gl"></canvas>
 <div id="grain"></div>
 <div id="grain2"></div>
 <div id="vig"></div>
-<div id="hint"><b>Drag</b> to turn it<span class="ptr"> &nbsp;·&nbsp; <b>Hover</b> to light it</span></div>
+<div id="hint"><b>Seret</b> untuk memutar<span class="ptr"> &nbsp;·&nbsp; <b>Arahkan</b> untuk menyinari</span></div>
 
 <script>/**
  * @license
@@ -71,8 +88,9 @@ const T = THREE;
 const TW = 1400, TH = 1932;               // 0.7246, same proportion as before
 const clamp = (v,a,b)=> v<a?a:(v>b?b:v);
 const rng = (s)=>()=>{ s=(s*1103515245+12345)&0x7fffffff; return (s>>>8)/8388608; };
-const REDUCED = window.matchMedia &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const mq = (q)=> !!(window.matchMedia && window.matchMedia(q).matches);
+const REDUCED = mq('(prefers-reduced-motion: reduce)');
+const COARSE  = mq('(pointer: coarse)');
 
 // the author's photo, drawn into the glass texture. It is loaded same-origin
 // (the host iframe allows it) so the canvas stays untainted for WebGL.
@@ -90,14 +108,55 @@ const COPY = {
   role:     P('role',     'Project Manager · Emveep · Software House'),
   kicker:   P('kicker',   'An essay for whoever takes this seat next'),
   issue:    P('issue',    'The Handover Issue.'),
-  quote:    P('quote',    '“Pekerjaan terbaik seorang PM bukan mengatur orang — tapi membuat mereka tidak perlu diatur.”'),
+  quote:    P('quote',    '“Pekerjaan terbaik seorang PM|bukan mengatur orang —|tapi membuat mereka|tidak perlu diatur.”'),
   meta:     P('meta',     'Estimasi membaca · 14 menit'),
   side:     P('side',     'PM · 2026'),
   foot:     P('foot',     'The Handover.'),
   vol:      P('vol',      'Vol. 01 · 2026'),
   wordmark: P('wordmark', 'HANDOVER')
 };
-{ const wm = document.querySelector('#bg h1'); if (wm) wm.textContent = COPY.wordmark; }
+// host flags. Embedded, the frame fades in over the host's poster (a still of this same
+// sheet), so it starts fully risen at the poster's pose; intro=1 forces the rise-in, and
+// intro=0 skips it standalone. cta=1: a click opens the issue. hint=0: no hint (captures).
+// still=1: one frame of the start pose (t = 0, pointer centred, no hint) and no loop after
+// it: the poster capture, so a live frame's first image matches its poster.
+const EMBEDDED = window.parent !== window;
+const STILL = Q.get('still') === '1';
+const NO_INTRO = STILL || Q.get('intro') === '0' || (EMBEDDED && Q.get('intro') !== '1');
+const CTA = Q.get('cta') === '1';
+const NO_HINT = STILL || Q.get('hint') === '0';
+// large print: the sheet's small type (issue, quote, meta, side label, caption) set bigger
+// wherever the sheet shows small on screen: a phone hero (any frame up to 780 px wide, where
+// the host also switches to the tall, width-fit poster) and a plate (cta=1). print=large /
+// print=regular force either (poster captures).
+const PRINT = Q.get('print');
+const largePrint = ()=> PRINT === 'large' || (PRINT !== 'regular' && (CTA || window.innerWidth <= 780));
+let LARGE = largePrint();
+// accent=#rrggbb: the issue colour for the "H." mark and a faint environment tint.
+// Without it the sheet keeps Vol. 01's original look.
+const ACCENT = (()=>{
+  const m = /^#?([0-9a-f]{6})$/i.exec((Q.get('accent') || '').trim());
+  if(!m) return null;
+  const n = parseInt(m[1], 16);
+  return [n >> 16 & 255, n >> 8 & 255, n & 255];
+})();
+const mixRGB = (a, b, t)=> a.map((v, i)=> v + (b[i] - v)*t);
+const rgbStr = (c, a)=> 'rgba(' + c.map(Math.round).join(',') + ',' + a + ')';
+
+const wordEl = document.querySelector('#bg h1');
+if (wordEl) wordEl.firstElementChild.textContent = COPY.wordmark;
+const hintEl = document.getElementById('hint');
+if (CTA) hintEl.innerHTML = '<b>Klik</b> untuk membaca &nbsp;·&nbsp; <b>Seret</b> untuk memutar';
+
+// scene -> host messages; standalone they are only logged (window.__sheet.sent)
+const sent = [];
+const LAYOUT = {};                         // the sheet's computed type sizes (grid px), for tests
+function post(msg){
+  sent.push(msg);
+  if(EMBEDDED){
+    try{ window.parent.postMessage(msg, location.origin); }catch(_){}
+  }
+}
 
 /* ======================================================================
    1. THE CERTIFICATE — printed on glass
@@ -106,13 +165,63 @@ function rr(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y);
   ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
   ctx.arcTo(x,y+h,x,y,r);     ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
 
-function wrapL(ctx,text,x,y,maxW,lh){
-  const words=text.split(' '); let line='', yy=y;
-  for(const w of words){ const t=line?line+' '+w:w;
-    if(ctx.measureText(t).width>maxW && line){ ctx.fillText(line,x,yy); line=w; yy+=lh; }
-    else line=t; }
-  if(line) ctx.fillText(line,x,yy);
-  return yy+lh;
+// word wrap with the current font. "|" forces a break, non-breaking spaces hold
+// words together, and a sentence that cannot finish on the current line starts a
+// new one (so "A. B." breaks after "A." rather than inside B)
+function wrapLines(ctx, text, maxW){
+  const out=[];
+  const fits = (s)=> ctx.measureText(s).width <= maxW;
+  for(const para of text.split('|')){
+    const words = para.split(/ +/).filter(Boolean);
+    let line='';
+    for(let i=0;i<words.length;i++){
+      const t = line ? line+' '+words[i] : words[i];
+      if(line && !fits(t)){ out.push(line); line = words[i]; }
+      else line = t;
+      if(/[.!?…]["”’»)]?$/.test(words[i]) && i < words.length-1){
+        let j = i+1;
+        while(j < words.length-1 && !/[.!?…]["”’»)]?$/.test(words[j])) j++;
+        if(!fits(line+' '+words.slice(i+1, j+1).join(' '))){ out.push(line); line=''; }
+      }
+    }
+    if(line) out.push(line);
+  }
+  return out;
+}
+
+// the evenest way to set a text in exactly n lines no wider than maxW (current font): each
+// line as close as possible to the longest one (a short last line costs less, a one-word
+// last line more), and a break after a comma, a dash or a full stop is worth a little
+// unevenness. Returns null for a hand-set ("|") or very long text (the greedy wrap stays).
+function balanceLines(ctx, text, maxW, n){
+  const tok = text.split(/ +/).filter(Boolean);
+  if(n < 2 || n > 6 || tok.length > 30 || text.includes('|')) return null;
+  const sp = ctx.measureText(' ').width, pre = [0];
+  tok.forEach((t, i)=>{ pre[i+1] = pre[i] + ctx.measureText(t).width; });
+  const lineW = (i, j)=> pre[j] - pre[i] + (j - i - 1)*sp;           // tokens i..j-1
+  const stop = /[,;:—–.!?…]["”’»)]?$/;
+  const ends = [];
+  let best = null, bestCost = Infinity;
+  (function rec(start, k){
+    const last = k === n - 1;
+    for(let e = last ? tok.length : start + 1; e <= tok.length - (n - 1 - k); e++){
+      if(lineW(start, e) > maxW) break;
+      ends[k] = e;
+      if(!last){ rec(e, k + 1); continue; }
+      let s = 0, top = 0;
+      const ws = ends.map(x=>{ const w = lineW(s, x); s = x; top = Math.max(top, w); return w; });
+      let cost = 0;
+      ws.forEach((w, i)=>{
+        const d = (top - w)/top;
+        if(i < n - 1) cost += d*d - (stop.test(tok[ends[i] - 1]) ? 0.05 : 0);
+        else cost += 0.25*d*d + (ends[i] - ends[i - 1] === 1 ? 0.1 : 0);
+      });
+      if(cost < bestCost){ bestCost = cost; best = ends.slice(); }
+    }
+  })(0, 0);
+  if(!best) return null;
+  let s = 0;
+  return best.map(e=>{ const l = tok.slice(s, e).join(' '); s = e; return l; });
 }
 
 function signature(ctx,x,y,s,seed,color){
@@ -141,6 +250,8 @@ function drawGlass(ctx){
   ctx.scale(TW/1200, TH/1656);
 
   ctx.fillStyle='rgba(255,255,255,.030)'; ctx.fillRect(0,0,1200,1656);
+  const BIG = LARGE;                          // larger small print (see largePrint)
+  LAYOUT.large = BIG;
   // a whisper of frost behind the headline so it holds over the type below
   // the band ends 26px under the kicker: 880 for a three-line title, lower for four or five
   const nT = Math.min(5, COPY.title.split('|').length);
@@ -157,9 +268,21 @@ function drawGlass(ctx){
   rr(ctx,36,36,1128,1584,10); ctx.stroke();
 
   const M=74;
-  // top-left mark: the site's italic "H" favicon letter. No italic face is loaded,
-  // so lean the upright glyph with a skew anchored on its baseline.
-  ctx.fillStyle='#ffffff'; ctx.font='700 104px "Inter Tight", Inter, sans-serif';
+  // top-left mark: the site's italic "H" favicon letter, in the issue accent when
+  // one is given. No italic face is loaded, so lean the upright glyph with a skew
+  // anchored on its baseline.
+  // Lifted toward white just enough to hold on the dark glass: relative luminance >= .22
+  // before the glass material's cool tint and clearcoat darken it (>= 3:1 on screen).
+  // Vol. 01's vermilion barely moves, Vol. 02's deep ultramarine a little more.
+  ctx.fillStyle = (()=>{
+    if(!ACCENT) return '#ffffff';
+    const lum = (c)=> c.map(v=>{ v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); })
+                      .reduce((s, v, i)=> s + v*[0.2126, 0.7152, 0.0722][i], 0);
+    let t = 0.10, c = mixRGB(ACCENT, [255,255,255], t);
+    while(lum(c) < 0.22 && t < 0.7){ t += 0.02; c = mixRGB(ACCENT, [255,255,255], t); }
+    return rgbStr(c, 1);
+  })();
+  ctx.font='700 104px "Inter Tight", Inter, sans-serif';
   ctx.save(); ctx.transform(1,0,-0.18,1,0.18*190,0);
   ctx.fillText('H.', M, 190);
   ctx.restore();
@@ -174,6 +297,24 @@ function drawGlass(ctx){
       size -= 2;
     }
   };
+  // one line of Inter, shrunk (max -> min) until it fits maxW; leaves the font set
+  const fitLine = (text, weight, max, min, maxW)=>{
+    let size = max;
+    for(;;){
+      ctx.font = weight+' '+size+'px Inter, sans-serif';
+      if(ctx.measureText(text).width <= maxW || size <= min) return size;
+      size -= 1;
+    }
+  };
+  // copy still too wide at the minimum size is cut with "…" (in the current font),
+  // so no line ever runs into the side label or past the frame
+  const clip = (text, maxW)=>{
+    if(ctx.measureText(text).width <= maxW) return text;
+    let t = text;
+    while(t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0, -1);
+    return t.replace(/[\s·,;:—–-]+$/, '') + '…';
+  };
+  const TEXT_R = 1200 - M - 10;              // right limit for full-width lines (inner frame)
 
   // author name: the largest element, bright lines inside the frost band
   // (a one-line name sits on the second baseline so the title block never moves)
@@ -181,7 +322,7 @@ function drawGlass(ctx){
   const nameSize = fit(nameLines, 600, 104, 72);
   ctx.fillStyle='#ffffff';
   let y = 350 + (2 - nameLines.length) * 112;
-  nameLines.forEach(s=>{ ctx.fillText(s, M, y); y += Math.round(nameSize * 1.077); });
+  nameLines.forEach(s=>{ ctx.fillText(clip(s, TEXT_R - M), M, y); y += Math.round(nameSize * 1.077); });
 
   // essay title in the dim weight; the lines come pre-broken with "|"
   const titleLines = COPY.title.split('|').slice(0, 5);
@@ -190,26 +331,29 @@ function drawGlass(ctx){
   const titleLH = Math.round(titleSize * 1.105);
   ctx.fillStyle='rgba(255,255,255,.52)';
   y = 576;
-  titleLines.forEach(s=>{ ctx.fillText(s, M, y); y += titleLH; });
+  titleLines.forEach(s=>{ ctx.fillText(clip(s, TEXT_R - M), M, y); y += titleLH; });
 
   // role line and kicker where the old "By ..." lines sat, 68px under the last title line
   const smallY = y - titleLH + 68;
+  const SMALL_W = TEXT_R - (M+4);                    // the right limit of every full-width line
   const small = (text, alpha, yy)=>{
-    let size = 34;                                   // shrink until the line clears the inner frame
+    let size = 34;                                   // shrink until the line fits
     for(;;){
       ctx.font='600 '+size+'px Inter, sans-serif';
-      if(ctx.measureText(text).width <= 1086 || size <= 22) break;
+      if(ctx.measureText(text).width <= SMALL_W || size <= 22) break;
       size -= 2;
     }
-    ctx.fillStyle='rgba(255,255,255,'+alpha+')'; ctx.fillText(text, M+4, yy);
+    const s = clip(text, SMALL_W);
+    ctx.fillStyle='rgba(255,255,255,'+alpha+')'; ctx.fillText(s, M+4, yy);
+    return {size, right: M+4 + Math.round(ctx.measureText(s).width)};
   };
-  small(COPY.role, '.90', smallY);
-  small(COPY.kicker, '.72', smallY + 42);
+  LAYOUT.role = small(COPY.role, '.90', smallY);
+  LAYOUT.kicker = small(COPY.kicker, '.72', smallY + 42);
 
   // the author's photo, pasted bottom-left like a print on the glass, in its
   // own colours (a touch more saturation offsets the glass material's cool tint)
+  const pw=360, ph=398, pxl=M, pyt=980;
   if(photo.complete && photo.naturalWidth > 0){
-    const pw=360, ph=398, pxl=M, pyt=980;
     ctx.save();
     rr(ctx,pxl,pyt,pw,ph,10); ctx.clip();
     if('filter' in ctx) ctx.filter='contrast(1.05) saturate(1.12)';
@@ -220,31 +364,93 @@ function drawGlass(ctx){
     ctx.restore();
     ctx.strokeStyle='rgba(255,255,255,.34)'; ctx.lineWidth=2;
     rr(ctx,pxl,pyt,pw,ph,10); ctx.stroke();
-    ctx.font='500 22px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.62)';
-    ctx.fillText('— The Author', pxl, pyt+ph+40);
+    LAYOUT.caption = fitLine('— The Author', 500, BIG ? 38 : 30, BIG ? 32 : 26, pw);
+    ctx.fillStyle='rgba(255,255,255,.66)';
+    ctx.fillText('— The Author', pxl, pyt + ph + Math.round(LAYOUT.caption*0.727) + 24);
   }
 
-  // bottom-right block: the pull quote and reading time (the fake signatures are gone)
-  const px=592, py=1158;
-  ctx.font='700 24px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.92)';
-  ctx.fillText(COPY.issue, px, py);
-  ctx.font='500 24px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.68)';
-  const endY = wrapL(ctx, COPY.quote, px, py+36, 400, 30);
-  ctx.fillStyle='rgba(255,255,255,.62)';
-  ctx.fillText(COPY.meta, px, endY+18);
+  // bottom-right block, hung on the photo: the issue line on its top edge, the
+  // reading time on its bottom edge, the pull quote set under the issue line.
+  // Sizes are grid px (about x0.47 on screen at 1440 wide, x0.29 on a phone).
+  const BX = 500, BW = 540, CAP = 0.727;             // Inter cap height / em
+  const issueS = fitLine(COPY.issue, 700, BIG ? 44 : 36, BIG ? 36 : 28, BW);
+  const issueY = pyt + Math.round(issueS*CAP);
+  ctx.fillStyle='rgba(255,255,255,.92)'; ctx.fillText(clip(COPY.issue, BW), BX, issueY);
 
-  // rotated side label near the right edge
-  ctx.save(); ctx.translate(1200-M-24, 1236); ctx.rotate(Math.PI/2);
-  ctx.font='500 24px Inter, sans-serif'; ctx.fillStyle='rgba(255,255,255,.62)';
-  ctx.fillText('—', 0, 0); ctx.fillText(COPY.side, 48, 0);
+  const metaS = fitLine(COPY.meta, 500, BIG ? 42 : 34, BIG ? 34 : 28, BW);
+  const metaY = pyt + ph;
+  ctx.fillStyle='rgba(255,255,255,.72)'; ctx.fillText(clip(COPY.meta, BW), BX, metaY);
+
+  // the quote: the largest size (52 -> 30) whose wrapped lines fill at most ~70% of
+  // the space between the two, so a short line is set big and a long one stays
+  // calm; a dash never starts a line, and a quote too long even at 30 is cut with "…".
+  // Large print: 52 -> 40 over ~85% of the space, and the hand-set breaks are dropped so
+  // the quote re-flows at the bigger size
+  const qTop = issueY + 40;                           // cap top of the first line
+  const qMax = metaY - Math.round(metaS*CAP) - 46;    // lowest allowed baseline
+  const qRoom = (qMax - qTop)*(BIG ? 0.85 : 0.70);
+  const qMin = BIG ? 40 : 30;
+  // a dash never starts a line; "di"/"ke" stay with the word they introduce, and any other
+  // word of three letters or fewer ("PM", "AI", "ini") with the word before it. "|" is a
+  // hand-set break (the default quote is set that way)
+  const quote = (BIG ? COPY.quote.replace(/\s*\|\s*/g, ' ') : COPY.quote).replace(/ ([—–-])(?=[ |]|$)/g, '\u00a0$1')
+    .replace(/(^|[\s“"‘(|])(di|ke|Di|Ke) /g, '$1$2\u00a0')
+    .replace(/ (\S{1,3})(?=[ |]|$)/g, '\u00a0$1');
+  const setQuote = (s)=>{
+    ctx.font = '500 '+s+'px Inter, sans-serif';
+    return wrapLines(ctx, quote, BW);
+  };
+  let qS = 52, qLines = setQuote(qS);
+  while(qS > qMin && Math.round(qS*CAP) + (qLines.length-1)*Math.round(qS*1.25) > qRoom){
+    qS -= 2; qLines = setQuote(qS);
+  }
+  // a step or three smaller is worth it when it saves a line (fewer, fuller lines)
+  for(let s = qS-2; s >= Math.max(qMin, qS-6); s -= 2){
+    const l = setQuote(s);
+    if(l.length < qLines.length){ qS = s; qLines = l; break; }
+  }
+  setQuote(qS);
+  const qLH = Math.round(qS*1.25);
+  const qFit = Math.max(1, Math.floor((qMax - qTop - Math.round(qS*CAP))/qLH) + 1);
+  // the same number of lines, broken as evenly as the words allow
+  if(qLines.length <= qFit){
+    const even = balanceLines(ctx, quote, BW, qLines.length);
+    if(even) qLines = even;
+  }
+  if(qLines.length > qFit){
+    qLines = qLines.slice(0, qFit);
+    let l = qLines[qFit-1] + '…';
+    while(ctx.measureText(l).width > BW && l.length > 2) l = l.slice(0, -2) + '…';
+    qLines[qFit-1] = l;
+  }
+  ctx.fillStyle='rgba(255,255,255,.82)';
+  let qy = qTop + Math.round(qS*CAP);
+  qLines.forEach((l, i)=>{
+    // hang an opening quote mark in the margin so the words align with the issue line
+    const hang = i === 0 && /^[“"‘«]/.test(l) ? ctx.measureText(l[0]).width : 0;
+    ctx.fillText(l, BX - hang, qy); qy += qLH;
+  });
+  const quoteW = Math.round(Math.max.apply(null, qLines.map(l=>ctx.measureText(l).width)));
+
+  // rotated side label in the right margin, starting level with the photo's top;
+  // its cap line sits on the M margin
+  const sideS = fitLine('—  ' + COPY.side, 500, BIG ? 38 : 30, BIG ? 30 : 22, ph);
+  ctx.save(); ctx.translate(1200-M-Math.round(sideS*CAP), pyt); ctx.rotate(Math.PI/2);
+  ctx.fillStyle='rgba(255,255,255,.66)';
+  ctx.fillText('—', 0, 0); ctx.fillText(clip(COPY.side, ph - Math.round(sideS*2)), Math.round(sideS*2), 0);
   ctx.restore();
+  Object.assign(LAYOUT, {issue:issueS, meta:metaS, quote:qS, quoteLines:qLines.length, quoteW,
+                         quoteText:qLines.join(' / '),
+                         quoteBottom:qy - qLH, metaTop:metaY - Math.round(metaS*CAP), side:sideS});
 
   // footer: publication and volume
   ctx.font='700 34px "Inter Tight", Inter, sans-serif'; ctx.fillStyle='#ffffff';
-  ctx.fillText(COPY.foot, M, 1516);
-  const w = ctx.measureText(COPY.foot).width;
+  const foot = clip(COPY.foot, TEXT_R - M);
+  ctx.fillText(foot, M, 1516);
+  const w = ctx.measureText(foot).width;
   ctx.font='500 34px "Inter Tight", Inter, sans-serif';
-  ctx.fillStyle='rgba(255,255,255,.62)'; ctx.fillText(' ' + COPY.vol, M+w, 1516);
+  ctx.fillStyle='rgba(255,255,255,.62)';
+  if(TEXT_R - M - w > 60) ctx.fillText(clip(' ' + COPY.vol, TEXT_R - M - w), M+w, 1516);
 }
 
 function makeCertTexture(){
@@ -263,8 +469,12 @@ function makeCertTexture(){
 (function grain(){
   const n=160, c=document.createElement('canvas'); c.width=c.height=n;
   const x=c.getContext('2d'), d=x.createImageData(n,n);
+  // seeded (mulberry32), so a poster capture carries exactly the grain of the live frame
+  let a = 1909;
+  const rnd = ()=>{ a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0)/4294967296; };
   for(let i=0;i<n*n;i++){
-    const v = 128 + (Math.random()-0.5)*168;
+    const v = 128 + (rnd()-0.5)*168;
     d.data[i*4]=d.data[i*4+1]=d.data[i*4+2]=v; d.data[i*4+3]=255;
   }
   x.putImageData(d,0,0);
@@ -298,9 +508,16 @@ function envTexture(){
     x.save(); x.translate(cx,cy); x.scale(1,ry/rx); x.translate(-cx,-cy);
     x.fillStyle=rg; x.beginPath(); x.arc(cx,cy,rx,0,7); x.fill(); x.restore();
   };
+  // the cool side light and the warm floor lean toward the issue accent (lifted
+  // to the blobs' brightness first, so the tint never darkens the reflections)
+  let cool = [150,175,235], warm = [255,170,120];
+  if(ACCENT){
+    const lit = ACCENT.map(v=> Math.min(255, v*245/Math.max(1, ...ACCENT)));
+    cool = mixRGB(cool, lit, 0.40); warm = mixRGB(warm, lit, 0.55);
+  }
   blob(w*0.30,h*0.24,330,240,'rgba(255,252,246,A)','1');
-  blob(w*0.74,h*0.34,240,200,'rgba(150,175,235,A)','.42');
-  blob(w*0.52,h*0.86,420,190,'rgba(255,170,120,A)','.10');
+  blob(w*0.74,h*0.34,240,200,rgbStr(cool,'A'),'.42');
+  blob(w*0.52,h*0.86,420,190,rgbStr(warm,'A'),'.10');
   const t=new T.CanvasTexture(c);
   t.mapping=T.EquirectangularReflectionMapping; t.encoding=T.sRGBEncoding;
   return t;
@@ -320,9 +537,10 @@ touchLight.position.set(0,0,1.7); scene.add(touchLight);
 /* ---- geometry + the bend ------------------------------------------- */
 const SW = 2.30, SH = 2.72;
 const geo = new T.PlaneGeometry(SW,SH,72,96);
+const AMP = 1.18;
 
 const uni = {
-  uTime:{value:0}, uAmp:{value:1.18}, uFreq:{value:4.70}, uTwist:{value:1.30},
+  uTime:{value:0}, uAmp:{value:AMP}, uFreq:{value:4.70}, uTwist:{value:1.30},
   uSize:{value:new T.Vector2(SW,SH)}, uFlutter:{value:0}, uPhase:{value:0},
   uRim:{value:0.62}, uRimA:{value:0.88}, uSpecA:{value:0.14},
   uRimCol:{value:new T.Color(0xeaf2ff)}
@@ -443,16 +661,16 @@ const halo = new T.Mesh(new T.PlaneGeometry(3.9,4.9),
 halo.position.z = -0.62; group.add(halo);
 
 /* ======================================================================
-   4. POINTER — drag to turn, hover to light
+   4. POINTER — drag to turn, hover to light, click to open
    ====================================================================== */
 let dragging=false, dragYaw=0, dragPitch=0, release=0;
 // spin carried after release, in rad/second — integrated with dt so the
 // fling travels the same distance at 60Hz and at 120Hz
 let velYaw=0, velPitch=0, prevYaw=0, prevPitch=0;
 let lastPX=0, lastPY=0, moved=0, overSheet=false, hover=0, hoverTarget=0;
+let pressing=false, downT=0, downX=0, downY=0, downDist=0, downOnSheet=false, grabSent=false;
 let quad=null, cursorNow='';
 const mouse = {x:0,y:0,tx:0,ty:0};
-const hintEl = document.getElementById('hint');
 let hintUsed=false;
 
 // JS mirror of the GLSL bend, corners only — enough to know whether the
@@ -494,25 +712,34 @@ function inQuad(px,py){
   }
   return true;
 }
-function useHint(){ hintUsed=true; hintEl.style.opacity='0'; }
+function useHint(){ hintUsed=true; updateHint(); }
 
 window.addEventListener('pointermove', e=>{
   mouse.tx = (e.clientX/window.innerWidth  - 0.5)*2;
   mouse.ty = (e.clientY/window.innerHeight - 0.5)*2;
+  if(pressing) downDist = Math.max(downDist, Math.hypot(e.clientX-downX, e.clientY-downY));
   if(dragging){
     const dx=e.clientX-lastPX, dy=e.clientY-lastPY;
     lastPX=e.clientX; lastPY=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
+    if(!grabSent && downDist >= 6){ grabSent=true; post({sheet:'grab'}); }
     dragYaw   += dx*0.0060;                   // glass prints through, so a
     dragPitch  = clamp(dragPitch - dy*0.0045, -0.60, 0.60);  // full turn is honest
     if(moved>40) useHint();
+    requestRender();
     return;
   }
   overSheet = inQuad(e.clientX,e.clientY);
+  const was = hoverTarget;
   hoverTarget = overSheet ? 1 : 0;
+  if(hoverTarget !== was || hover > 0.002) requestRender();   // on-demand mode only
 }, {passive:true});
 
 window.addEventListener('pointerdown', e=>{
-  if(inQuad(e.clientX,e.clientY)){
+  // primary button, touch and pen; on a cta=1 frame also the middle button (a new tab)
+  if(e.button !== 0 && !(CTA && e.button === 1)) return;
+  pressing=true; downT=e.timeStamp; downX=e.clientX; downY=e.clientY; downDist=0;
+  downOnSheet = e.button === 0 && inQuad(e.clientX,e.clientY);
+  if(downOnSheet){
     dragging=true; moved=0; lastPX=e.clientX; lastPY=e.clientY;
     velYaw=velPitch=0; prevYaw=dragYaw; prevPitch=dragPitch;
     // embedded in a page: keep receiving moves and the release even when the
@@ -520,48 +747,257 @@ window.addEventListener('pointerdown', e=>{
     if(e.target && e.target.setPointerCapture){
       try{ e.target.setPointerCapture(e.pointerId); }catch(_){}
     }
+    requestRender();
   }
 });
-function endDrag(){ if(dragging){ dragging=false; release=0.6; } }
-window.addEventListener('pointerup', endDrag);
-window.addEventListener('pointercancel', endDrag);   // touch turned into a scroll
-window.addEventListener('blur', endDrag);
-// pointerleave never reaches window; pointerout with no relatedTarget is the frame exit
-document.addEventListener('pointerout', e=>{ if(!e.relatedTarget) hoverTarget=0; });
+function endDrag(){
+  if(!dragging) return;
+  dragging=false;
+  // reduced motion: no fling and no drift home, the sheet stays where it was left
+  if(REDUCED){ velYaw = velPitch = 0; release = 0; } else release = 0.6;
+  requestRender();
+}
+// a press focuses this frame, and the page would then no longer scroll on Space: hand
+// the focus straight back (the frame holds nothing to focus)
+function handBack(){ if(EMBEDDED){ try{ window.parent.focus(); }catch(_){} } }
+window.addEventListener('pointerup', e=>{
+  // a press that barely moved is a click: a quick one on the sheet (a long one is a
+  // grab), or any on a cta=1 frame, which the host styles as a link to the issue. The
+  // middle button and Cmd/Ctrl/Shift ask for a new tab.
+  if(pressing && (downOnSheet || CTA) && (!downOnSheet || e.timeStamp-downT <= 350) &&
+     Math.max(downDist, Math.hypot(e.clientX-downX, e.clientY-downY)) < 6){
+    post({sheet:'click', newTab: e.button === 1 || e.metaKey || e.ctrlKey || e.shiftKey});
+  }
+  pressing=false;
+  endDrag();
+  handBack();
+});
+function cancelPress(){ pressing=false; endDrag(); }
+window.addEventListener('pointercancel', ()=>{ cancelPress(); handBack(); });   // touch turned into a scroll
+window.addEventListener('blur', cancelPress);
+window.addEventListener('contextmenu', cancelPress);   // macOS Ctrl+click opens a menu, not the issue
+// a middle press on a link plate opens a tab, never the autoscroll cursor
+if(CTA) window.addEventListener('mousedown', e=>{ if(e.button === 1) e.preventDefault(); });
+// pointerleave never reaches window; pointerout with no relatedTarget is the frame exit:
+// the light fades and the pointer tilt eases back to rest
+document.addEventListener('pointerout', e=>{
+  if(!e.relatedTarget){ hoverTarget=0; overSheet=false; mouse.tx=mouse.ty=0; requestRender(); }
+});
 
 /* ======================================================================
-   5. RESIZE
+   5. RESIZE + QUALITY
    ====================================================================== */
 let vw=0, vh=0;
+let quality = 2;            // pixel-ratio ceiling; the watchdog lowers it to 1
+function pixelRatio(){
+  // touch devices and narrow frames (phone hero, archive plate) stop at 1.5
+  const cap = (COARSE || vw < 780) ? 1.5 : 2;
+  return Math.min(window.devicePixelRatio || 1, cap, quality);
+}
 function resize(){
   vw = window.innerWidth; vh = window.innerHeight;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  renderer.setPixelRatio(pixelRatio());
   renderer.setSize(vw,vh,false);
   camera.aspect = vw/vh; camera.updateProjectionMatrix();
   const visH = 2*camera.position.z*Math.tan(T.MathUtils.degToRad(camera.fov)/2);
   const visW = visH*camera.aspect;
   const wCap = Math.min(0.88, 0.60 + Math.max(0, 1.45 - camera.aspect)*0.45);
   group.scale.setScalar(Math.min(visH*0.735/SH, visW*wCap/SW));
+  placeHint(visH);
+  // crossing the large-print width (a rotated phone, a resized window): print the sheet again
+  if(booted && largePrint() !== LARGE){
+    LARGE = largePrint();
+    const t3 = makeCertTexture();
+    if(mat.map) mat.map.dispose();
+    mat.map = t3; mat.needsUpdate = true;
+  }
+  // a drawing area that grows by a third (a maximised window, a bigger screen) is checked again
+  const area = vw*vh*Math.pow(renderer.getPixelRatio(), 2);
+  if(WD.area && area > WD.area*1.3 && !REDUCED && !STILL){ WD.done = false; WD.strikes = 0; }
+  WD.area = Math.max(WD.area, area);
+  wdReset(3);
+  // setSize cleared the canvas. Running, the next vsync draws (pacing never skips it);
+  // paused or on demand, the frozen pose is repainted at once, so the frame never comes
+  // back empty
+  forceDraw = true;
+  if(booted && (!running || REDUCED)) repaint();
 }
 window.addEventListener('resize', resize);
 
+// the hint sits still under the sheet's lowest reach (bob, wave and pointer tilt included).
+// On a hero it takes the line of the host's "Scroll · Prolog" cue (text centred 40px above
+// the frame's bottom, from left 5vw), so the banner's two labels share one baseline; it is
+// hidden when that line cuts into the sheet's reach or runs into the cue, and on a plate
+// (cta=1, no cue) when there is no room under the sheet
+let hintRoom=false, hintShown=false, hintTop=0;
+function placeHint(visH){
+  // lowest reach below the centre in world units (measured: ~0.19 at full
+  // scale, with the pointer parked on the frame's bottom edge)
+  const low = (SH/2 + 0.10)*group.scale.y + 0.10;
+  const edge = vh/2 + low/(visH/2)*(vh/2);          // px
+  const space = vh - edge;                          // px left under the sheet
+  hintTop = Math.round(CTA ? edge + Math.min(18, (space - 16)/2) : vh - 48);
+  hintEl.style.transform = 'translate(-50%,' + hintTop + 'px)';
+  const hw = hintEl.offsetWidth;
+  const fits = CTA ? space >= 48 : hintTop >= edge;   // glyphs stay 4px clear of the reach
+  // the cue's text ends ~190px right of its 5vw inset; two lines of the same mono caps on
+  // one baseline read as one run-on instruction unless 140px of air sits between them
+  const cueRight = vw*0.05 + 190;
+  const cue = !CTA && (vw - hw)/2 - cueRight < 140;
+  hintRoom = !NO_HINT && fits && hw <= vw - 32 && !cue;
+  updateHint();
+}
+function updateHint(){
+  const on = booted && hintRoom && !hintUsed && intro > 0.9 && scrollTarget < 0.04;
+  if(on !== hintShown){ hintShown = on; hintEl.classList.toggle('on', on); }
+}
+
+const median = (a)=>{
+  const s = a.slice().sort((x,y)=>x-y), n = s.length;
+  return n % 2 ? s[n >> 1] : (s[n/2 - 1] + s[n/2])/2;
+};
+// frame-time watchdog, after the intro, over windows of at least 1 s and 12 frames. Its
+// limits follow the display, so a 30 Hz power-saving cap is never taken for a slow GPU:
+// a median over max(34 ms, 1.5 display intervals) drops the pixel ratio to 1; at 1x, one
+// over max(66 ms, 3 intervals) (under ~15 fps) tells the host at once to swap in its
+// static poster, and one over max(42 ms, 1.9 intervals) does on a second strike (so one
+// busy second on the host page is not enough)
+const WD = { samples:[], t:0, skip:0, strikes:0, done:REDUCED || STILL, area:0 };
+function wdReset(skip){ WD.samples.length = 0; WD.t = 0; WD.skip = Math.max(WD.skip, skip); }
+function watchdog(ms){
+  if(WD.done || introT < 1.6) return;      // steady state only (intro=0 starts at 1.1)
+  if(WD.skip > 0){ WD.skip--; return; }
+  WD.samples.push(ms); WD.t += ms;
+  if(WD.samples.length < 12 || WD.t < 1000) return;
+  const med = median(WD.samples);
+  WD.samples.length = 0; WD.t = 0;
+  const d = VS.disp || FRAME;
+  if(med > Math.max(34, 1.5*d) && renderer.getPixelRatio() > 1){ quality = 1; resize(); WD.skip = 3; return; }
+  const crawl = med > Math.max(66, 3*d), slow = crawl || med > Math.max(42, 1.9*d);
+  if(slow && !crawl && ++WD.strikes < 2){ WD.skip = 2; return; }
+  if(slow) post({sheet:'slow', fps: Math.round(1000/med*10)/10});
+  WD.done = true;
+}
+
 /* ======================================================================
-   6. LOOP
+   6. LOOP — evenly paced at about 60 renders a second (75 on a 75 Hz panel); paused by
+   the host when the hero is off screen; on demand only under reduced motion
    ====================================================================== */
-const clock = new T.Clock();
+// pacing: a frame is drawn on every Nth vsync, N picked from the display's refresh rate so
+// frames come out evenly spaced: 60 Hz -> 60 fps, 75 -> 75, 90 -> 45, 100 -> 50,
+// 120 -> 60, 144 -> 48, 165 -> 55, 240 -> 60. The refresh is the median vsync gap. The
+// display interval the watchdog judges against comes only from gaps that follow a vsync
+// that drew nothing (before boot, and the skipped vsyncs), since heavy frames lengthen them.
+const FRAME = 1000/60;
+const VS = { all:[], idle:[], ms:FRAME, n:1, disp:0 };
+function noteVsync(d, clean){
+  if(!(d > 2 && d < 100)) return;        // a stall or a doubled timestamp says nothing
+  VS.all.push(d);
+  if(VS.all.length >= 15){
+    VS.ms = median(VS.all); VS.all.length = 0;
+    // up to 120 Hz: the fewest skips that keep it at or under ~78 fps (75 Hz panels keep
+    // their own rate); above 130 Hz: a hard ~60 ceiling, even if that means 48 fps at 144
+    const hz = 1000/VS.ms;
+    VS.n = hz > 130 ? Math.ceil(hz/61) : Math.max(1, Math.ceil(hz/78));
+  }
+  if(clean){
+    VS.idle.push(d);
+    if(VS.idle.length >= 9){
+      const m = median(VS.idle); VS.idle.length = 0;
+      VS.disp = VS.disp ? Math.min(VS.disp, m) : m;
+    }
+  }
+}
 const lightPos = new T.Vector3();
-let intro = REDUCED ? 1 : 0;   // reduced motion: no entry slide, the frame simply fades in
+let booted=false, running=true, rafId=0, lastT=0, frames=0, vsyncT=0, forceDraw=false, drewLast=false;
+const T0 = 2.4;                          // wave phase of the start pose (kept under reduced motion)
+let simT=0, wakeT=0, introT=NO_INTRO ? 1.1 : 0;
+let intro = (REDUCED || NO_INTRO) ? 1 : 0;   // reduced motion: no entry slide
+let scrollTarget=0, scrollP=0, snapPose=true, snapBy=Infinity, wordKey='';
 
-function frame(){
-  requestAnimationFrame(frame);
-  const dt = Math.min(clock.getDelta(), 0.05);
-  const t  = clock.elapsedTime;
-  uni.uTime.value = REDUCED ? 2.4 : t;
+(function probe(){                       // ~15 vsyncs while the fonts and the photo load
+  let t0 = 0, k = 0;
+  const f = (t)=>{ if(t0) noteVsync(t - t0, true); t0 = t; if(!booted && ++k < 16) requestAnimationFrame(f); };
+  requestAnimationFrame(f);
+})();
 
-  intro += (1 - intro) * Math.min(1, dt*1.9);
-  mat.opacity = intro;
-  halo.material.opacity = intro*0.30;
-  if(intro > 0.7 && !hintUsed) hintEl.style.opacity='1';
+function requestRender(){
+  if(booted && running && !rafId) rafId = requestAnimationFrame(tick);
+}
+function tick(now){
+  rafId = 0;
+  if(!running) return;
+  if(!REDUCED){
+    rafId = requestAnimationFrame(tick);
+    if(vsyncT) noteVsync(now - vsyncT, !drewLast);
+    vsyncT = now;
+    // draw once N display intervals have passed since the last frame; half an interval
+    // of slack absorbs timestamp jitter, and a late frame is never paid back in a burst
+    drewLast = forceDraw || !lastT || now - lastT >= (VS.n - 0.5)*VS.ms;
+    if(!drewLast) return;
+    forceDraw = false;
+    draw(now);
+    return;
+  }
+  draw(now);
+  if(settling()) rafId = requestAnimationFrame(tick);
+  else lastT = 0;                        // the next burst starts with a normal step
+}
+// on-demand mode (reduced motion): draw only while a drag or the hover-light fade is
+// live; there is no fling and no drift home to wait for
+function settling(){
+  return dragging || Math.abs(hover-hoverTarget) > 2e-3;
+}
+
+// the wordmark sits deeper, so it drifts down (lags the page) and dims more
+function placeWord(sp){
+  if(!wordEl) return;
+  const wy = (sp*vh*0.16).toFixed(1), wo = (1 - 0.5*sp).toFixed(3);
+  const k = wy + '|' + wo;
+  if(k === wordKey) return;
+  wordKey = k;
+  wordEl.style.transform = 'translate(-50%,-50%) translate3d(0,' + wy + 'px,0) scale(' +
+    (1 - 0.04*sp).toFixed(4) + ')';
+  wordEl.style.opacity = wo;
+}
+// the current pose again, advancing nothing (a resize while paused or on demand)
+function repaint(){
+  placeWord(REDUCED ? 0 : scrollP);
+  group.updateMatrixWorld(); buildQuad();
+  renderer.render(scene, camera);
+}
+
+function draw(now){
+  const raw = lastT ? Math.max(0, (now - lastT)/1000) : 1/60;
+  lastT = now;
+  const dt = Math.min(raw, 0.05);        // physics: fling, settle and springs
+  // the first frame is the start pose (t = 0), the one the host's poster shows. A frame
+  // that fades in over its poster then eases its clock up from standstill (~1.4 s), so
+  // the crossfade shows one sheet, never two
+  if(frames) wakeT += raw;
+  const wake = !NO_INTRO || wakeT >= 1.4 ? 1 : (k=>k*k*(3-2*k))(wakeT/1.4);
+  if(frames) simT += Math.min(raw, 0.1)*wake;   // the wave: a stalled frame never leaps
+  const t = REDUCED ? 0 : simT;
+  uni.uTime.value = T0 + t;
+
+  // the rise-in eases over 1.1 s of wall time, whatever the frame rate
+  introT += raw;
+  if(intro < 1){ const k = Math.min(1, introT/1.1); intro = 1 - Math.pow(1-k, 3); }
+
+  // scroll hand-off: as the hero leaves, the sheet is laid down (top tipping away),
+  // recedes, relaxes its curl and sinks a little behind the page; the word drifts
+  if(!REDUCED){
+    scrollP += (scrollTarget - scrollP) * Math.min(1, dt*6);
+    if(Math.abs(scrollTarget - scrollP) < 1e-4) scrollP = scrollTarget;
+  }
+  const sp = REDUCED ? 0 : scrollP;
+  const lay = Math.pow(sp, 1.4);        // gentle at first: the print stays readable
+  const fade = sp < 0.5 ? 0 : (sp-0.5)/0.5;
+  uni.uAmp.value = AMP*(1 - 0.40*sp);
+
+  mat.opacity = intro*(1 - 0.30*fade*fade);
+  halo.material.opacity = intro*0.30*(1 - 0.55*sp);
+  updateHint();
 
   if(dragging){
     // measure the throw as an angular velocity, smoothed over a few frames
@@ -570,7 +1006,7 @@ function frame(){
     velPitch += ((dragPitch - prevPitch)/Math.max(dt,1e-3) - velPitch) * k;
     velYaw   = clamp(velYaw,  -7, 7);
     velPitch = clamp(velPitch,-4, 4);
-  } else {
+  } else if(!REDUCED){
     dragYaw   += velYaw*dt;
     dragPitch  = clamp(dragPitch + velPitch*dt, -0.60, 0.60);
     const decay = Math.pow(0.018, dt);
@@ -589,16 +1025,21 @@ function frame(){
   mouse.x += (mouse.tx-mouse.x)*Math.min(1,dt*3.0);
   mouse.y += (mouse.ty-mouse.y)*Math.min(1,dt*3.0);
   const idle = REDUCED ? 0 : 1;
+  const lean = idle*wake;                // the pointer parallax wakes up with the clock
   const rise = 1 - intro;
   // mouse parallax is gated by `idle` too, so reduced-motion users get a still sheet
-  group.rotation.y = dragYaw + mouse.x*0.16*idle + Math.sin(t*0.23)*0.045*idle;
-  group.rotation.x = dragPitch - mouse.y*0.11*idle + Math.sin(t*0.19)*0.026*idle + rise*0.28;
-  group.rotation.z = Math.sin(t*0.27)*0.018*idle;
-  group.position.y = Math.sin(t*0.36)*0.06*idle - rise*0.7;
-  group.position.x = Math.sin(t*0.21)*0.05*idle + mouse.x*0.10*idle;
+  group.rotation.y = dragYaw + mouse.x*0.16*lean + Math.sin(t*0.23)*0.045*idle + sp*0.07;
+  group.rotation.x = dragPitch - mouse.y*0.11*lean + Math.sin(t*0.19)*0.026*idle + rise*0.28
+                   - lay*0.62;
+  group.rotation.z = Math.sin(t*0.27)*0.018*idle - sp*0.025;
+  group.position.y = Math.sin(t*0.36)*0.06*idle - rise*0.7 - sp*0.30;
+  group.position.x = Math.sin(t*0.21)*0.05*idle + mouse.x*0.10*lean;
+  group.position.z = -sp*1.0;
   group.updateMatrixWorld();
 
-  hover += (hoverTarget - hover) * Math.min(1, dt*4.5);
+  placeWord(sp);
+
+  hover += (hoverTarget - hover) * Math.min(1, dt*(REDUCED ? 12 : 4.5));   // reduced motion: a short fade
   touchLight.intensity = hover * 2.6 * intro;
   if(hover > 0.002){
     lightPos.set(mouse.tx, -mouse.ty, 0.5).unproject(camera).sub(camera.position).normalize();
@@ -607,20 +1048,72 @@ function frame(){
   }
 
   buildQuad();
-  const wantCursor = dragging ? 'grabbing' : (overSheet ? 'grab' : '');
+  const wantCursor = dragging ? 'grabbing' : CTA ? 'pointer' : (overSheet ? 'grab' : '');
   if(wantCursor !== cursorNow){ cursorNow = wantCursor; document.body.style.cursor = wantCursor; }
 
   renderer.render(scene,camera);
+  frames++;
+  if(!REDUCED) watchdog(raw*1000);
 }
+
+/* ======================================================================
+   7. HOST PROTOCOL — same-origin messages from the parent page (or this
+   window, for testing): {sheet:'pause'|'resume'|'scroll', p}
+   ====================================================================== */
+function pause(){
+  if(!running || STILL) return;
+  running = false;
+  if(rafId){ cancelAnimationFrame(rafId); rafId = 0; }
+  // freeze on the pose the page last asked for (the eased pose may trail it)
+  scrollP = scrollTarget; snapPose = true; snapBy = Infinity;
+  wdReset(0);
+}
+// the first frame after a gap steps 1/60 s, so the wave and a fling never leap
+function restartClock(){ lastT = 0; vsyncT = 0; drewLast = false; wdReset(4); }
+function resume(){
+  if(running || STILL) return;
+  running = true;
+  restartClock();
+  if(snapPose) snapBy = performance.now() + 250;
+  if(!REDUCED || settling()) requestRender();
+  else if(booted){ rafId = requestAnimationFrame(tick); }   // repaint once (size may have changed)
+}
+// The first scroll message after boot (the frame is still fading in) or right after a
+// resume (the host sends one with it) takes its pose at once: the reader sees the sheet
+// where the page is, never a sheet laying itself down after the scrolling has stopped.
+// The ones after it are eased.
+function setScroll(p){
+  scrollTarget = clamp(+p || 0, 0, 1);
+  if(!running) scrollP = scrollTarget;
+  else if(snapPose){ if(performance.now() <= snapBy) scrollP = scrollTarget; snapPose = false; }
+  updateHint();                          // reduced motion: only the hint reacts
+}
+window.addEventListener('message', e=>{
+  if(e.origin !== location.origin) return;
+  if(e.source !== window.parent && e.source !== window) return;
+  const d = e.data;
+  if(!d || typeof d !== 'object') return;
+  if(d.sheet === 'pause') pause();
+  else if(d.sheet === 'resume') resume();
+  else if(d.sheet === 'scroll') setScroll(d.p);
+});
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) restartClock(); });
 
 function boot(){
   const t2 = makeCertTexture();
   tex.dispose(); mat.map = t2; mat.needsUpdate = true;
   resize();
+  booted = true;
   mesh.visible = true; mat.opacity = 0.002;
   renderer.compile(scene,camera); renderer.render(scene,camera);
   mat.opacity = 1;
-  frame();
+  draw(performance.now());               // the first real frame: the start pose
+  // tell the host once that frame has reached the screen
+  let told = false;
+  const ready = ()=>{ if(!told){ told = true; post({sheet:'ready'}); } };
+  requestAnimationFrame(ready); setTimeout(ready, 150);
+  if(STILL){ running = false; return; }  // a capture: that one frame, no loop
+  if(!REDUCED || settling()) requestRender();
 }
 
 const fontsReady = (document.fonts && document.fonts.ready) ? Promise.race([
@@ -628,7 +1121,10 @@ const fontsReady = (document.fonts && document.fonts.ready) ? Promise.race([
       document.fonts.load('700 104px "Inter Tight"'),
       document.fonts.load('600 110px "Inter Tight"'),
       document.fonts.load('600 34px "Inter"'),
-      document.fonts.load('500 22px "Inter"')
+      document.fonts.load('700 36px "Inter"'),
+      document.fonts.load('500 22px "Inter"'),
+      document.fonts.load('500 11px "JetBrains Mono"'),
+      document.fonts.load('600 11px "JetBrains Mono"')
     ]).then(()=>document.fonts.ready),
     new Promise(r=>setTimeout(r,2500))
   ]) : Promise.resolve();
@@ -640,9 +1136,13 @@ const photoReady = Promise.race([
 ]);
 Promise.all([fontsReady, photoReady]).then(boot);
 
-window.__sheet = {group, mat, uni, renderer, scene, camera, mesh, photo,
-  state:()=>({intro, dragYaw, dragPitch, hover, quad}),
+window.__sheet = {group, mat, uni, renderer, scene, camera, mesh, photo, sent, layout:LAYOUT,
+  vs:VS, wd:WD,
+  state:()=>({intro, dragYaw, dragPitch, hover, quad, scrollP, scrollTarget, running,
+              frames, pr: renderer.getPixelRatio(), hint: hintShown, hintTop, booted,
+              simT, uTime: uni.uTime.value, snapPose, n: VS.n, vsMs: VS.ms, disp: VS.disp,
+              velYaw, release}),
   hit:(x,y)=>inQuad(x,y),
-  spin:(y)=>{ dragYaw=y; release=1e9; }};
+  spin:(y)=>{ dragYaw=y; release=1e9; requestRender(); }};
 })();
 </script>

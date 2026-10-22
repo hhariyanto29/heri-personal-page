@@ -8,7 +8,7 @@
 <meta name="description" content="Semua edisi The Handover, esai pribadi Heribertus Hariyanto Atmaja tentang menjadi project manager dan operator di era AI. Satu esai utuh per edisi.">
 <meta name="author" content="Heribertus Hariyanto Atmaja">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://heri-page.vercel.app/arsip/">
+<link rel="canonical" href="https://heri-page.pages.dev/arsip/">
 <meta name="theme-color" content="#f5f1ea">
 <meta name="color-scheme" content="light">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f5f1ea'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='22' font-weight='600' font-style='italic' fill='%23c8553d' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
@@ -17,17 +17,27 @@
 <meta property="og:site_name" content="The Handover">
 <meta property="og:title" content="Arsip — The Handover">
 <meta property="og:description" content="Semua edisi The Handover, satu esai pribadi utuh per edisi.">
-<meta property="og:url" content="https://heri-page.vercel.app/arsip/">
-<meta property="og:image" content="https://heri-page.vercel.app/assets/author.jpg">
+<meta property="og:url" content="https://heri-page.pages.dev/arsip/">
+<meta property="og:image" content="https://heri-page.pages.dev/assets/og/arsip.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://heri-page.pages.dev/assets/og/arsip.jpg">
 <meta property="og:locale" content="id_ID">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/src/shaders/threeui.css">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{if(JSON.parse(localStorage.getItem('handover:theme'))==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+<!-- instant hops between issues: prerender a page once the reader hovers or presses its link -->
+<script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/src/*"}}]},"eagerness":"moderate"}]}</script>
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/reader.css">
 </head>
 <body class="page-archive">
+<script>if ("IntersectionObserver" in window) document.documentElement.classList.add("js");</script>
+<a class="skip-link" href="#main">Langsung ke isi</a>
+<span id="top"></span>
 
 <!-- ============ MASTHEAD ============ -->
 <header class="masthead">
@@ -36,36 +46,42 @@
     <span>2 Edisi · 2026</span>
   </div>
   <div class="logo"><a href="/">The Handover</a></div>
-  <nav>
-    <a href="/">Terbaru</a>
-    <a href="/#stack">Stack</a>
-    <a href="/#portfolio">Work</a>
-    <a href="/#manifesto">Manifesto</a>
-    <a href="/#letter">Surat</a>
-    <a href="/arsip/" aria-current="page">Arsip</a>
+  <nav aria-label="Edisi">
+    <a href="/vol-02-dua-kursi/">Vol. 02</a>
+    <a href="/">Vol. 01</a>
+    <a href="/arsip/" aria-current="page" class="is-here">Arsip</a>
   </nav>
 </header>
 
 <!-- ============ ARSIP ============ -->
-<main class="archive" id="arsip">
+<main class="archive" id="main">
   <div class="archive-inner">
-    <div class="section-label">— Arsip · Semua Edisi</div>
-    <h1>Setiap edisi, <em>satu esai utuh.</em></h1>
-    <p class="archive-lede">The Handover terbit per edisi: satu esai pribadi, berbab, ditutup dengan surat. Mulai dari yang terbaru, atau dari yang pertama.</p>
+    <header class="archive-head">
+      <div class="section-label">— Arsip · Semua Edisi</div>
+      <h1>Setiap edisi, <em>satu esai utuh.</em></h1>
+      <p class="archive-lede">The Handover terbit per edisi: satu esai pribadi, berbab, ditutup dengan surat. Mulai dari yang terbaru, atau dari yang pertama.</p>
+      <dl class="archive-stats">
+        <div><dt>Edisi</dt><dd>02</dd></div>
+        <div><dt>Bab</dt><dd>12</dd></div>
+        <div><dt>Surat</dt><dd>02</dd></div>
+        <div><dt>Membaca</dt><dd>28<small> mnt</small></dd></div>
+      </dl>
+    </header>
 
-    <section class="issue-featured" aria-label="Edisi terbaru">
-      <div>
+    <section class="issue-featured issue-02" aria-labelledby="featured-title">
+      <div class="issue-featured-text">
         <div class="tag"><span class="issue-badge">Terbaru</span><span>Vol. 02 · Oktober 2026</span></div>
-        <div class="num">02</div>
-        <h2>Dua Kursi: Operasi, Produk, dan <em>Kecepatan AI.</em></h2>
+        <div class="num" aria-hidden="true">02</div>
+        <h2 id="featured-title"><a href="/vol-02-dua-kursi/">Dua Kursi: Operasi, Produk, dan <em>Kecepatan AI.</em></a></h2>
         <p>Catatan seorang COO merangkap product lead di dua perusahaan baru tentang tanggung jawab yang naik, iterasi yang makin cepat, dan utang perusahaan kepada orang-orang yang belum sempat fasih bekerja dengan AI.</p>
         <div class="issue-meta"><span><b>Estimasi membaca</b> 14 menit</span><span><b>Ditulis</b> Oktober 2026</span><span><b>Isi</b> 6 bab · Surat</span></div>
-        <a class="issue-cta" href="/vol-02-dua-kursi/">Baca Vol. 02 <i>→</i></a>
+        <a class="issue-cta" href="/vol-02-dua-kursi/" data-progress-for="/vol-02-dua-kursi/">Baca Vol. 02 <i aria-hidden="true">→</i></a>
       </div>
-      <!-- the cover is the issue's own glass sheet: <ThreeDPaper variant="original" /> with the Vol. 02 copy -->
+      <!-- the cover is the issue's own glass sheet: <ThreeDPaper variant="original" /> with the Vol. 02 copy; a click opens the issue -->
       <div class="issue-cover" aria-hidden="true">
         <div class="shader-frame">
           <div class="threeui-background three-d-paper" data-variant="original" data-state="loading"
+               data-href="/vol-02-dua-kursi/"
                data-sheet-title="Dua Kursi.|Operasi, produk,|dan kecepatan AI."
                data-sheet-vol="Vol. 02 · 2026"
                data-sheet-role="COO &amp; Product Lead · Nemu Marketplace · Nourri Active"
@@ -74,27 +90,39 @@
                data-sheet-issue="The Dua Kursi Issue."
                data-sheet-meta="Estimasi membaca · 14 menit"
                data-sheet-quote="“Kamu tidak tertinggal. Kamu belum diajak.”"
-               style="position:relative;overflow:hidden;background:#08080a;pointer-events:auto"></div>
+               data-sheet-wordmark="DUA KURSI"
+               data-sheet-accent="#3558a8"
+               data-sheet-cta="1"></div>
         </div>
         <div class="issue-cover-fallback"><span>Vol. 02 · 2026</span><strong>Dua Kursi</strong></div>
       </div>
     </section>
 
-    <div class="issue-rows">
-      <a class="issue" href="/vol-02-dua-kursi/">
-        <div class="num">02</div>
-        <div class="title">Dua Kursi <span class="issue-badge">Terbaru</span></div>
-        <div class="desc">Operasi, produk, dan kecepatan AI. Menjadi COO sekaligus product lead di dua perusahaan baru, dan utang kepada orang-orang yang belum sempat diajak.<span>6 bab · Surat</span></div>
-        <div class="side"><b>Oktober 2026</b>14 menit</div>
-      </a>
-      <a class="issue" href="/">
-        <div class="num">01</div>
-        <div class="title">The Handover</div>
-        <div class="desc">The Things I Wish Someone Told Me &amp; Wish I Knew Sooner. Catatan untuk PM penerus di era AI.<span>6 bab · Stack · Work · Manifesto · Surat</span></div>
-        <div class="side"><b>Mei 2026</b>14 menit</div>
-      </a>
-    </div>
-    <p class="archive-note">Apendiks Stack, Work, dan Manifesto hidup di Vol. 01. Setiap edisi berikutnya membawa babnya sendiri dan ditutup dengan surat.</p>
+    <section class="shelf" aria-labelledby="shelf-title">
+      <h2 class="section-label" id="shelf-title">— Edisi sebelumnya</h2>
+      <div class="shelf-grid">
+        <a class="shelf-item issue-01" href="/" data-progress-for="/">
+          <span class="shelf-cover"><img src="/assets/covers/vol-01-plate.jpg" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
+          <span class="shelf-text">
+            <span class="tag">Vol. 01 · Mei 2026</span>
+            <span class="num" aria-hidden="true">01</span>
+            <span class="title">The Handover</span>
+            <span class="desc">The Things I Wish Someone Told Me &amp; Wish I Knew Sooner. Catatan untuk PM penerus di era AI.</span>
+            <span class="meta">14 menit · 6 bab · Stack · Work · Manifesto · Surat</span>
+            <span class="shelf-cta">Baca Vol. 01 <i aria-hidden="true">→</i></span>
+          </span>
+        </a>
+        <div class="shelf-item is-soon" aria-hidden="true">
+          <span class="shelf-cover"><span class="soon-mark">03</span></span>
+          <span class="shelf-text">
+            <span class="tag">Vol. 03</span>
+            <span class="title">Sedang ditulis</span>
+            <span class="desc">Edisi berikutnya muncul di sini begitu suratnya selesai.</span>
+          </span>
+        </div>
+      </div>
+    </section>
+    <p class="archive-note">Apendiks Stack, Work, dan Manifesto hidup di <a class="xref" href="/#stack">Vol. 01</a>. Setiap edisi berikutnya membawa babnya sendiri dan ditutup dengan surat.</p>
   </div>
 </main>
 
@@ -111,9 +139,15 @@
     </div>
     <div class="colophon-block">
       <div class="ttl">— Versi</div>
-      <p>v1.0 · Mei 2026 · Living document. Akan diperbarui ketika dunia berubah — yang berarti, segera.</p>
+      <p>Arsip diperbarui Oktober 2026 · Living document. Akan diperbarui ketika dunia berubah — yang berarti, segera.</p>
     </div>
   </div>
+  <nav class="footer-nav" aria-label="Edisi The Handover">
+    <a href="/vol-02-dua-kursi/"><span>Vol. 02</span> Dua Kursi</a>
+    <a href="/"><span>Vol. 01</span> The Handover</a>
+    <a href="/arsip/"><span>Semua</span> Arsip</a>
+    <a href="#top" class="to-top"><span>↑</span> Kembali ke atas</a>
+  </nav>
   <div class="footer-bottom">
     <span>© 2026 Heribertus Hariyanto Atmaja</span>
     <span>The Handover · Arsip semua edisi</span>
@@ -121,6 +155,7 @@
 </footer>
 
 <script src="/assets/site.js" defer></script>
+<script src="/assets/reader.js" defer></script>
 
 </body>
 </html>

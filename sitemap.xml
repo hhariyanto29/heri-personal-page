@@ -2,25 +2,29 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://heri-page.vercel.app/</loc>
-    <lastmod>2026-10-15</lastmod>
+    <loc>https://heri-page.pages.dev/</loc>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://heri-page.vercel.app/assets/author.jpg</image:loc>
-      <image:title>Heribertus Hariyanto Atmaja</image:title>
+      <image:loc>https://heri-page.pages.dev/assets/og/vol-01.jpg</image:loc>
+      <image:title>The Handover Vol. 01</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://heri-page.vercel.app/arsip/</loc>
-    <lastmod>2026-10-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://heri-page.vercel.app/vol-02-dua-kursi/</loc>
-    <lastmod>2026-10-16</lastmod>
+    <loc>https://heri-page.pages.dev/vol-02-dua-kursi/</loc>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://heri-page.pages.dev/assets/og/vol-02.jpg</image:loc>
+      <image:title>The Handover Vol. 02 — Dua Kursi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://heri-page.pages.dev/arsip/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

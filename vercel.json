@@ -1,6 +1,15 @@
 {
   "redirects": [
-    { "source": "/vol-01-the-handover", "destination": "/", "permanent": true },
-    { "source": "/vol-01-the-handover/:path*", "destination": "/", "permanent": true }
-  ]
+    {
+      "source": "/vol-01-the-handover",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/vol-01-the-handover/:path*",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "cleanUrls": true
 }

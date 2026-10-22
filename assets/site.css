@@ -10,7 +10,19 @@
   --accent-soft:#e8a87c;
   --paper:#fdfaf3;
   --highlight:#fff3a8;
+  --accent-text:#a8432d;      /* accent for small or inline text: passes AA on every paper tone */
+  --hero:#08080a;
 }
+/* each issue wears its own accent; Vol. 01 keeps the original vermilion */
+.issue-02{--accent:#3558a8;--accent-text:#2f52a0;--accent-soft:#a9bdf0}
+/* the ThreeUI host box (the only rule this site used from threeui.css) */
+.threeui-background{position:relative;width:100%;height:100%;min-width:0;min-height:0;overflow:hidden;isolation:isolate;background:var(--hero)}
+::selection{background:var(--highlight);color:var(--ink)}
+/* skip link: first focus stop on every page */
+.skip-link{position:fixed;left:16px;top:12px;z-index:80;padding:12px 16px;background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;font-size:13px;letter-spacing:.04em;transform:translateY(-160%);transition:transform .2s}
+.skip-link:focus{transform:none}
+h1,h2,h3,h4,.pullquote,.salutation{text-wrap:balance}
+p,li{text-wrap:pretty}
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -44,25 +56,27 @@ body::before{
 }
 
 a{color:inherit;text-decoration:none}
-a.ref{
-  border-bottom:1px solid rgba(200,85,61,0.55);
-  color:var(--accent);
-  transition:all .2s ease;
-  font-style:italic;
+a.ref,a.xref{
+  color:var(--ink);
+  text-decoration:underline;
+  text-decoration-color:color-mix(in srgb,var(--accent) 70%,transparent);
+  text-decoration-thickness:1px;
+  text-underline-offset:.22em;
+  text-decoration-skip-ink:auto;
+  transition:color .2s,text-decoration-color .2s,text-decoration-thickness .2s;
 }
-a.ref:hover{
-  background:var(--accent);
-  color:var(--paper);
-  border-bottom-color:var(--accent);
-}
-a.ref:focus-visible{outline-offset:1px}
+a.ref:hover,a.xref:hover{color:var(--accent-text);text-decoration-color:var(--accent);text-decoration-thickness:2px}
+a.ref:focus-visible,a.xref:focus-visible{outline-offset:1px}
+/* a citation to another issue of this magazine */
+a.xref{text-decoration-style:dotted;text-decoration-thickness:1.5px}
 
 /* === MASTHEAD === */
 .masthead{
   border-bottom:2px solid var(--ink);
   padding:18px 5vw;
-  display:flex;
-  justify-content:space-between;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  column-gap:24px;
   align-items:center;
   position:fixed;             /* floats over the hero; the page itself starts at y=0 underneath */
   top:0;left:0;right:0;
@@ -73,8 +87,8 @@ a.ref:focus-visible{outline-offset:1px}
   text-transform:uppercase;
   letter-spacing:0.18em;
 }
-.masthead .vol{display:flex;gap:24px;color:var(--muted)}
-.masthead .vol span:nth-child(2){color:var(--accent);font-weight:500}
+.masthead .vol{display:flex;gap:24px;color:var(--muted);white-space:nowrap;min-width:0}
+.masthead .vol span:nth-child(2){color:var(--accent-text);font-weight:500}
 .masthead .logo{
   font-family:'Fraunces',serif;
   font-size:22px;
@@ -82,15 +96,35 @@ a.ref:focus-visible{outline-offset:1px}
   font-style:italic;
   letter-spacing:-0.01em;
   text-transform:none;
+  white-space:nowrap;
+  justify-self:center;
 }
-.masthead nav{display:flex;gap:28px}
+.masthead nav{display:flex;gap:28px;justify-self:end;white-space:nowrap}
 .masthead nav a{transition:color .2s;color:var(--ink-soft)}
 .masthead nav a:hover{color:var(--accent)}
 
-@media (max-width:780px){
-  .masthead{flex-wrap:wrap;gap:10px;padding:14px 5vw}
+@media (max-width:1180px){
+  .masthead nav{gap:20px}
+  .masthead{letter-spacing:.14em}
+}
+@media (max-width:1040px){
+  .masthead .vol span:nth-child(2){display:none}
+}
+/* tablets: the chapter list moves into the reader's floating pill, the bar keeps logo + issue */
+@media (max-width:980px){
   .masthead nav{display:none}
-  .masthead .vol{font-size:10px;gap:14px}
+}
+/* phones: one slim row, logo left, issue number right */
+@media (max-width:780px){
+  .masthead{grid-template-columns:auto 1fr;padding:12px 5vw}
+  .masthead nav{display:none}
+  .masthead .logo{grid-column:1;grid-row:1;justify-self:start;font-size:20px}
+  .masthead .vol{grid-column:2;grid-row:1;justify-self:end;font-size:10px;gap:14px}
+}
+/* landscape phones: the hero gets the whole short screen, the bar stays thin */
+@media (max-height:500px) and (orientation:landscape){
+  .masthead{padding:8px 5vw}
+  .masthead .logo{font-size:18px}
 }
 
 /* === HERO === the banner is the ThreeUI 3D Paper scene alone. The glass
@@ -153,7 +187,19 @@ a.ref:focus-visible{outline-offset:1px}
 .hero.no-webgl h1{font-family:'Fraunces',serif;font-size:clamp(40px,5vw,88px);line-height:0.94;font-weight:400;letter-spacing:-0.035em}
 .hero.no-webgl .hero-byline{font-family:'Inter',sans-serif;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;line-height:1.7;color:rgba(245,241,234,.6)}
 .hero.no-webgl blockquote{font-style:italic;font-size:16px;line-height:1.5;color:rgba(245,241,234,.78);padding-left:14px;border-left:3px solid var(--accent-soft);max-width:480px}
-/* while the 630 KB scene loads: a faint outline where the sheet will land */
+/* the scene host: a still poster of the issue's sheet sits underneath while the
+   630 KB scene boots (and replaces it for good on devices too slow to animate) */
+.three-d-paper{position:relative;overflow:hidden;background:var(--hero) var(--poster,none) center/auto 100% no-repeat}
+.issue-cover .three-d-paper{background-size:100% auto}
+@media (max-width:780px){.hero-stage .three-d-paper{background-size:100% auto}}
+.issue-01 .hero-stage .three-d-paper{--poster:url(/assets/covers/vol-01-wide.jpg)}
+.issue-02 .hero-stage .three-d-paper{--poster:url(/assets/covers/vol-02-wide.jpg)}
+@media (max-width:780px){
+  .issue-01 .hero-stage .three-d-paper{--poster:url(/assets/covers/vol-01-tall.jpg)}
+  .issue-02 .hero-stage .three-d-paper{--poster:url(/assets/covers/vol-02-tall.jpg)}
+}
+.three-d-paper[data-href]{cursor:pointer}
+/* while the scene loads with no poster: a faint outline where the sheet will land */
 .hero-stage .three-d-paper::after{
   content:"";
   position:absolute;
@@ -170,15 +216,18 @@ a.ref:focus-visible{outline-offset:1px}
   pointer-events:none;
 }
 .hero-stage .three-d-paper[data-state="loading"]::after{opacity:1}
+.hero-stage .three-d-paper[style*="--poster"]::after,.issue-01 .hero-stage .three-d-paper::after,.issue-02 .hero-stage .three-d-paper::after{display:none}
 /* a quiet way down: the only host-side element drawn on the banner */
 .hero-cue{
   position:absolute;
   left:5vw;
-  bottom:28px;
+  bottom:18px;
   z-index:1;
   display:flex;
   align-items:center;
   gap:12px;
+  min-height:44px;
+  padding-right:8px;
   font-family:'JetBrains Mono',monospace;
   font-size:11px;
   letter-spacing:0.2em;
@@ -191,8 +240,15 @@ a.ref:focus-visible{outline-offset:1px}
   width:32px;
   height:1px;
   background:currentColor;
+  transform-origin:left;
+  transition:width .45s var(--ease-out,ease);
 }
 .hero-cue:hover{color:var(--accent-soft)}
+.hero-cue:hover::before{width:56px}
+.js .hero-cue{animation:cue-in 1s var(--ease-out,ease) 1.6s backwards}
+.js .hero-cue::before{animation:cue-rule 1.1s var(--ease-io,ease) 1.8s backwards}
+@keyframes cue-in{from{opacity:0;transform:translateY(8px)}}
+@keyframes cue-rule{from{transform:scaleX(0)}}
 
 /* touch devices: the sheet keeps moving, but stops swallowing swipes so the page scrolls */
 @media (pointer:coarse){
@@ -203,7 +259,10 @@ a.ref:focus-visible{outline-offset:1px}
    instead of floating in a full-height void */
 @media (max-width:780px){
   .hero{height:72vh;height:72svh;min-height:480px;max-height:720px}
-  .hero-cue{bottom:20px}
+  .hero-cue{bottom:10px}
+}
+@media (max-height:500px) and (orientation:landscape){
+  .hero{height:100vh;height:100svh;min-height:0;max-height:none}
 }
 
 /* === DROPCAP INTRO === */
@@ -220,7 +279,7 @@ a.ref:focus-visible{outline-offset:1px}
   font-family:'JetBrains Mono',monospace;
   font-size:11px;
   letter-spacing:0.2em;
-  color:var(--accent);
+  color:var(--accent-text);
   text-transform:uppercase;
   margin-bottom:40px;
   text-align:center;
@@ -317,6 +376,7 @@ a.ref:focus-visible{outline-offset:1px}
 }
 .chapter-body p strong{color:var(--ink);font-weight:600}
 .chapter-body h3{
+  max-width:680px;
   font-family:'Fraunces',serif;
   font-size:24px;
   font-weight:600;
@@ -324,8 +384,10 @@ a.ref:focus-visible{outline-offset:1px}
   margin:40px 0 14px;
   color:var(--ink);
 }
-.chapter-body h3::before{
-  content:"§ ";
+.chapter-body h3 .h3-in::before,html:not(.js) .chapter-body h3::before{
+  content:"§";
+  content:"§" / "";
+  margin-right:.32em;
   color:var(--accent);
   font-style:italic;
   font-weight:300;
@@ -365,11 +427,11 @@ a.ref:focus-visible{outline-offset:1px}
 .pullquote.side::before{display:none}
 .pullquote.minimal{
   border:none;
-  padding:8px 0;
+  padding:8px 30px;
   font-size:30px;
   text-align:center;
-  max-width:560px;
-  margin:48px auto;
+  max-width:620px;
+  margin:48px 0;
 }
 .pullquote.minimal::before{
   position:static;
@@ -418,10 +480,10 @@ ul.notes li strong{color:var(--ink);font-weight:600}
 }
 .refs .refs-title{
   font-family:'JetBrains Mono',monospace;
-  font-size:10px;
+  font-size:11px;
   letter-spacing:0.2em;
   text-transform:uppercase;
-  color:var(--accent);
+  color:var(--accent-text);
   margin-bottom:14px;
 }
 .refs ol{
@@ -446,7 +508,7 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   top:8px;
   font-family:'JetBrains Mono',monospace;
   font-size:11px;
-  color:var(--accent);
+  color:var(--accent-text);
   font-weight:500;
 }
 
@@ -489,9 +551,9 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:1px;
-  background:rgba(245,241,234,0.15);
   border:1px solid rgba(245,241,234,0.15);
 }
+.tool-card{outline:1px solid rgba(245,241,234,0.15)}
 .tool-card{
   background:var(--ink);
   padding:32px 28px;
@@ -508,18 +570,18 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   text-transform:uppercase;
   margin-bottom:14px;
 }
-.tool-card h4{
+.tool-card h3,.tool-card h4{
   font-family:'Fraunces',serif;
   font-size:24px;
   font-weight:500;
   margin-bottom:8px;
   letter-spacing:-0.01em;
 }
-.tool-card h4 a{
+.tool-card h3 a{
   border-bottom:1px solid transparent;
   transition:border-color .2s;
 }
-.tool-card h4 a:hover{border-bottom-color:var(--accent-soft)}
+.tool-card h3 a:hover{border-bottom-color:var(--accent-soft)}
 .tool-card p{
   font-size:14px;
   line-height:1.55;
@@ -535,7 +597,18 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   color:var(--accent-soft);
 }
 
-@media (max-width:780px){.tool-grid{grid-template-columns:1fr}}
+/* phones: the nine tools become a swipeable strip instead of a 2,900px column */
+.swipe-hint{display:none}
+@media (max-width:780px){
+  .tool-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(84%,320px);gap:12px;border:0;
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-left:5vw;
+    margin:0 -5vw;padding:2px 5vw 14px;scrollbar-width:none}
+  .tool-grid::-webkit-scrollbar{display:none}
+  .tool-card{scroll-snap-align:start;outline-color:rgba(245,241,234,.22)}
+  .swipe-hint{display:flex;align-items:center;gap:10px;margin:-36px 0 18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-soft)}
+  .swipe-hint i{font-style:normal;font-family:'Fraunces',serif;font-size:17px;animation:nudge 1.6s var(--ease-io,ease) 1s 2}
+}
+@keyframes nudge{50%{transform:translateX(6px)}}
 
 /* === PORTFOLIO / SELECTED WORK === */
 .portfolio{
@@ -549,7 +622,7 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   font-family:'JetBrains Mono',monospace;
   font-size:11px;
   letter-spacing:0.2em;
-  color:var(--accent);
+  color:var(--accent-text);
   text-transform:uppercase;
   margin-bottom:30px;
 }
@@ -585,25 +658,8 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   padding:36px 0 32px;
   border-bottom:1px solid var(--ink);
   align-items:start;
-  transition:background .3s, padding-left .3s;
   position:relative;
 }
-.project:hover{
-  background:var(--bg-alt);
-  padding-left:16px;
-}
-.project::after{
-  content:"→";
-  position:absolute;
-  right:0;
-  top:36px;
-  font-size:24px;
-  color:var(--muted);
-  opacity:0;
-  transition:opacity .3s, transform .3s;
-  font-family:'Fraunces',serif;
-}
-.project:hover::after{opacity:1; transform:translateX(4px)}
 
 .project-number{
   font-family:'Fraunces',serif;
@@ -683,8 +739,6 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   .project-title{font-size:22px; grid-column:2}
   .project-desc{grid-column:1 / -1; padding-left:0; margin-top:6px}
   .project-meta{grid-column:1 / -1; text-align:left; margin-top:8px}
-  .project::after{display:none}
-  .project:hover{padding-left:0}
 }
 
 .portfolio-note{
@@ -715,7 +769,7 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   font-family:'JetBrains Mono',monospace;
   font-size:11px;
   letter-spacing:0.2em;
-  color:var(--accent);
+  color:var(--accent-text);
   text-transform:uppercase;
   margin-bottom:40px;
 }
@@ -764,6 +818,7 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   color:var(--ink-soft);
 }
 @media (max-width:780px){.manifesto .principles{grid-template-columns:1fr}}
+@media (max-width:600px){.manifesto h2 br{display:none}}
 
 /* === CLOSING LETTER === */
 .letter{
@@ -789,7 +844,7 @@ ul.notes li strong{color:var(--ink);font-weight:600}
   text-transform:uppercase;
   background:var(--paper);
 }
-@media (max-width:780px){.letter .stamp{position:static;display:inline-block;transform:none;margin-bottom:30px}}
+@media (max-width:780px){.letter .stamp{position:static;display:inline-block;transform:rotate(-3deg);margin-bottom:30px}}
 
 .letter .salutation{
   font-family:'Fraunces',serif;
@@ -857,10 +912,10 @@ ul.notes li strong{color:var(--ink);font-weight:600}
 .contact-strip .ct-links{display:flex;gap:24px;flex-wrap:wrap}
 .contact-strip .ct-links a{
   font-family:'Inter',sans-serif;
-  font-size:13px;
+  font-size:14px;
   letter-spacing:0.05em;
   border-bottom:1px solid var(--ink);
-  padding-bottom:2px;
+  padding:12px 0 2px;
   transition:all .2s;
 }
 .contact-strip .ct-links a:hover{color:var(--accent);border-color:var(--accent)}
@@ -917,6 +972,16 @@ footer .footer-bottom{
   .chapter{padding:70px 5vw}
   .intro,.toolstack,.manifesto,.letter{padding:70px 5vw}
   .tool-card{padding:24px 20px}
+  /* display sizes step down so phone lines keep a reading measure */
+  .intro p{font-size:19px;line-height:1.7}
+  .intro .dropcap,.intro p:first-of-type::first-letter{font-size:78px}
+  .chapter-body .lede{font-size:19px}
+  .pullquote{font-size:26px;margin:40px 0}
+  .pullquote.side{font-size:24px}
+  .pullquote.minimal{font-size:25px;padding:8px 0}
+  .letter .salutation{font-size:30px}
+  .chapter-tag{font-size:11px}
+  .project-title .project-status{font-size:10px}
 }
 
 /* ===================================================================
@@ -981,15 +1046,16 @@ footer .footer-bottom{
 /* a translucent veil in the section's own colour covers the unread part of the numeral;
    --depth (0→1, set on .chapter while scrolling) uncovers it from the bottom up */
 .js .chapter-number{position:relative}
-.js .chapter-number::after{content:"";position:absolute;inset:0 -.12em 0 -.12em;background:rgba(245,241,234,.68);clip-path:inset(0 0 calc(var(--depth,0) * 100%) 0);pointer-events:none;transition:clip-path .25s linear}
-.js .chapter:nth-child(even) .chapter-number::after{background:rgba(235,229,216,.7)}
-@media (max-width:980px){.chapter-meta.fx .chapter-tag::before{display:none}}
+.js .chapter-number::after{content:"";position:absolute;inset:0 -.12em 0 -.12em;background:color-mix(in srgb,var(--bg) 68%,transparent);clip-path:inset(0 0 calc(var(--depth,0) * 100%) 0);pointer-events:none;transition:clip-path .25s linear}
+.js .chapter:nth-child(even) .chapter-number::after{background:color-mix(in srgb,var(--bg-alt) 70%,transparent)}
+@media (max-width:980px){.chapter-meta.fx .chapter-tag::before{display:none}.js .chapter-number::after{display:none}}
 
 /* --- Chapter body --- */
-.lede.fx,.portfolio-lede.fx{opacity:0;transform:translateY(10px);transition:opacity .7s .35s,transform .8s .35s var(--ease-out)}
+.lede.fx,.portfolio-lede.fx{opacity:0;transform:translateY(10px);transition:opacity .6s .1s,transform .7s .1s var(--ease-out)}
 .lede.fx.show,.portfolio-lede.fx.show{opacity:1;transform:none}
-.chapter-body h3.fx{clip-path:inset(-.15em 100% -.4em -.1em);transition:clip-path .9s var(--ease-io)}
-.chapter-body h3.fx.show{clip-path:inset(-.15em -.2em -.4em -.1em)}
+.chapter-body h3 .h3-in{display:block}
+.chapter-body h3.fx .h3-in{clip-path:inset(-.2em 100% -.4em -.1em);transition:clip-path .9s var(--ease-io)}
+.chapter-body h3.fx.show .h3-in{clip-path:inset(-.2em -.3em -.4em -.1em)}
 
 /* pullquote rules draw, quote mark inks in */
 .pullquote.fx:not(.side):not(.minimal){border-color:transparent;background:linear-gradient(var(--ink),var(--ink)) left top/0% 2px no-repeat,linear-gradient(var(--ink),var(--ink)) left bottom/0% 2px no-repeat;background-origin:border-box;transition:background-size 1s var(--ease-io)}
@@ -1008,31 +1074,30 @@ ul.notes.fx.show li::before{opacity:1;transform:none}
 .refs.fx{border-left-color:transparent}
 .refs.fx::before{content:"";position:absolute;left:-3px;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .9s var(--ease-io)}
 .refs.fx.show::before{transform:scaleY(1)}
-.refs.fx ol li{opacity:0;transform:translateX(-8px);transition:opacity .5s calc(var(--i,0) * 70ms + .2s),transform .6s var(--ease-out) calc(var(--i,0) * 70ms + .2s)}
+.refs.fx ol li{opacity:0;transform:translateX(-8px);transition:opacity .45s calc(var(--i,0) * 45ms + .08s),transform .55s var(--ease-out) calc(var(--i,0) * 45ms + .08s)}
 .refs.fx.show ol li{opacity:1;transform:none}
 
 /* --- Toolstack --- */
 .tool-card.fx{opacity:0;transform:translateY(16px);transition:background .3s,opacity .6s calc(var(--i,0) * 70ms),transform .8s var(--ease-out) calc(var(--i,0) * 70ms)}
 .tool-card.fx.show{opacity:1;transform:none}
-.js .tool-card h4 a{border-bottom-color:transparent;background:linear-gradient(var(--accent-soft),var(--accent-soft)) right bottom/0 1px no-repeat;transition:background-size .35s var(--ease-io)}
-.js .tool-card h4 a:hover,.js .tool-card h4 a:focus-visible{border-bottom-color:transparent;background-position:left bottom;background-size:100% 1px}
+.js .tool-card h3 a{border-bottom-color:transparent;background:linear-gradient(var(--accent-soft),var(--accent-soft)) right bottom/0 1px no-repeat;transition:background-size .35s var(--ease-io)}
+.js .tool-card h3 a:hover,.js .tool-card h3 a:focus-visible{border-bottom-color:transparent;background-position:left bottom;background-size:100% 1px}
 
 /* pointer spotlight (dark cards + project rows); content lifted above the glow */
 .spot>*{position:relative}
 .spot::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .45s;background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),var(--spot,rgba(232,168,124,.16)),transparent 65%)}
 .spot:hover::before{opacity:1}
-.project.spot{--spot:rgba(200,85,61,.09)}
+
 
 /* --- Portfolio --- */
 .project-list.fx{border-top-color:transparent;background:linear-gradient(var(--ink),var(--ink)) left top/0% 2px no-repeat;background-origin:border-box;transition:background-size 1.1s var(--ease-io)}
 .project-list.fx.show{background-size:100% 2px}
-.project.fx{opacity:0;transform:translateY(14px);transition:background .3s,padding-left .3s,opacity .7s,transform .8s var(--ease-out)}
+.project.fx{opacity:0;transform:translateY(14px);transition:opacity .7s,transform .8s var(--ease-out)}
 .project.fx.show{opacity:1;transform:none}
-@media (hover:hover) and (min-width:981px){
-  .js .project:hover{padding-left:0}  /* transform-only "row opens" replaces the layout-shifting hover */
-  .js .project>.project-number,.js .project>.project-title,.js .project>.project-desc,.js .project>.project-meta{transition:transform .45s var(--ease-out)}
-  .js .project:hover>.project-number,.js .project:hover>.project-title,.js .project:hover>.project-desc{transform:translateX(14px)}
-  .js .project:hover>.project-meta{transform:translateX(-34px)}  /* makes room for the → arrow */
+/* rows are not links: the only response is the numeral leaning in */
+@media (hover:hover){
+  .js .project .project-number{transition:transform .5s var(--settle)}
+  .js .project:hover .project-number{transform:translateX(4px) rotate(-4deg)}
 }
 
 /* --- Manifesto --- */
@@ -1048,9 +1113,14 @@ ul.notes.fx.show li::before{opacity:1;transform:none}
 @media (min-width:781px){
   .letter .stamp.fx.show{animation:stamp-in .9s cubic-bezier(.2,.8,.2,1) .4s backwards}
 }
+@media (max-width:780px){
+  .letter .stamp.fx.show{animation:stamp-in-phone .8s cubic-bezier(.2,.8,.2,1) .3s backwards}
+}
+@keyframes stamp-in-phone{0%{transform:rotate(4deg) scale(1.3)}55%{transform:rotate(-5deg) scale(.98)}100%{transform:rotate(-3deg) scale(1)}}
 @keyframes stamp-in{0%{transform:rotate(-4deg) scale(1.35)}45%{transform:rotate(11deg) scale(.98)}70%{transform:rotate(6deg) scale(1.02)}100%{transform:rotate(8deg) scale(1)}}
-.letter .salutation.fx{clip-path:inset(-.2em 100% -.4em -.1em);transition:clip-path 1s var(--ease-io)}
-.letter .salutation.fx.show{clip-path:inset(-.2em -.2em -.4em -.1em)}
+.letter .salutation .sal-in{display:inline-block}
+.letter .salutation.fx .sal-in{clip-path:inset(-.2em 100% -.4em -.1em);transition:clip-path 1s var(--ease-io)}
+.letter .salutation.fx.show .sal-in{clip-path:inset(-.2em -.3em -.4em -.1em)}
 .letter .signoff.fx{border-top-color:transparent;background:linear-gradient(var(--ink),var(--ink)) left top/0% 1px no-repeat;background-origin:border-box;transition:background-size 1s var(--ease-io)}
 .letter .signoff.fx.show{background-size:100% 1px}
 .letter .signoff.fx .signature{clip-path:inset(-.25em 100% -.45em -.1em);transition:clip-path 1.4s var(--ease-io) .4s}
@@ -1073,9 +1143,62 @@ footer .colophon.fx.show .colophon-block{opacity:1;transform:none}
 footer .footer-bottom.fx{opacity:0;transition:opacity .8s .3s}
 footer .footer-bottom.fx.show{opacity:1}
 
+/* --- Pullquotes ink in word by word as they cross the reading line (scroll-linked, set by site.js) --- */
+.pullquote .pw{transition:opacity .3s linear}
+.js .pullquote.is-inking .pw{opacity:clamp(.34,calc(var(--pq,1) * (var(--n,10) + 6) - var(--k,0)),1)}
+
+/* --- "Baru" flag, Edisi Lain cards, footer nav --- */
+.issue-flag.fx{opacity:0;transform:translateY(-6px);transition:opacity .6s .15s,transform .7s .15s var(--ease-out),background .3s}
+.issue-flag.fx.show{opacity:1;transform:none}
+.issues-next-item.fx{opacity:0;transform:translateY(18px);transition:background .3s,opacity .6s calc(var(--i,0) * 120ms),transform .8s var(--ease-out) calc(var(--i,0) * 120ms)}
+.issues-next-item.fx.show{opacity:1;transform:none}
+.issues-next-item.fx:not(.show) .cover:not(.cover-stack){transform:rotate(-9deg) translateY(12px)}
+.issues-next-item.fx:not(.show) .cover-stack img{transform:none}
+.issues-next-grid.fx{border-top-color:transparent;background:linear-gradient(var(--ink),var(--ink)) left top/0% 2px no-repeat;transition:background-size 1s var(--ease-io)}
+.issues-next-grid.fx.show{background-size:100% 2px}
+footer .footer-nav.fx a{opacity:0;transform:translateY(8px);transition:color .2s,opacity .6s calc(var(--i,0) * 80ms),transform .7s var(--ease-out) calc(var(--i,0) * 80ms)}
+footer .footer-nav.fx.show a{opacity:1;transform:none}
+
+/* --- Archive: stats count in, the featured cover is unveiled from the bottom, shelf covers settle --- */
+.archive-stats.fx>div{opacity:0;transform:translateY(10px);transition:opacity .6s calc(var(--i,0) * 90ms + .2s),transform .7s var(--ease-out) calc(var(--i,0) * 90ms + .2s)}
+.archive-stats.fx.show>div{opacity:1;transform:none}
+.issue-featured.fx{border-top-color:transparent;background:linear-gradient(var(--ink),var(--ink)) left top/0% 2px no-repeat;transition:background-size 1.1s var(--ease-io)}
+.issue-featured.fx.show{background-size:100% 2px}
+.issue-featured.fx .issue-cover{clip-path:inset(100% 0 0 0);transition:clip-path 1.2s var(--ease-io) .15s}
+.issue-featured.fx.show .issue-cover{clip-path:inset(0)}
+.issue-featured.fx .num{opacity:0;transform:translateY(.25em);transition:opacity .6s .2s,transform 1s .2s var(--settle)}
+.issue-featured.fx.show .num{opacity:1;transform:none}
+.issue-featured.fx .issue-featured-text>*:not(.num){opacity:0;transform:translateY(10px);transition:opacity .6s .35s,transform .8s .35s var(--ease-out)}
+.issue-featured.fx.show .issue-featured-text>*{opacity:1;transform:none}
+.shelf-item.fx{opacity:0;transform:translateY(18px);transition:opacity .7s calc(var(--i,0) * 120ms),transform .9s var(--ease-out) calc(var(--i,0) * 120ms)}
+.shelf-item.fx.show{opacity:1;transform:none}
+.shelf-item.fx.is-soon.show{opacity:.75}
+
+/* --- Touch: pressed states, since hover never happens --- */
+@media (hover:none){
+  a.issues-next-item:active,a.shelf-item:active,.issue-flag:active{background:var(--bg-alt)}
+  .issue-cta:active,.shelf-cta:active,.hero-cue:active{color:var(--accent-text)}
+  .tool-card:active{background:#252118}
+  footer .footer-nav a:active{color:var(--accent-soft)}
+  a.issues-next-item:active .cover:not(.cover-stack){transform:rotate(0) scale(.97)}
+}
+
+/* --- Moving between pages: a cross-document view transition. The masthead stays put and an
+   issue's cover (archive plate, Edisi Lain card) grows into that issue's banner. --- */
+@view-transition{navigation:auto}
+::view-transition-group(*){animation-duration:.5s;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+::view-transition-old(root){animation:.32s cubic-bezier(.65,0,.35,1) both vt-fade-out}
+::view-transition-new(root){animation:.45s cubic-bezier(.22,1,.36,1) .05s both vt-fade-in}
+@keyframes vt-fade-out{to{opacity:0}}
+@keyframes vt-fade-in{from{opacity:0;transform:translateY(14px)}}
+.masthead{view-transition-name:masthead}
+.issue-01 .hero-stage,.shelf-item.issue-01 .shelf-cover,.issues-next-item.issue-01 .cover{view-transition-name:cover-01}
+.issue-02 .hero-stage,.issue-featured.issue-02 .issue-cover,.issues-next-item.issue-02 .cover{view-transition-name:cover-02}
+
 /* --- Reduced motion: durations go to ~0 everywhere; the scroll-linked lines, the
    numeral veil and the spotlight are dropped so the page is simply still --- */
 @media (prefers-reduced-motion: reduce){
+  @view-transition{navigation:none}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important}
   .js .masthead::after,.js .chapter-number::after,.spot::before{display:none}
@@ -1086,78 +1209,156 @@ footer .footer-bottom.fx.show{opacity:1}
 }
 
 /* === ARSIP (issue index) ===
-   The featured issue's cover is the real WebGL sheet in a 4:5 plate; the other
-   issues use the same row grammar as Selected Work. */
-.page-archive .archive{padding:calc(73px + 72px) 5vw 90px;background:var(--paper);border-bottom:1px solid var(--ink)}
+   A magazine shelf: the latest issue as a live WebGL cover, earlier issues as printed covers. */
+.page-archive .archive{padding:calc(73px + 64px) 5vw 96px;background:var(--paper);border-bottom:1px solid var(--ink)}
+@media (max-width:780px){.page-archive .archive{padding-top:calc(58px + 40px)}}
 .archive-inner{max-width:1200px;margin:0 auto}
-.archive .section-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:28px}
-.archive h1{font-family:'Fraunces',serif;font-size:clamp(40px,5.6vw,80px);font-weight:400;letter-spacing:-0.025em;line-height:1.02;max-width:16ch;margin-bottom:20px}
+.archive .section-label{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:400;letter-spacing:0.2em;color:var(--accent-text);text-transform:uppercase;margin-bottom:28px}
+.archive-head{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:64px;align-items:end;padding-bottom:44px}
+.archive-head .section-label,.archive-head h1,.archive-head .archive-lede{grid-column:1}
+.archive h1{font-family:'Fraunces',serif;font-size:clamp(44px,6.4vw,96px);font-weight:400;letter-spacing:-0.03em;line-height:.98;max-width:13ch;margin-bottom:24px}
 .archive h1 em{font-style:italic;font-weight:300;color:var(--accent)}
-.archive .archive-lede{font-size:19px;line-height:1.6;color:var(--ink-soft);max-width:680px;margin-bottom:60px;font-style:italic;font-weight:300}
-.issue-featured{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;padding:40px 0 48px;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink)}
-.issue-featured .tag{display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
-.issue-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;background:var(--accent);color:var(--paper);padding:3px 8px;border-radius:2px;font-weight:500}
+.archive .archive-lede{font-size:19px;line-height:1.6;color:var(--ink-soft);max-width:560px;font-style:italic;font-weight:300}
+.archive-stats{grid-column:2;grid-row:1 / span 3;align-self:end;display:grid;grid-template-columns:repeat(2,auto);gap:22px 40px;padding:0 0 6px 32px;border-left:1px solid var(--ink)}
+.archive-stats dt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.archive-stats dd{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:46px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.archive-stats dd small{font-size:15px;font-style:normal;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--muted)}
+@media (max-width:860px){
+  .archive-head{grid-template-columns:1fr}
+  .archive-stats{grid-column:1;grid-row:auto;grid-template-columns:repeat(4,auto);justify-content:start;margin-top:32px;padding:20px 0 0;border-left:0;border-top:1px solid var(--ink);gap:16px 28px}
+  .archive-stats dd{font-size:34px}
+}
+.issue-featured{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px;align-items:center;padding:48px 0 56px;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink)}
+.issue-featured .tag{display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+.issue-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;background:var(--accent);color:var(--paper);padding:3px 8px;border-radius:2px;font-weight:500}
 .issue-badge.ink{background:var(--ink)}
-.issue-featured .num{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:64px;line-height:1;color:var(--accent);margin-bottom:8px}
-.issue-featured h2{font-family:'Fraunces',serif;font-size:clamp(28px,3.2vw,44px);font-weight:500;letter-spacing:-0.02em;line-height:1.08;margin-bottom:16px}
+.issue-featured .num{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(72px,9vw,128px);line-height:.9;color:var(--accent);margin-bottom:10px}
+.issue-featured h2{font-family:'Fraunces',serif;font-size:clamp(30px,3.4vw,48px);font-weight:500;letter-spacing:-0.022em;line-height:1.06;margin-bottom:18px}
+.issue-featured h2 a{background:linear-gradient(currentColor,currentColor) left 96%/0 1px no-repeat;transition:background-size .5s var(--ease-io,ease)}
+.issue-featured h2 a:hover,.issue-featured h2 a:focus-visible{background-size:100% 1px}
 .issue-featured h2 em{font-style:italic;font-weight:300;color:var(--accent)}
-.issue-featured p{font-size:16px;line-height:1.6;color:var(--ink-soft);max-width:52ch;margin-bottom:22px}
+.issue-featured p{font-size:17px;line-height:1.65;color:var(--ink-soft);max-width:52ch;margin-bottom:24px}
 .issue-meta{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 22px}
 .issue-meta b{color:var(--ink);font-weight:500}
-.issue-cta{display:inline-flex;align-items:center;gap:10px;margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:4px;transition:color .2s,border-color .2s}
-.issue-cta:hover{color:var(--accent);border-color:var(--accent)}
-.issue-cta i{font-style:normal;font-family:'Fraunces',serif;font-size:18px;color:var(--accent)}
-.issue-cover{position:relative;aspect-ratio:4/5;background:#08080a;border:1px solid var(--ink);overflow:hidden}
+.issue-cta{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:22px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--ink);padding-top:10px;padding-bottom:6px;transition:color .2s,border-color .2s}
+.issue-cta:hover{color:var(--accent-text);border-color:var(--accent)}
+.issue-cta i{font-style:normal;font-family:'Fraunces',serif;font-size:18px;color:var(--accent);transition:transform .35s var(--ease-out,ease)}
+.issue-cta:hover i{transform:translateX(5px)}
+.issue-cover{position:relative;aspect-ratio:4/5;max-width:100%;background:var(--hero);border:1px solid var(--ink);overflow:hidden}
 .issue-cover .shader-frame{position:absolute;inset:0}
 .issue-cover .three-d-paper{width:100%;height:100%}
-.issue-cover .three-d-paper::after{content:"";position:absolute;left:50%;top:50%;height:73.5%;aspect-ratio:2.30/2.72;max-width:88%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.16);border-radius:4px;opacity:0;transition:opacity .5s ease;pointer-events:none}
-.issue-cover .three-d-paper[data-state="loading"]::after{opacity:1}
-.issue-rows{display:flex;flex-direction:column}
-.issue{display:grid;grid-template-columns:90px 1.2fr 1.3fr 190px;gap:36px;padding:32px 0 28px;border-bottom:1px solid var(--ink);align-items:start;position:relative;color:inherit;transition:background .3s}
-a.issue:hover{background:var(--bg-alt)}
-a.issue::after{content:"→";position:absolute;right:0;top:32px;font-family:'Fraunces',serif;font-size:22px;color:var(--muted);opacity:0;transition:opacity .3s,transform .3s}
-a.issue:hover::after{opacity:1;transform:translateX(4px)}
-.issue .num{font-family:'Fraunces',serif;font-style:italic;font-size:34px;font-weight:300;color:var(--accent);line-height:1}
-.issue .title{font-family:'Fraunces',serif;font-size:24px;font-weight:500;letter-spacing:-0.015em;line-height:1.15}
-.issue .title .issue-badge{margin-left:10px;vertical-align:middle}
-.issue .desc{font-size:15px;line-height:1.6;color:var(--ink-soft)}
-.issue .desc span{display:block;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase}
-.issue .side{text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;line-height:1.8}
-.issue .side b{display:block;color:var(--ink);font-weight:500}
-.issue.is-soon .num,.issue.is-soon .title{color:var(--muted)}
-.archive-note{margin-top:40px;padding-top:24px;border-top:1px dotted var(--muted);font-size:15px;line-height:1.6;color:var(--ink-soft);font-style:italic;max-width:680px}
-@media (max-width:980px){
-  .issue-featured{grid-template-columns:1fr;gap:32px}
-  .issue{grid-template-columns:52px 1fr;gap:16px 18px;padding:26px 0 24px}
-  .issue .num{font-size:28px}
-  .issue .title{font-size:21px;grid-column:2}
-  .issue .desc{grid-column:1 / -1}
-  .issue .side{grid-column:1 / -1;text-align:left}
-  a.issue::after{display:none}
+.issue-02 .issue-cover .three-d-paper{--poster:url(/assets/covers/vol-02-plate.jpg)}
+.issue-01 .issue-cover .three-d-paper{--poster:url(/assets/covers/vol-01-plate.jpg)}
+.issue-cover-fallback{display:none;position:absolute;inset:0;flex-direction:column;justify-content:flex-end;gap:6px;padding:28px;color:#f5f1ea;background:var(--hero)}
+.issue-cover-fallback span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-soft)}
+.issue-cover-fallback strong{font-family:'Fraunces',serif;font-size:28px;font-weight:500;letter-spacing:-0.02em;line-height:1.1}
+.issue-cover.no-webgl .shader-frame{display:none}
+.issue-cover.no-webgl .issue-cover-fallback{display:flex}
+@media (max-width:980px){.issue-featured{grid-template-columns:1fr;gap:36px}.issue-cover{max-width:520px;order:-1}}
+
+/* the shelf: earlier issues as printed covers that lean toward the pointer */
+.shelf{padding-top:56px}
+.shelf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
+.shelf-item{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr);gap:28px;align-items:start;color:inherit;padding:24px 0;border-top:1px solid var(--ink)}
+.shelf-cover{position:relative;display:block;aspect-ratio:4/5;background:var(--hero);border:1px solid var(--ink);overflow:hidden;transform:perspective(900px) rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));transition:transform .6s var(--ease-out,ease),box-shadow .6s var(--ease-out,ease)}
+.shelf-cover img{display:block;width:100%;height:100%;object-fit:cover}
+.shelf-cover::after{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--gx,50%) var(--gy,30%),rgba(255,255,255,.16),transparent 60%);opacity:0;transition:opacity .5s;pointer-events:none}
+a.shelf-item:hover .shelf-cover{box-shadow:0 18px 40px -22px rgba(26,24,20,.55)}
+a.shelf-item:hover .shelf-cover::after{opacity:1}
+.shelf-text{display:flex;flex-direction:column;gap:8px;min-width:0}
+.shelf-item .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.shelf-item .num{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:56px;line-height:.9;color:var(--accent)}
+.shelf-item .title{font-family:'Fraunces',serif;font-size:28px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
+.shelf-item .desc{font-size:16px;line-height:1.6;color:var(--ink-soft)}
+.shelf-item .meta{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.7}
+.shelf-cta{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;min-height:44px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-top:10px;padding-bottom:4px;transition:color .2s,border-color .2s}
+.shelf-cta i{font-style:normal;font-family:'Fraunces',serif;font-size:18px;color:var(--accent);transition:transform .35s var(--ease-out,ease)}
+a.shelf-item:hover .shelf-cta{color:var(--accent-text);border-color:var(--accent)}
+a.shelf-item:hover .shelf-cta i{transform:translateX(5px)}
+.shelf-item.is-soon{opacity:.75}
+.shelf-item.is-soon .shelf-cover{background:repeating-linear-gradient(135deg,var(--bg) 0 10px,var(--bg-alt) 10px 11px);border-style:dashed;display:grid;place-items:center}
+.soon-mark{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:64px;color:var(--muted)}
+.shelf-item.is-soon .title{color:var(--muted)}
+@media (max-width:860px){.shelf-grid{grid-template-columns:1fr;gap:8px}}
+@media (max-width:480px){.shelf-item{grid-template-columns:110px minmax(0,1fr);gap:18px}.shelf-item .num{font-size:40px}.shelf-item .title{font-size:23px}}
+.archive-note{margin-top:48px;padding-top:24px;border-top:1px dotted var(--muted);font-size:15px;line-height:1.6;color:var(--ink-soft);font-style:italic;max-width:680px}
+/* 404 */
+.lost h1{max-width:14ch}
+.lost-links{display:flex;flex-wrap:wrap;gap:8px 36px;margin-top:28px}
+
+/* === EDISI LAIN (end of an issue): the next or previous issue as a cover card, and the archive === */
+.issues-next{padding:72px 5vw 80px;background:var(--bg);border-bottom:1px solid var(--ink)}
+.issues-next-inner{max-width:860px;margin:0 auto}
+.issues-next .section-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:var(--accent-text);text-transform:uppercase;margin-bottom:18px}
+.issues-next-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:2px solid var(--ink)}
+.issues-next-item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:22px;align-items:start;padding:26px 24px 28px 0;border-bottom:1px solid var(--ink);color:inherit;transition:background .3s}
+.issues-next-item+.issues-next-item{padding-left:24px;border-left:1px solid var(--ink)}
+a.issues-next-item:hover{background:color-mix(in srgb,var(--bg-alt) 70%,transparent)}
+.issues-next-item .cover{position:relative;display:block;aspect-ratio:4/5;background:var(--hero);border:1px solid var(--ink);transform:rotate(-2deg);transition:transform .55s var(--settle,ease)}
+.issues-next-item .cover img{display:block;width:100%;height:100%;object-fit:cover}
+a.issues-next-item:hover .cover{transform:rotate(0deg) translateY(-4px)}
+.issues-next-item .cover-stack img{position:absolute;inset:0;border:1px solid var(--ink)}
+.issues-next-item .cover-stack img:first-child{transform:rotate(-7deg) translate(-6px,2px)}
+.issues-next-item .cover-stack img:last-child{transform:rotate(3deg) translate(6px,-2px)}
+.issues-next-item .cover-stack{background:none;border:0;transform:none}
+.issues-next-item .cover-stack img{transition:transform .55s var(--settle,ease)}
+a.issues-next-item:hover .cover-stack{transform:none}
+a.issues-next-item:hover .cover-stack img:first-child{transform:rotate(-11deg) translate(-12px,4px)}
+a.issues-next-item:hover .cover-stack img:last-child{transform:rotate(6deg) translate(10px,-6px)}
+.issues-next-item .body{display:grid;gap:8px;min-width:0}
+.issues-next-item .dir{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
+.issues-next-item .dir i{font-style:normal;display:inline-block;transition:transform .35s var(--ease-out,ease)}
+a.issues-next-item:hover .dir i{transform:translateX(4px)}
+.issues-next-item .num{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:34px;color:var(--accent);line-height:1}
+.issues-next-item .t{font-family:'Fraunces',serif;font-size:23px;font-weight:500;letter-spacing:-0.015em;line-height:1.15}
+.issues-next-item .m{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:640px){
+  .issues-next-grid{grid-template-columns:1fr}
+  .issues-next-item,.issues-next-item+.issues-next-item{padding:22px 0;border-left:0}
+  .issues-next-item{grid-template-columns:76px minmax(0,1fr)}
 }
 
-/* === EDISI LAIN (end of an issue): previous / next issue, link to the archive === */
-.issues-next{padding:64px 5vw 72px;background:var(--bg);border-bottom:1px solid var(--ink)}
-.issues-next-inner{max-width:680px;margin:0 auto}
-.issues-next .section-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:18px}
-.issues-next-grid{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--ink)}
-.issues-next-item{display:grid;gap:8px;padding:24px 22px 26px;border-bottom:1px solid var(--ink);color:inherit;transition:background .3s}
-.issues-next-item:first-child{border-right:1px solid var(--ink)}
-a.issues-next-item:hover{background:var(--bg-alt)}
-.issues-next-item .dir{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
-.issues-next-item .num{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:30px;color:var(--accent);line-height:1}
-.issues-next-item .t{font-family:'Fraunces',serif;font-size:22px;font-weight:500;letter-spacing:-0.015em;line-height:1.15}
-.issues-next-item .m{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
-.issues-next-item.is-soon .num,.issues-next-item.is-soon .t{color:var(--muted)}
-@media (max-width:600px){.issues-next-grid{grid-template-columns:1fr}.issues-next-item:first-child{border-right:0}}
+/* === "Baru" flag between the banner and the prolog (Vol. 01 points to the newest issue) === */
+.issue-flag{display:flex;align-items:center;gap:18px;padding:16px 5vw;background:var(--paper);border-bottom:1px solid var(--ink);color:var(--ink);font-family:'Inter',sans-serif;font-size:14px;transition:background .3s}
+.issue-flag:hover{background:var(--bg)}
+.flag-badge{flex:none;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;background:var(--accent);color:var(--paper);padding:4px 8px;border-radius:2px}
+.flag-text{flex:1;min-width:0}
+.flag-vol{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-right:6px}
+.flag-text em{font-family:'Fraunces',serif;font-size:19px;font-style:italic;color:var(--accent-text)}
+.flag-sub{color:var(--ink-soft)}
+.flag-cta{flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:inline-flex;gap:8px;align-items:center}
+.flag-cta i{font-style:normal;font-family:'Fraunces',serif;font-size:17px;color:var(--accent);transition:transform .35s var(--ease-out,ease)}
+.issue-flag:hover .flag-cta i{transform:translateX(5px)}
+@media (max-width:600px){.flag-sub{display:none}.issue-flag{gap:12px;padding:14px 5vw}}
+
+/* === footer navigation === */
+footer .footer-nav{max-width:1200px;margin:28px auto 0;display:flex;flex-wrap:wrap;gap:6px 34px;padding-bottom:24px;border-bottom:1px solid rgba(245,241,234,.2)}
+footer .footer-nav a{display:inline-flex;align-items:baseline;gap:10px;min-height:44px;padding-top:12px;font-family:'Fraunces',serif;font-size:18px;color:var(--bg);transition:color .2s}
+footer .footer-nav a span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-soft)}
+footer .footer-nav a:hover{color:var(--accent-soft)}
+footer .footer-nav .to-top{margin-left:auto}
+@media (max-width:600px){footer .footer-nav .to-top{margin-left:0}}
 
 /* === DRAFT banner (unpublished issue pages) === */
 .draft-banner{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 5vw;background:var(--accent);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;text-align:center}
 /* a page that carries the fixed draft banner keeps its footer clear of it */
 body:has(.draft-banner){padding-bottom:40px}
-/* no WebGL on the archive: the plate shows the issue's name instead of an empty black box */
-.issue-cover-fallback{display:none;position:absolute;inset:0;flex-direction:column;justify-content:flex-end;gap:6px;padding:28px;color:#f5f1ea;background:#08080a}
-.issue-cover-fallback span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-soft)}
-.issue-cover-fallback strong{font-family:'Fraunces',serif;font-size:28px;font-weight:500;letter-spacing:-0.02em;line-height:1.1}
-.issue-cover.no-webgl .shader-frame{display:none}
-.issue-cover.no-webgl .issue-cover-fallback{display:flex}
+
+
+/* === PRINT: the essay on paper. Everything that moves is shown at rest, chrome is dropped. === */
+@media print{
+  .masthead,.hero-stage,.hero-cue,.issue-flag,.issues-next,.skip-link,footer .footer-nav,.sig-stage{display:none !important}
+  body::before{display:none}
+  body{background:#fff}
+  .hero{height:auto;min-height:0;background:none;color:#000;border:0;padding:24px 0}
+  .hero .hero-text{position:static;width:auto;height:auto;margin:0;clip:auto;white-space:normal;overflow:visible;display:block}
+  .hero h1{font-size:36px;line-height:1.05;margin:12px 0}
+  .fx,.fx *,.fx::before,.fx::after,.is-split .w>span,.h3-in,.sal-in,.pw{opacity:1 !important;transform:none !important;clip-path:none !important}
+  .chapter-meta{position:static}
+  .js .chapter-number::after{display:none}
+  .chapter,.intro,.letter{padding:28px 0;background:none !important}
+  .toolstack,footer{background:none !important;color:#000}
+  .tool-card{background:none !important;color:#000}
+  a.ref::after{content:" (" attr(href) ")";font-size:.75em;color:#555;word-break:break-all}
+}
+.js .masthead nav a.is-here{color:var(--ink)}

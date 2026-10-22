@@ -4,13 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Analytics (GA4, gtag.js) — ganti G-XXXXXXXXXX dengan Measurement ID dari GA4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<!-- Google Analytics (GA4): ganti G-XXXXXXXXXX dengan Measurement ID dari GA4. Selama masih
+     placeholder, tag-nya tidak dimuat sama sekali (tidak ada unduhan, tidak ada beacon). -->
 <script>
+(function(){
+  var GA_ID = 'G-XXXXXXXXXX';
+  if (/X{6}/.test(GA_ID)) return;
+  var s = document.createElement('script'); s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID; document.head.appendChild(s);
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+  window.gtag = function(){ dataLayer.push(arguments); };
+  gtag('js', new Date()); gtag('config', GA_ID);
+})();
 </script>
 
 <!-- Primary SEO -->
@@ -19,10 +24,10 @@
 <meta name="keywords" content="project manager, PM, AI tools, agents, software house, Emveep, Indonesia, Claude Code, Lovable, project management, agile, scrum, AI MVP, Heribertus Hariyanto Atmaja">
 <meta name="author" content="Heribertus Hariyanto Atmaja">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<link rel="canonical" href="https://heri-page.vercel.app/">
+<link rel="canonical" href="https://heri-page.pages.dev/">
 
 <!-- Theme & favicon -->
-<meta name="theme-color" content="#f5f1ea">
+<meta name="theme-color" content="#08080a">
 <meta name="color-scheme" content="light">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f5f1ea'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='22' font-weight='600' font-style='italic' fill='%23c8553d' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="/assets/author.jpg">
@@ -32,11 +37,11 @@
 <meta property="og:site_name" content="The Handover">
 <meta property="og:title" content="The Handover — Catatan untuk PM Penerus di Era AI">
 <meta property="og:description" content="Sebuah arsip pribadi dari ruang kerja sebuah software house — tentang menjadi project manager di era AI.">
-<meta property="og:url" content="https://heri-page.vercel.app/">
-<meta property="og:image" content="https://heri-page.vercel.app/assets/author.jpg">
-<meta property="og:image:alt" content="Foto Heribertus Hariyanto Atmaja">
-<meta property="og:image:width" content="559">
-<meta property="og:image:height" content="619">
+<meta property="og:url" content="https://heri-page.pages.dev/">
+<meta property="og:image" content="https://heri-page.pages.dev/assets/og/vol-01.jpg">
+<meta property="og:image:alt" content="Sampul The Handover Vol. 01: lembar kaca bertuliskan nama penulis dan judul esai">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale" content="id_ID">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="article:author" content="Heribertus Hariyanto Atmaja">
@@ -51,8 +56,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Handover — Catatan untuk PM Penerus di Era AI">
 <meta name="twitter:description" content="Sebuah arsip pribadi dari ruang kerja sebuah software house — tentang menjadi project manager di era AI.">
-<meta name="twitter:image" content="https://heri-page.vercel.app/assets/author.jpg">
-<meta name="twitter:image:alt" content="Foto Heribertus Hariyanto Atmaja">
+<meta name="twitter:image" content="https://heri-page.pages.dev/assets/og/vol-01.jpg">
+<meta name="twitter:image:alt" content="Sampul The Handover Vol. 01: lembar kaca bertuliskan nama penulis dan judul esai">
 
 <!-- JSON-LD structured data -->
 <script type="application/ld+json">
@@ -65,12 +70,12 @@
   "inLanguage": "id-ID",
   "datePublished": "2026-05-01",
   "dateModified": "2026-05-12",
-  "url": "https://heri-page.vercel.app/",
+  "url": "https://heri-page.pages.dev/",
   "image": {
     "@type": "ImageObject",
-    "url": "https://heri-page.vercel.app/assets/author.jpg",
-    "width": 559,
-    "height": 619
+    "url": "https://heri-page.pages.dev/assets/og/vol-01.jpg",
+    "width": 1200,
+    "height": 630
   },
   "author": {
     "@type": "Person",
@@ -91,7 +96,7 @@
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://heri-page.vercel.app/"
+    "@id": "https://heri-page.pages.dev/"
   }
 }
 </script>
@@ -99,13 +104,18 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<!-- ThreeUI shared styles, the static equivalent of `import "@designcodeio/threeui/style.css"` -->
-<link rel="stylesheet" href="/src/shaders/threeui.css">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{if(JSON.parse(localStorage.getItem('handover:theme'))==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+<!-- instant hops between issues: prerender a page once the reader hovers or presses its link -->
+<script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/src/*"}}]},"eagerness":"moderate"}]}</script>
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/reader.css">
+<link rel="stylesheet" href="/assets/signature.css">
 </head>
-<body class="has-hero">
+<body class="has-hero issue-page issue-01" data-issue="01">
 <script>if ("IntersectionObserver" in window) document.documentElement.classList.add("js");</script>
+<a class="skip-link" href="#intro">Langsung ke isi</a>
+<span id="top"></span>
 
 <!-- ============ MASTHEAD ============ -->
 <header class="masthead">
@@ -125,6 +135,8 @@
   </nav>
 </header>
 
+<main id="main">
+
 <!-- ============ HERO ============ -->
 <section class="hero" aria-labelledby="hero-title">
   <!-- The banner is <ThreeDPaper variant="original" /> from @designcodeio/threeui alone:
@@ -140,11 +152,19 @@
   </div>
   <div class="hero-stage" aria-hidden="true">
     <div class="shader-frame">
-      <div class="threeui-background three-d-paper" data-variant="original" data-state="loading" style="position:relative;overflow:hidden;background:#08080a;pointer-events:auto"></div>
+      <div class="threeui-background three-d-paper" data-variant="original" data-state="loading"
+           data-sheet-accent="#c8553d"></div>
     </div>
   </div>
   <a class="hero-cue" href="#intro">Scroll · Prolog</a>
 </section>
+
+<!-- ============ EDISI TERBARU ============ -->
+<a class="issue-flag issue-02" href="/vol-02-dua-kursi/" data-progress-for="/vol-02-dua-kursi/">
+  <span class="flag-badge">Baru</span>
+  <span class="flag-text"><span class="flag-vol">Vol. 02</span> <em>Dua Kursi</em><span class="flag-sub">: operasi, produk, dan kecepatan AI</span></span>
+  <span class="flag-cta">Baca <i aria-hidden="true">→</i></span>
+</a>
 
 <!-- ============ PROLOG ============ -->
 <section class="intro" id="intro">
@@ -152,7 +172,7 @@
     <div class="section-label">— Prolog —</div>
     <p>Tulisan ini bukan tutorial. Kalau kamu butuh teori <em>Agile</em> atau <em>Scrum</em>, buka saja <a class="ref" href="https://www.pmi.org/learning/library" target="_blank" rel="noopener">PMI Knowledge Library</a> atau <a class="ref" href="https://www.atlassian.com/agile" target="_blank" rel="noopener">Atlassian Agile Coach</a> — jauh lebih lengkap. Ini cuma catatan pribadi. Hal-hal yang saya pelajari dari mengoordinasikan tim, melihat proyek melenceng, memperbaiki rencana yang kelewat optimis, dan kadang-kadang menyelamatkan situasi tepat sebelum semuanya keburu hancur.</p>
 
-    <p>Kenapa sekarang? Karena <strong>semuanya bergerak lebih cepat dari yang saya kira</strong>. Di Emveep, saya lihat sendiri — dulu bikin MVP klien butuh 6 minggu, tim 4 orang. Sekarang satu engineer pakai <em>Claude Code</em>, <em>Codex</em>, atau <em>Lovable</em> bisa kelar versi awalnya dalam satu akhir pekan. Pertanyaannya bergeser: bukan lagi "bagaimana cara membangun ini?" tapi "apakah ini memang layak dibangun, untuk siapa, dan apa risikonya kalau kita salah baca?"</p>
+    <p>Kenapa sekarang? Karena <strong>semuanya bergerak lebih cepat dari yang saya kira</strong>. Di Emveep, saya lihat sendiri — dulu bikin MVP klien butuh 6 minggu, tim 4 orang. Sekarang satu engineer pakai <em>Claude Code</em>, <em>Codex</em>, atau <em>Lovable</em> bisa kelar versi awalnya dalam satu akhir pekan. Pertanyaannya bergeser: bukan lagi “bagaimana cara membangun ini?” tapi “apakah ini memang layak dibangun, untuk siapa, dan apa risikonya kalau kita salah baca?”</p>
 
     <p>Di situlah PM masih punya tempat. Bukan sebagai pencatat <em>task</em> — Trello, Notion, Jira, AI agent sudah bisa handle itu. Tapi karena <strong>seseorang tetap harus pegang konteks</strong>: konteks bisnis, pengguna, tim, waktu, dan politik kecil yang tidak pernah tertulis di dokumen mana pun. Hal-hal begitu tidak masuk prompt. Padahal di sanalah keputusan yang paling penting dibuat.</p>
 
@@ -171,7 +191,7 @@
       <h2>Planning bukan tentang <em>jadwal</em>. Tentang <em>asumsi</em>.</h2>
       <p class="lede">Setiap Gantt chart yang saya buat di awal karier ternyata fiksi. Bukan karena timnya buruk — tapi karena saya kira <em>planning</em> itu soal memprediksi waktu. Padahal sebenarnya soal memetakan ketidakpastian.</p>
 
-      <p>Yang paling mahal saya pelajari: <strong>jadwal proyek itu bukan kontrak dengan kenyataan</strong>. Itu hipotesis. Setiap deadline yang kamu tulis sebenarnya penuh asumsi tersembunyi — <em>dependency</em> bakal selesai tepat waktu, <em>requirement</em> tidak berubah, orangnya tidak sakit, <em>scope creep</em> tidak terjadi. <a class="ref" href="https://en.wikipedia.org/wiki/Hofstadter%27s_law" target="_blank" rel="noopener">Hofstadter's Law</a> mengatakannya paling baik: "It always takes longer than you expect, even when you take into account Hofstadter's Law."</p>
+      <p>Yang paling mahal saya pelajari: <strong>jadwal proyek itu bukan kontrak dengan kenyataan</strong>. Itu hipotesis. Setiap deadline yang kamu tulis sebenarnya penuh asumsi tersembunyi — <em>dependency</em> bakal selesai tepat waktu, <em>requirement</em> tidak berubah, orangnya tidak sakit, <em>scope creep</em> tidak terjadi. <a class="ref" href="https://en.wikipedia.org/wiki/Hofstadter%27s_law" target="_blank" rel="noopener">Hofstadter’s Law</a> mengatakannya paling baik: “It always takes longer than you expect, even when you take into account Hofstadter’s Law.”</p>
 
       <p>Jadi sekarang saya melakukan dua hal yang berbeda dari kebanyakan PM:</p>
 
@@ -184,9 +204,9 @@
       <div class="pullquote">Stakeholder tidak frustrasi karena kamu terlambat. Mereka frustrasi karena mereka <em>tahunya belakangan</em>.</div>
 
       <h3>Risk register itu bukan dokumen — tapi <em>kebiasaan</em></h3>
-      <p>Risk register paling efektif yang pernah saya punya cuma <strong>5 menit di awal setiap weekly</strong>: "Apa yang bikin kamu khawatir minggu ini?" Tabel di Confluence yang tidak pernah di-update kalah jauh. Jawaban tim selalu lebih jujur daripada apa pun yang ditulis di dokumen formal. Soal kenapa ini bekerja, baca riset <em>psychological safety</em> dari <a class="ref" href="https://www.hbs.edu/faculty/Pages/profile.aspx?facId=6451" target="_blank" rel="noopener">Amy Edmondson di Harvard</a> dan studi <a class="ref" href="https://rework.withgoogle.com/print/guides/5721312655835136/" target="_blank" rel="noopener">Project Aristotle Google</a>.</p>
+      <p>Risk register paling efektif yang pernah saya punya cuma <strong>5 menit di awal setiap weekly</strong>: “Apa yang bikin kamu khawatir minggu ini?” Tabel di Confluence yang tidak pernah di-update kalah jauh. Jawaban tim selalu lebih jujur daripada apa pun yang ditulis di dokumen formal. Soal kenapa ini bekerja, baca riset <em>psychological safety</em> dari <a class="ref" href="https://www.hbs.edu/faculty/Pages/profile.aspx?facId=6451" target="_blank" rel="noopener">Amy Edmondson di Harvard</a> dan studi <a class="ref" href="https://rework.withgoogle.com/print/guides/5721312655835136/" target="_blank" rel="noopener">Project Aristotle Google</a>.</p>
 
-      <h3>Stakeholder mapping dilakukan <em>sebelum</em> Anda butuh</h3>
+      <h3>Stakeholder mapping dilakukan <em>sebelum</em> kamu butuh</h3>
       <p>Pelajaran mahal lainnya: mengelola stakeholder itu bukan keterampilan komunikasi — itu <strong>keterampilan politik</strong>. Dan saya tidak bermaksud negatif. Setiap stakeholder punya KPI sendiri, tekanan dari atasannya sendiri, dan ketakutannya sendiri. Tugas kamu: pahami semua itu <em>sebelum</em> kamu perlu minta sesuatu dari mereka. <a class="ref" href="https://www.mindtools.com/aol0rms/stakeholder-analysis" target="_blank" rel="noopener">Stakeholder Analysis dari MindTools</a> titik awal yang oke, dan <a class="ref" href="https://hbr.org/2007/11/influence-management-the-art-of-creating-and-sharing-value" target="_blank" rel="noopener">artikel HBR soal influence management</a> melengkapi sisanya.</p>
 
       <div class="refs">
@@ -195,7 +215,7 @@
           <li><a class="ref" href="https://www.pmi.org/pmbok-guide-standards" target="_blank" rel="noopener">PMBOK Guide 7th Edition</a> — Standar global PM, terutama bagian <em>principles-based approach</em>.</li>
           <li><a class="ref" href="https://www.shapeup.com/" target="_blank" rel="noopener">Shape Up — Basecamp</a> — Alternatif planning yang lebih realistis daripada Sprint biasa.</li>
           <li><a class="ref" href="https://hbr.org/1995/05/discovery-driven-planning" target="_blank" rel="noopener">Discovery-Driven Planning — McGrath &amp; MacMillan, HBR</a></li>
-          <li><a class="ref" href="https://www.amazon.com/Making-Things-Happen-Mastering-Management/dp/0596517718" target="_blank" rel="noopener">"Making Things Happen" — Scott Berkun</a> — Buku PM terbaik yang pernah saya baca.</li>
+          <li><a class="ref" href="https://www.amazon.com/Making-Things-Happen-Mastering-Management/dp/0596517718" target="_blank" rel="noopener">“Making Things Happen” — Scott Berkun</a> — Buku PM terbaik yang pernah saya baca.</li>
         </ol>
       </div>
     </div>
@@ -216,9 +236,9 @@
       <p>Dulu saya skeptis. Saya pikir AI cuma bisa bikin ringkasan rapat yang dangkal dan email yang kedengarannya palsu. Ternyata yang salah bukan AI-nya — <strong>saya yang salah pakai</strong>. Saya perlakukan AI seperti asisten yang disuruh-suruh. Begitu saya ubah jadi <em>thinking partner</em> yang menantang asumsi saya, hasilnya beda jauh.</p>
 
       <h3>Pergeseran mental: dari <em>prompt</em> ke <em>konteks</em></h3>
-      <p>Istilah "prompt engineering" sudah mulai usang. Yang lebih penting sekarang: <strong>context engineering</strong> — gimana caranya kasih AI konteks yang cukup supaya dia bisa berpikir bareng kamu, bukan cuma menjawab. <a class="ref" href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener">Anthropic</a> dan <a class="ref" href="https://www.latent.space/p/context-engineering" target="_blank" rel="noopener">Latent Space</a> sudah menulis soal ini dengan baik.</p>
+      <p>Istilah “prompt engineering” sudah mulai usang. Yang lebih penting sekarang: <strong>context engineering</strong> — gimana caranya kasih AI konteks yang cukup supaya dia bisa berpikir bareng kamu, bukan cuma menjawab. <a class="ref" href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener">Anthropic</a> dan <a class="ref" href="https://www.latent.space/p/context-engineering" target="_blank" rel="noopener">Latent Space</a> sudah menulis soal ini dengan baik.</p>
 
-      <p>Contoh kecil: saya tidak pernah lagi ketik "buatkan saya project plan". Saya tulis dulu konteksnya 5–10 menit — siapa stakeholder-nya, batasannya apa, sejarah masalahnya gimana, gaya komunikasi timnya seperti apa. Baru minta bantuan. Hasilnya beda jauh.</p>
+      <p>Contoh kecil: saya tidak pernah lagi ketik “buatkan saya project plan”. Saya tulis dulu konteksnya 5–10 menit — siapa stakeholder-nya, batasannya apa, sejarah masalahnya gimana, gaya komunikasi timnya seperti apa. Baru minta bantuan. Hasilnya beda jauh.</p>
 
       <div class="pullquote minimal">AI memperbesar apa yang sudah ada di kepalamu. Pemikiran dangkal masuk, hasil dangkal keluar — cuma lebih cepat.</div>
 
@@ -227,8 +247,8 @@
       <ul class="notes">
         <li><strong>Synthesis rapat &amp; dokumen</strong> — <a class="ref" href="https://claude.ai" target="_blank" rel="noopener">Claude</a> buat merangkum 1 jam rapat jadi <em>action items</em>, <em>open questions</em>, dan <em>decision log</em>. Bukan transkrip — tapi ringkasan yang bisa langsung ditindaklanjuti. <a class="ref" href="https://www.microsoft.com/en-us/worklab/work-trend-index/" target="_blank" rel="noopener">Microsoft Work Trend Index</a> bilang rata-rata pekerja hemat 30 menit per hari dari ini saja.</li>
         <li><strong>Stakeholder communication</strong> — Nulis email ke stakeholder itu susah, apalagi kalau lagi frustrasi. AI bantu saya atur ulang nada tanpa kehilangan substansi. Menurut <a class="ref" href="https://hbr.org/2024/05/how-people-are-really-using-genai" target="_blank" rel="noopener">survey HBR</a>, komunikasi memang use case nomor satu.</li>
-        <li><strong>Risk &amp; pre-mortem analysis</strong> — Saya suruh AI jadi "PM senior yang skeptis" dan kritik rencana saya. Teknik <em>pre-mortem</em> dari <a class="ref" href="https://hbr.org/2007/09/performing-a-project-premortem" target="_blank" rel="noopener">Gary Klein</a> jadi jauh lebih tajam kalau ada sparring partner yang tidak capek.</li>
-        <li><strong>Knowledge retrieval</strong> — <a class="ref" href="https://www.notion.so/help/notion-ai" target="_blank" rel="noopener">Notion AI</a> dan <a class="ref" href="https://www.atlassian.com/software/artificial-intelligence" target="_blank" rel="noopener">Atlassian Intelligence</a> bisa cari konteks lintas dokumen. "Keputusan kita soal X tiga bulan lalu apa?" — jawaban dalam hitungan detik.</li>
+        <li><strong>Risk &amp; pre-mortem analysis</strong> — Saya suruh AI jadi “PM senior yang skeptis” dan kritik rencana saya. Teknik <em>pre-mortem</em> dari <a class="ref" href="https://hbr.org/2007/09/performing-a-project-premortem" target="_blank" rel="noopener">Gary Klein</a> jadi jauh lebih tajam kalau ada sparring partner yang tidak capek.</li>
+        <li><strong>Knowledge retrieval</strong> — <a class="ref" href="https://www.notion.so/help/notion-ai" target="_blank" rel="noopener">Notion AI</a> dan <a class="ref" href="https://www.atlassian.com/software/artificial-intelligence" target="_blank" rel="noopener">Atlassian Intelligence</a> bisa cari konteks lintas dokumen. “Keputusan kita soal X tiga bulan lalu apa?” — jawaban dalam hitungan detik.</li>
       </ul>
 
       <h3>Tools yang saya pakai aktif setiap hari</h3>
@@ -256,12 +276,12 @@
     </div>
     <div class="chapter-body">
       <h2>Tahun 2026 adalah tahun <em>agen</em>. Tapi mereka butuh PM.</h2>
-      <p class="lede">Dua tahun lalu semua ribut soal <em>chat</em>, tahun lalu soal <em>tools</em>. Sekarang gilirannya <em>agents</em>: AI yang mengeksekusi, bukan cuma menjawab. Buat PM, ini mengubah apa yang disebut "tim".</p>
+      <p class="lede">Dua tahun lalu semua ribut soal <em>chat</em>, tahun lalu soal <em>tools</em>. Sekarang gilirannya <em>agents</em>: AI yang mengeksekusi, bukan cuma menjawab. Buat PM, ini mengubah apa yang disebut “tim”.</p>
 
       <p>Beberapa bulan lalu saya coba men-<em>deploy</em> agen otonom di VPS berbayar — <strong>Openclaw</strong> — untuk workflow competitive intelligence yang biasanya makan waktu 3 hari analis junior. Agen ini jalan 24/7: menelusuri sumber, kirim ringkasan harian ke WhatsApp saya, eksekusi task ringan. Hasil pertama keluar dalam 40 menit, kualitasnya setara. Tapi tetap — <strong>saya harus review, arahkan ulang, dan putuskan</strong>. Agen menggantikan <em>eksekusi</em>, bukan penilaian.</p>
 
-      <h3>Apa itu "agen" sebenarnya?</h3>
-      <p>Definisi yang saya pakai dari <a class="ref" href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener">"Building Effective Agents" oleh Anthropic</a>: agen adalah sistem di mana LLM secara dinamis mengarahkan proses dan penggunaan toolnya sendiri. Bedanya dengan <em>workflow</em> biasa: agen memutuskan sendiri langkah selanjutnya, bukan mengikuti alur yang sudah di-hardcode.</p>
+      <h3>Apa itu “agen” sebenarnya?</h3>
+      <p>Definisi yang saya pakai dari <a class="ref" href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener">“Building Effective Agents” oleh Anthropic</a>: agen adalah sistem di mana LLM secara dinamis mengarahkan proses dan penggunaan toolnya sendiri. Bedanya dengan <em>workflow</em> biasa: agen memutuskan sendiri langkah selanjutnya, bukan mengikuti alur yang sudah di-hardcode.</p>
 
       <div class="pullquote side">Agen yang paling berbahaya bukan yang salah total — tapi yang <em>hampir benar</em>. Cukup meyakinkan untuk lolos review kalau kamu tidak fokus.</div>
 
@@ -269,11 +289,16 @@
       <p>Lucunya, prinsip mengelola agen ternyata mirip banget dengan onboarding anggota tim baru:</p>
 
       <ul class="notes">
-        <li><strong>Onboarding adalah investasi besar di depan.</strong> Beri agen konteks lengkap — dokumen, contoh hasil yang baik, batas yang jelas. Riset <a class="ref" href="https://arxiv.org/abs/2302.11382" target="_blank" rel="noopener">"Prompt Patterns" di arXiv</a> mendukung ini.</li>
-        <li><strong>Tetapkan "definition of done" yang ketat.</strong> Agen jago mengejar metrik, payah menebak intent. Jadi tulis semuanya eksplisit.</li>
+        <li><strong>Onboarding adalah investasi besar di depan.</strong> Beri agen konteks lengkap — dokumen, contoh hasil yang baik, batas yang jelas. Riset <a class="ref" href="https://arxiv.org/abs/2302.11382" target="_blank" rel="noopener">“Prompt Patterns” di arXiv</a> mendukung ini.</li>
+        <li><strong>Tetapkan “definition of done” yang ketat.</strong> Agen jago mengejar metrik, payah menebak intent. Jadi tulis semuanya eksplisit.</li>
         <li><strong>Review awal, kemudian sampling.</strong> Awal-awal: review 100% output. Setelah kepercayaan terbangun: sample 10–20%. Sama seperti mengelola junior.</li>
         <li><strong>Human-in-the-loop di setiap titik berisiko tinggi.</strong> Approval, eksekusi yang tidak bisa dibatalkan, atau keputusan dengan implikasi reputasi — selalu human gate. Ini adalah inti rekomendasi <a class="ref" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI Risk Management Framework</a>.</li>
       </ul>
+
+      <figure class="sig" data-sig="agent-trust">
+        <div class="sig-stage"></div>
+        <figcaption id="sig-agent-trust-cap" class="sig-cap">Cara saya melepas agen pelan-pelan: awal-awal semua hasilnya saya review, lalu cukup sampel 10–20% setelah kepercayaan terbangun. Titik berisiko tinggi tetap lewat persetujuan manusia.</figcaption>
+      </figure>
 
       <h3>Stack agen sederhana yang saya jalankan</h3>
       <p>Kalau baru mulai, ada dua jalur. Pilih tergantung seberapa besar kamu peduli soal kontrol data:</p>
@@ -282,7 +307,7 @@
       <ul class="notes">
         <li><strong><a class="ref" href="https://zapier.com/agents" target="_blank" rel="noopener">Zapier Agents</a></strong> atau <strong><a class="ref" href="https://make.com" target="_blank" rel="noopener">Make</a></strong> — Automation visual untuk task berulang.</li>
         <li><strong><a class="ref" href="https://www.lindy.ai" target="_blank" rel="noopener">Lindy</a></strong> atau <strong><a class="ref" href="https://relay.app" target="_blank" rel="noopener">Relay.app</a></strong> — Workflow AI-first yang lebih natural.</li>
-        <li><strong><a class="ref" href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP (Model Context Protocol)</a></strong> — Standar terbuka dari Anthropic untuk menghubungkan AI ke tools yang sudah Anda pakai (Jira, Notion, Linear, Gmail). Ini akan menjadi standar industri.</li>
+        <li><strong><a class="ref" href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP (Model Context Protocol)</a></strong> — Standar terbuka dari Anthropic untuk menghubungkan AI ke tools yang sudah kamu pakai (Jira, Notion, Linear, Gmail). Ini akan menjadi standar industri.</li>
       </ul>
 
       <p><strong>Jalur 2 — Self-hosted</strong> (data di tangan kamu, perlu sedikit setup):</p>
@@ -331,7 +356,7 @@
 
       <h3>Apa artinya bagi peran PM?</h3>
 
-      <p><strong>Discovery jadi lebih penting dari delivery.</strong> Kalau membangun jadi murah, pertanyaan yang paling mahal adalah "apa ini memang perlu dibangun?" <a class="ref" href="https://www.svpg.com/inspired-how-to-create-products-customers-love/" target="_blank" rel="noopener">Marty Cagan</a> dan <a class="ref" href="https://www.producttalk.org" target="_blank" rel="noopener">Teresa Torres</a> sudah lama bilang ini — sekarang argumennya makin sulit dibantah.</p>
+      <p><strong>Discovery jadi lebih penting dari delivery.</strong> Kalau membangun jadi murah, pertanyaan yang paling mahal adalah “apa ini memang perlu dibangun?” <a class="ref" href="https://www.svpg.com/inspired-how-to-create-products-customers-love/" target="_blank" rel="noopener">Marty Cagan</a> dan <a class="ref" href="https://www.producttalk.org" target="_blank" rel="noopener">Teresa Torres</a> sudah lama bilang ini — sekarang argumennya makin sulit dibantah.</p>
 
       <p><strong>PM harus bisa bikin prototype sendiri.</strong> Bukan untuk menggantikan engineer — tapi supaya kamu bisa:</p>
       <ul class="notes">
@@ -341,7 +366,7 @@
         <li>Pahami batasan teknis secara nyata, bukan cuma teori</li>
       </ul>
 
-      <p><strong>Definisi "ready" berubah total.</strong> Karena MVP jadi murah, saya menyaring lebih ketat di depan. Mending batalkan 3 ide buruk lewat AI prototype dalam seminggu daripada bangun 1 ide buruk selama sebulan pakai tim penuh. <a class="ref" href="https://andrewchen.com/the-cold-start-problem/" target="_blank" rel="noopener">Andrew Chen</a> di The Cold Start Problem juga bicara soal pentingnya ini di tahap awal.</p>
+      <p><strong>Definisi “ready” berubah total.</strong> Karena MVP jadi murah, saya menyaring lebih ketat di depan. Mending batalkan 3 ide buruk lewat AI prototype dalam seminggu daripada bangun 1 ide buruk selama sebulan pakai tim penuh. <a class="ref" href="https://andrewchen.com/the-cold-start-problem/" target="_blank" rel="noopener">Andrew Chen</a> di The Cold Start Problem juga bicara soal pentingnya ini di tahap awal.</p>
 
       <h3>Catatan penting: <em>vibe coding</em> bukan rekayasa perangkat lunak</h3>
       <p>Saya lihat banyak PM yang kelewat semangat terus langsung pakai output AI tools untuk produksi tanpa review teknis. Itu berbahaya. Untuk prototype dan validasi — silakan. Tapi <strong>untuk produksi customer-facing</strong>, kamu tetap butuh engineer yang review keamanan, skalabilitas, dan maintainability. Guillermo Rauch (founder Vercel) juga <a class="ref" href="https://vercel.com/blog/ai-and-the-future-of-the-web" target="_blank" rel="noopener">menulis soal ini</a>.</p>
@@ -351,7 +376,7 @@
         <ol>
           <li><a class="ref" href="https://www.svpg.com/" target="_blank" rel="noopener">Silicon Valley Product Group (Marty Cagan)</a> — Esensi discovery vs delivery.</li>
           <li><a class="ref" href="https://www.producttalk.org/continuous-discovery-habits/" target="_blank" rel="noopener">Continuous Discovery Habits — Teresa Torres</a></li>
-          <li><a class="ref" href="https://www.lennysnewsletter.com/" target="_blank" rel="noopener">Lenny's Newsletter</a> — Studi kasus PM modern.</li>
+          <li><a class="ref" href="https://www.lennysnewsletter.com/" target="_blank" rel="noopener">Lenny’s Newsletter</a> — Studi kasus PM modern.</li>
           <li><a class="ref" href="https://every.to/chain-of-thought" target="_blank" rel="noopener">Every — Chain of Thought (Dan Shipper)</a> — Eksperimen aktual menggunakan AI untuk produk.</li>
         </ol>
       </div>
@@ -371,26 +396,26 @@
       <p class="lede">Bab-bab sebelumnya banyak bicara soal tools. Tapi kalau dipikir-pikir, kemampuan PM yang paling penting justru yang paling susah didelegasikan ke AI. Membaca ruangan. Bangun kepercayaan. Tahu kapan harus diam.</p>
 
       <h3>Membaca ruangan bukan keterampilan lunak — itu pekerjaan kerasmu</h3>
-      <p>Engineer senior yang biasanya vokal tiba-tiba diam di meeting. Designer merespons ide kamu dengan "menarik". Stakeholder cuma balas email dengan "Noted." Semua itu sinyal, dan PM yang baik menangkapnya real-time. AI tidak bisa. <a class="ref" href="https://hbr.org/2017/02/the-leader-as-coach" target="_blank" rel="noopener">HBR</a> menyebutnya <em>contextual intelligence</em>.</p>
+      <p>Engineer senior yang biasanya vokal tiba-tiba diam di meeting. Designer merespons ide kamu dengan “menarik”. Stakeholder cuma balas email dengan “Noted.” Semua itu sinyal, dan PM yang baik menangkapnya real-time. AI tidak bisa. <a class="ref" href="https://hbr.org/2017/02/the-leader-as-coach" target="_blank" rel="noopener">HBR</a> menyebutnya <em>contextual intelligence</em>.</p>
 
       <div class="pullquote minimal">Trust dibangun di rapat 1:1, bukan di Slack. Dan sejauh ini, trust satu-satunya hal yang tidak bisa di-generate oleh AI.</div>
 
       <h3>Tiga hal yang saya lakukan untuk membangun trust dengan tim</h3>
       <ul class="notes">
-        <li><strong>1:1 yang sungguh-sungguh, bukan status update.</strong> Saya tidak pernah membuka 1:1 dengan "bagaimana progress X?". Saya buka dengan "bagaimana kabarmu minggu ini?". Status ada di tools. 1:1 untuk hal yang tidak ada di tools. Lihat <a class="ref" href="https://lattice.com/library/the-ultimate-guide-to-1-1-meetings-for-managers-and-employees" target="_blank" rel="noopener">panduan 1:1 dari Lattice</a> untuk frameworknya.</li>
-        <li><strong>Mengakui ketidaktahuan secara publik.</strong> "Saya tidak tahu, mari kita cari tahu" mengembalikan banyak <em>credibility</em>, bukan menghilangkannya. Konsep ini diteliti oleh <a class="ref" href="https://www.brenebrown.com/book/dare-to-lead/" target="_blank" rel="noopener">Brené Brown di "Dare to Lead"</a>.</li>
+        <li><strong>1:1 yang sungguh-sungguh, bukan status update.</strong> Saya tidak pernah membuka 1:1 dengan “bagaimana progress X?”. Saya buka dengan “bagaimana kabarmu minggu ini?”. Status ada di tools. 1:1 untuk hal yang tidak ada di tools. Lihat <a class="ref" href="https://lattice.com/library/the-ultimate-guide-to-1-1-meetings-for-managers-and-employees" target="_blank" rel="noopener">panduan 1:1 dari Lattice</a> untuk frameworknya.</li>
+        <li><strong>Mengakui ketidaktahuan secara publik.</strong> “Saya tidak tahu, mari kita cari tahu” mengembalikan banyak <em>credibility</em>, bukan menghilangkannya. Konsep ini diteliti oleh <a class="ref" href="https://www.brenebrown.com/book/dare-to-lead/" target="_blank" rel="noopener">Brené Brown di “Dare to Lead”</a>.</li>
         <li><strong>Mengambil tanggung jawab penuh ketika ada masalah, kredit penuh untuk tim ketika berhasil.</strong> Kedengarannya klise, tapi saya belum nemu penggantinya.</li>
       </ul>
 
       <h3>Memberi feedback itu bisa dilatih</h3>
       <p>Saya butuh waktu bertahun-tahun untuk belajar memberi feedback dengan baik. Dua framework yang paling membantu:</p>
       <ul class="notes">
-        <li><strong><a class="ref" href="https://www.radicalcandor.com/our-approach/" target="_blank" rel="noopener">Radical Candor — Kim Scott</a></strong> — "Care personally, challenge directly". Satu pilar tanpa yang lain malah jadi berbahaya.</li>
+        <li><strong><a class="ref" href="https://www.radicalcandor.com/our-approach/" target="_blank" rel="noopener">Radical Candor — Kim Scott</a></strong> — “Care personally, challenge directly”. Satu pilar tanpa yang lain malah jadi berbahaya.</li>
         <li><strong><a class="ref" href="https://hbr.org/2019/03/the-feedback-fallacy" target="_blank" rel="noopener">The Feedback Fallacy — HBR (Buckingham &amp; Goodall)</a></strong> — Argumen kontra-intuitif bahwa banyak praktik feedback standard justru merusak.</li>
       </ul>
 
       <h3>Konflik itu informasi</h3>
-      <p>Dua engineer debat soal arsitektur? Itu bukan drama. Itu informasi tentang trade-off teknis yang sedang dipertaruhkan. Tugas PM bukan meredam konflik, tapi <strong>memastikan konfliknya soal ide, bukan soal orang</strong>. <a class="ref" href="https://www.tablegroup.com/topics-and-resources/teamwork-5-dysfunctions/" target="_blank" rel="noopener">"Five Dysfunctions of a Team"</a> dari Patrick Lencioni framework yang paling berguna untuk ini.</p>
+      <p>Dua engineer debat soal arsitektur? Itu bukan drama. Itu informasi tentang trade-off teknis yang sedang dipertaruhkan. Tugas PM bukan meredam konflik, tapi <strong>memastikan konfliknya soal ide, bukan soal orang</strong>. <a class="ref" href="https://www.tablegroup.com/topics-and-resources/teamwork-5-dysfunctions/" target="_blank" rel="noopener">“Five Dysfunctions of a Team”</a> dari Patrick Lencioni framework yang paling berguna untuk ini.</p>
 
       <div class="refs">
         <div class="refs-title">— Referensi tentang Manusia</div>
@@ -413,14 +438,14 @@
       <div class="chapter-tag">Bab Keenam<span>Growth &amp; Mindset</span></div>
     </div>
     <div class="chapter-body">
-      <h2>Berhentilah mencari "<em>career path</em>". Bangun <em>career portfolio</em>.</h2>
-      <p class="lede">Nasihat paling tidak berguna yang pernah saya terima: "rencanakan jenjang kamu 5 tahun ke depan." Dunia bergerak terlalu cepat untuk itu. Yang saya pelajari justru kebalikannya: jangan optimasi untuk posisi — optimasi untuk <em>kemampuan dan jangkauan</em>.</p>
+      <h2>Berhentilah mencari “<em>career path</em>”. Bangun <em>career portfolio</em>.</h2>
+      <p class="lede">Nasihat paling tidak berguna yang pernah saya terima: “rencanakan jenjang kamu 5 tahun ke depan.” Dunia bergerak terlalu cepat untuk itu. Yang saya pelajari justru kebalikannya: jangan optimasi untuk posisi — optimasi untuk <em>kemampuan dan jangkauan</em>.</p>
 
       <h3>Tiga jenis modal yang harus dikembangkan PM</h3>
       <p>Saya mencuri framework ini dari <a class="ref" href="https://www.henrikkarlsson.xyz/" target="_blank" rel="noopener">Henrik Karlsson</a> dan menyesuaikan untuk PM:</p>
       <ul class="notes">
-        <li><strong>Modal pengetahuan</strong> — Pemahaman teknis, industri, dan domain. Investasi: belajar terus-menerus. Sumber favorit saya: <a class="ref" href="https://stratechery.com/" target="_blank" rel="noopener">Stratechery (Ben Thompson)</a> untuk strategi, <a class="ref" href="https://www.notboring.co/" target="_blank" rel="noopener">Not Boring (Packy McCormick)</a> untuk industri, <a class="ref" href="https://www.lennysnewsletter.com/" target="_blank" rel="noopener">Lenny's Newsletter</a> untuk PM craft.</li>
-        <li><strong>Modal jaringan</strong> — Bukan hanya jumlah koneksi, tapi <em>kualitas dan keragaman</em>. PM yang baik tahu cara mendapat jawaban dari orang yang tepat, cepat. <a class="ref" href="https://www.amazon.com/Never-Eat-Alone-Expanded-Updated/dp/0553418769" target="_blank" rel="noopener">"Never Eat Alone" — Keith Ferrazzi</a> klasik di topik ini.</li>
+        <li><strong>Modal pengetahuan</strong> — Pemahaman teknis, industri, dan domain. Investasi: belajar terus-menerus. Sumber favorit saya: <a class="ref" href="https://stratechery.com/" target="_blank" rel="noopener">Stratechery (Ben Thompson)</a> untuk strategi, <a class="ref" href="https://www.notboring.co/" target="_blank" rel="noopener">Not Boring (Packy McCormick)</a> untuk industri, <a class="ref" href="https://www.lennysnewsletter.com/" target="_blank" rel="noopener">Lenny’s Newsletter</a> untuk PM craft.</li>
+        <li><strong>Modal jaringan</strong> — Bukan hanya jumlah koneksi, tapi <em>kualitas dan keragaman</em>. PM yang baik tahu cara mendapat jawaban dari orang yang tepat, cepat. <a class="ref" href="https://www.amazon.com/Never-Eat-Alone-Expanded-Updated/dp/0553418769" target="_blank" rel="noopener">“Never Eat Alone” — Keith Ferrazzi</a> klasik di topik ini.</li>
         <li><strong>Modal reputasi</strong> — Apa yang orang katakan tentang kamu saat kamu tidak ada di ruangan. Bangun ini dengan: pengiriman konsisten, transparansi tentang kegagalan, dan kemurahan hati.</li>
       </ul>
 
@@ -439,7 +464,7 @@
       </ul>
 
       <h3>Dan akhirnya: tentang ambisi yang masuk akal</h3>
-      <p>Industri tech suka sekali narasi <em>"10x harder, 10x faster"</em>. Saya pernah hidup begitu. Saya juga pernah burnout karenanya. Yang akhirnya saya sadari: <strong>karier panjang dibangun dari keberlanjutan, bukan intensitas</strong>. <a class="ref" href="https://www.amazon.com/Slow-Productivity-Burnout-Accomplishment-Without/dp/0593544854" target="_blank" rel="noopener">Cal Newport</a> di "Slow Productivity" menulis soal ini dengan baik. Tidak semua hal harus dikerjakan sekarang. Tidak semua kesempatan harus diambil.</p>
+      <p>Industri tech suka sekali narasi <em>“10x harder, 10x faster”</em>. Saya pernah hidup begitu. Saya juga pernah burnout karenanya. Yang akhirnya saya sadari: <strong>karier panjang dibangun dari keberlanjutan, bukan intensitas</strong>. <a class="ref" href="https://www.amazon.com/Slow-Productivity-Burnout-Accomplishment-Without/dp/0593544854" target="_blank" rel="noopener">Cal Newport</a> di “Slow Productivity” menulis soal ini dengan baik. Tidak semua hal harus dikerjakan sekarang. Tidak semua kesempatan harus diambil.</p>
 
       <div class="refs">
         <div class="refs-title">— Mentor yang Tidak Pernah Bertemu</div>
@@ -460,58 +485,59 @@
   <div class="toolstack-inner">
     <div class="section-label">— Apendiks A · Tool Stack</div>
     <h2>Yang sebenarnya saya pakai. <em>Tidak lebih, tidak kurang.</em></h2>
+    <p class="swipe-hint" aria-hidden="true">Geser · 9 alat <i>→</i></p>
     <div class="tool-grid">
       <div class="tool-card">
         <div class="tool-cat">— Thinking Partner · Primary</div>
-        <h4><a href="https://claude.ai" target="_blank" rel="noopener">Claude</a></h4>
+        <h3><a href="https://claude.ai" target="_blank" rel="noopener">Claude</a></h3>
         <p>Reasoning panjang, analisis dokumen, drafting komunikasi sensitif, dan deep research. Context window besar membuat analisis lintas dokumen tetap menjaga nuansa.</p>
         <div class="use-case">Pre-mortem, stakeholder communication, synthesis, research</div>
       </div>
       <div class="tool-card">
         <div class="tool-cat">— Thinking Partner · Secondary</div>
-        <h4><a href="https://chat.openai.com" target="_blank" rel="noopener">ChatGPT</a></h4>
+        <h3><a href="https://chat.openai.com" target="_blank" rel="noopener">ChatGPT</a></h3>
         <p>Saya pakai sebagai second opinion. Ketika satu model setuju, oke. Ketika dua model setuju di sudut yang berbeda — saya lebih percaya keputusan saya.</p>
         <div class="use-case">Cross-check reasoning, alternative framing</div>
       </div>
       <div class="tool-card">
         <div class="tool-cat">— Task Board</div>
-        <h4><a href="https://trello.com" target="_blank" rel="noopener">Trello</a></h4>
+        <h3><a href="https://trello.com" target="_blank" rel="noopener">Trello</a></h3>
         <p>Visual kanban yang sudah teruji. Untuk proyek klien dan tim yang butuh lihat status dengan cepat tanpa belajar tool baru. Simpel, jelas, langsung jalan.</p>
         <div class="use-case">Sprint board, client task tracking, roadmap visual</div>
       </div>
       <div class="tool-card">
         <div class="tool-cat">— Workspace &amp; Docs</div>
-        <h4><a href="https://www.notion.so" target="_blank" rel="noopener">Notion</a></h4>
+        <h3><a href="https://www.notion.so" target="_blank" rel="noopener">Notion</a></h3>
         <p>Single source of truth untuk semua dokumentasi proyek. PRD, retrospective, knowledge base klien, hingga personal SOP — semua di satu tempat.</p>
         <div class="use-case">PRD, retrospective, knowledge base, SOP</div>
       </div>
       <div class="tool-card">
         <div class="tool-cat">— MVP &amp; Prototype</div>
-        <h4><a href="https://lovable.dev" target="_blank" rel="noopener">Lovable</a></h4>
+        <h3><a href="https://lovable.dev" target="_blank" rel="noopener">Lovable</a></h3>
         <p>Untuk validasi konsep klien dalam hitungan jam, bukan minggu. Sebagai PM di software house, ini mengubah cara saya melakukan <em>scoping</em> — saya bisa menunjukkan demo, bukan mockup.</p>
         <div class="use-case">MVP validation, client demo, internal tool</div>
       </div>
       <div class="tool-card">
         <div class="tool-cat">— Autonomous Agent</div>
-        <h4>Openclaw</h4>
+        <h3>Openclaw</h3>
         <p>Agen AI otonom <em>self-hosted</em> yang bisa mengeksekusi aksi nyata. Berjalan di mesin sendiri, terintegrasi dengan WhatsApp/Discord, dan punya akses ke tools seperti browsing, email, dan kalender.</p>
         <div class="use-case">Personal AI assistant 24/7, task execution, monitoring</div>
       </div>
       <div class="tool-card">
         <div class="tool-cat">— Research Stack</div>
-        <h4><a href="https://claude.ai" target="_blank" rel="noopener">Claude Research</a> + Openclaw</h4>
+        <h3><a href="https://claude.ai" target="_blank" rel="noopener">Claude Research</a> + Openclaw</h3>
         <p>Kombinasi yang saya pakai untuk competitive intelligence. Claude untuk reasoning &amp; sintesis mendalam, Openclaw sebagai agen yang menelusuri internet real-time, memonitor sumber, dan mengirim hasilnya langsung ke WhatsApp saya.</p>
         <div class="use-case">Market research, competitor monitoring, trend tracking</div>
       </div>
       <div class="tool-card">
         <div class="tool-cat">— Code &amp; Technical</div>
-        <h4><a href="https://www.anthropic.com/claude-code" target="_blank" rel="noopener">Claude Code</a> + <a href="https://github.com/openai/codex" target="_blank" rel="noopener">Codex</a></h4>
+        <h3><a href="https://www.anthropic.com/claude-code" target="_blank" rel="noopener">Claude Code</a> + <a href="https://github.com/openai/codex" target="_blank" rel="noopener">Codex</a></h3>
         <p>Untuk PM software house, kemampuan membaca dan mendiskusikan kode bukan opsional. Dua tools ini membantu saya tetap relevan dalam diskusi teknis dengan tim engineering.</p>
         <div class="use-case">Code review, technical scoping, learning</div>
       </div>
       <div class="tool-card">
         <div class="tool-cat">— Meeting Intelligence</div>
-        <h4><a href="https://fathom.video" target="_blank" rel="noopener">Fathom</a></h4>
+        <h3><a href="https://fathom.video" target="_blank" rel="noopener">Fathom</a></h3>
         <p>Transcription + action items otomatis untuk setiap meeting klien dan internal. Saya tidak perlu sibuk mencatat — saya bisa hadir dan benar-benar mendengarkan.</p>
         <div class="use-case">Meeting notes, action items, decision log</div>
       </div>
@@ -530,10 +556,10 @@
 
       <div class="project">
         <div class="project-number">01</div>
-        <div class="project-title">
+        <h3 class="project-title">
           Booking System
           <span class="project-status current">Active</span>
-        </div>
+        </h3>
         <div class="project-desc">
           Membangun sistem booking untuk klien di Belanda. Proyek yang sedang berjalan saat tulisan ini dibuat — penuh dengan tantangan kompleksitas regulasi lintas batas, multi-bahasa, dan ekspektasi pengguna Eropa yang demanding terhadap UX dan privasi data.
           <span class="project-stack">Sector: Travel &amp; Hospitality · Region: Netherlands</span>
@@ -546,9 +572,9 @@
 
       <div class="project">
         <div class="project-number">02</div>
-        <div class="project-title">
+        <h3 class="project-title">
           AI Voice Ordering Platform
-        </div>
+        </h3>
         <div class="project-desc">
           Sistem pemesanan berbasis suara dengan AI untuk klien di Amerika Serikat. Tantangan utamanya bukan pada teknologi — tapi pada <em>edge cases</em> bahasa: aksen, kata sambung, noise, dan multi-intent dalam satu kalimat. Mengajari saya bahwa <em>voice UX</em> adalah disiplin tersendiri.
           <span class="project-stack">Sector: Food &amp; Retail · Tech: LLM · Voice AI · NLU</span>
@@ -561,9 +587,9 @@
 
       <div class="project">
         <div class="project-number">03</div>
-        <div class="project-title">
+        <h3 class="project-title">
           AI Game Design &amp; Maker
-        </div>
+        </h3>
         <div class="project-desc">
           Platform AI untuk membuat dan mendesain game — pengguna mendeskripsikan game yang mereka inginkan, sistem yang menghasilkan asset, logika, dan struktur. Proyek paling ambisius secara teknis. Pelajaran terbesarnya soal <em>scope discipline</em>. Setiap minggu ada ide baru yang menggoda — tugas PM adalah menjaga fokus tanpa membunuh kreativitas.
           <span class="project-stack">Sector: Gaming &amp; Creative · Tech: Generative AI · Multi-modal</span>
@@ -576,9 +602,9 @@
 
       <div class="project">
         <div class="project-number">04</div>
-        <div class="project-title">
+        <h3 class="project-title">
           Web3 Web Application
-        </div>
+        </h3>
         <div class="project-desc">
           Aplikasi web berbasis teknologi blockchain. Dari proyek ini saya belajar bahwa stakeholder management di ruang Web3 sangat berbeda — komunitas adalah stakeholder, bukan hanya klien. Transparansi jadi wajib. <em>Decentralization</em> juga berarti keputusan tidak bisa di-rollback dengan mudah.
           <span class="project-stack">Tech: Smart Contract · Wallet Integration · dApp</span>
@@ -591,9 +617,9 @@
 
       <div class="project">
         <div class="project-number">05</div>
-        <div class="project-title">
+        <h3 class="project-title">
           Community Engagement Mobile App
-        </div>
+        </h3>
         <div class="project-desc">
           Aplikasi mobile untuk <em>community engagement</em> dengan integrasi teknologi Web3 — gamifikasi, reward system on-chain, dan mekanisme partisipasi yang transparan. Dari sini saya belajar blockchain cuma bernilai kalau memecahkan masalah yang nyata. Kalau tidak, dia cuma komplikasi tambahan.
           <span class="project-stack">Tech: Mobile (iOS/Android) · Web3 · Token Mechanics</span>
@@ -651,7 +677,7 @@
     <div class="salutation">Untuk kamu yang menerima estafet ini,</div>
     <p>Saya tidak tahu siapa yang akan baca ini. Mungkin kamu baru mulai jadi PM. Mungkin sudah lama tapi sedang bertanya-tanya soal arah. Yang pasti, <strong>tantangan kamu akan beda dari punya saya</strong>.</p>
 
-    <p>Tools bakal berubah. Tim juga. <em>Stakeholder</em> datang dan pergi. Bahkan definisi "project manager" mungkin kedengarannya aneh lima tahun dari sekarang.</p>
+    <p>Tools bakal berubah. Tim juga. <em>Stakeholder</em> datang dan pergi. Bahkan definisi “project manager” mungkin kedengarannya aneh lima tahun dari sekarang.</p>
 
     <p>Yang saya tinggalkan bukan peta. Ini cuma <em>kompas</em>.</p>
 
@@ -699,21 +725,28 @@
   <div class="issues-next-inner">
     <div class="section-label" id="issues-next-title">— Edisi Lain</div>
     <div class="issues-next-grid">
-      <a class="issues-next-item" href="/vol-02-dua-kursi/">
-        <span class="dir">Edisi berikutnya →</span>
-        <span class="num">02</span>
-        <span class="t">Dua Kursi</span>
-        <span class="m">Oktober 2026 · 14 menit</span>
+      <a class="issues-next-item issue-02" href="/vol-02-dua-kursi/" data-progress-for="/vol-02-dua-kursi/">
+        <span class="cover"><img src="/assets/covers/vol-02-plate.jpg" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
+        <span class="body">
+          <span class="dir">Edisi berikutnya <i aria-hidden="true">→</i></span>
+          <span class="num">02</span>
+          <span class="t">Dua Kursi</span>
+          <span class="m">Oktober 2026 · 14 menit</span>
+        </span>
       </a>
-      <a class="issues-next-item" href="/arsip/">
-        <span class="dir">Arsip</span>
-        <span class="num">01</span>
-        <span class="t">Semua edisi The Handover</span>
-        <span class="m">Vol. 01 · Vol. 02</span>
+      <a class="issues-next-item is-archive" href="/arsip/">
+        <span class="cover cover-stack"><img src="/assets/covers/vol-01-plate.jpg" alt="" width="400" height="500" loading="lazy" decoding="async"><img src="/assets/covers/vol-02-plate.jpg" alt="" width="400" height="500" loading="lazy" decoding="async"></span>
+        <span class="body">
+          <span class="dir">Arsip</span>
+          <span class="t">Semua edisi</span>
+          <span class="m">Vol. 01 · Vol. 02</span>
+        </span>
       </a>
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- ============ COLOPHON ============ -->
 <footer>
@@ -731,6 +764,12 @@
       <p>v1.0 · Mei 2026 · Living document. Akan diperbarui ketika dunia berubah — yang berarti, segera.</p>
     </div>
   </div>
+  <nav class="footer-nav" aria-label="Edisi The Handover">
+    <a href="/vol-02-dua-kursi/"><span>Vol. 02</span> Dua Kursi</a>
+    <a href="/"><span>Vol. 01</span> The Handover</a>
+    <a href="/arsip/"><span>Semua</span> Arsip</a>
+    <a href="#top" class="to-top"><span>↑</span> Kembali ke atas</a>
+  </nav>
   <div class="footer-bottom">
     <span>© 2026 Heribertus Hariyanto Atmaja</span>
     <span>The Handover Issue · Vol. 01</span>
@@ -738,6 +777,8 @@
 </footer>
 
 <script src="/assets/site.js" defer></script>
+<script src="/assets/reader.js" defer></script>
+<script src="/assets/signature.js" defer></script>
 
 </body>
 </html>

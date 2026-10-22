@@ -1,0 +1,459 @@
+/* The Handover — reader layer styles (see reader.js): chapter rail, chapter pill + sheet, tucking
+   phone masthead, continue-reading toast, read state on issue links, quote sharing, heading anchors,
+   reference popovers, and the low-light palette (html[data-theme="dark"]).
+   Everything here is created by reader.js, so with JS off none of it exists. */
+
+/* site.css sets only .issue-02's accent; an element that wears .issue-01 inside Vol. 02 (the
+   Edisi Lain card, the sheet's link) would inherit ultramarine without this */
+:not(body).issue-01{--accent:#c8553d;--accent-text:#a8432d;--accent-soft:#e8a87c}
+.rd-vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+:root{
+  --rd-rule:rgba(26,24,20,.16);            /* hairline track (spine, ring, bars) */
+  --rd-rule2:rgba(26,24,20,.28);           /* dotted dividers inside cards */
+  --rd-shadow:0 14px 30px -22px rgba(26,24,20,.42);
+  --rd-scrim:rgba(26,24,20,.42);
+  --rd-deep:#1a1814;                       /* the dark rhythm-break bands (stack, footer) */
+}
+
+/* ================= 1a. Chapter rail (desktop, right margin) ================= */
+.rd-rail{
+  position:fixed;z-index:44;top:120px;left:auto;width:220px;
+  display:none;
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  visibility:hidden;opacity:0;transform:translateX(10px);
+  transition:opacity .45s var(--ease-out,ease),transform .6s var(--ease-out,ease),visibility 0s linear .6s;
+}
+@media (min-width:1180px){.rd-rail{display:block}}
+.rd-rail.is-on{visibility:visible;opacity:1;transform:none;transition:opacity .45s var(--ease-out,ease),transform .6s var(--ease-out,ease),visibility 0s}
+.rd-rail-k{
+  display:flex;justify-content:space-between;gap:12px;
+  margin:0 0 14px;padding:0 0 10px 15px;
+  border-bottom:1px solid var(--rd-rule);
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;line-height:1.3;
+  color:var(--accent-text,var(--accent));
+}
+.rd-rail-k>span{white-space:nowrap}
+.rd-rail-v{color:var(--muted)}
+.rd-rail.is-narrow .rd-rail-v{display:none}
+
+/* the list: a hairline spine on the left; each item fills its own segment as it is read */
+.rd-toc,.rd-sub{list-style:none;margin:0;padding:0;font-family:'JetBrains Mono',ui-monospace,monospace}
+.rd-toc{position:relative;border-left:1px solid var(--rd-rule)}
+.rd-it>a{
+  position:relative;display:grid;grid-template-columns:24px minmax(0,1fr);align-items:baseline;column-gap:6px;
+  padding:5px 0 5px 14px;color:var(--muted);text-decoration:none;
+  transition:color .2s;
+}
+.rd-it>a::before{                         /* spine fill */
+  content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;
+  background:var(--accent);transform:scaleY(var(--p,0));transform-origin:50% 0;
+}
+.rd-it.is-cur>a::before{left:-1.5px;width:2px}
+.rd-it>a::after{                          /* current marker: a short tick off the spine */
+  content:"";position:absolute;left:0;top:50%;width:0;height:1px;background:var(--accent);
+  transition:width .35s var(--ease-out,ease);
+}
+.rd-it.is-cur>a::after{width:8px}
+.rd-n{
+  font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:300;
+  font-size:15px;line-height:1;letter-spacing:0;color:var(--muted);
+  font-variant-numeric:lining-nums;transition:color .2s;
+}
+.rd-l{font-size:10px;line-height:1.4;letter-spacing:.14em;text-transform:uppercase;overflow-wrap:anywhere}
+.rd-it.is-read>a{color:var(--ink-soft)}
+.rd-it.is-cur>a{color:var(--ink)}
+.rd-it.is-cur .rd-l{font-weight:500}
+.rd-it.is-cur .rd-n{color:var(--accent-text,var(--accent))}
+.rd-it>a:hover{color:var(--ink)}
+.rd-it>a:hover .rd-n{color:var(--accent-text,var(--accent))}
+.rd-it>a:focus-visible{outline-offset:2px}
+/* the air around the Apendiks group is padding inside the items, never margin, so the spine has no
+   unfilled breaks: the group head's segment covers the space above it, the letter's the space above it */
+.rd-grp{margin:0}
+.rd-grp+.rd-it>a{padding-top:15px}          /* the letter: back on the main list, not a fourth appendix */
+.rd-grp+.rd-it>a::after{top:calc(50% + 5px)}  /* the tick stays on the text, not the padded box's middle */
+.rd-grp-l{
+  position:relative;display:block;padding:14px 0 3px 14px;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);
+}
+/* the group head's stretch of spine fills once the reader reaches the first appendix */
+.rd-grp-l::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--accent);transform:scaleY(0);transform-origin:50% 0}
+.rd-grp.is-reached>.rd-grp-l::before{transform:none}
+.rd-rail.is-narrow .rd-l{letter-spacing:.1em}
+.rd-rail.is-narrow .rd-it>a{grid-template-columns:20px minmax(0,1fr);padding-left:11px}
+
+/* ================= 9a. Low-light switch (rail, sheet, footer) ================= */
+.rd-theme{
+  display:inline-flex;align-items:center;gap:10px;
+  margin:0;padding:0;border:0;background:none;cursor:pointer;color:var(--muted);
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;line-height:1;
+  transition:color .2s;
+}
+.rd-theme:hover{color:var(--ink)}
+.rd-theme-dot{
+  flex:none;width:10px;height:10px;border-radius:50%;
+  border:1px solid currentColor;
+  background:linear-gradient(90deg,currentColor 50%,transparent 50%) no-repeat;
+  background-size:0 100%;transition:background-size .3s var(--ease-io,ease);
+}
+.rd-theme[aria-pressed="true"]{color:var(--ink)}
+.rd-theme[aria-pressed="true"] .rd-theme-dot{background-size:100% 100%}
+.rd-theme-rail{margin:16px 0 0;padding:12px 0 0 15px;width:100%;border-top:1px solid var(--rd-rule);min-height:32px}
+/* in the footer's bottom line: centred on the line, its taller hit area kept out of the layout */
+.rd-theme-foot{color:inherit;font-family:inherit;font-weight:inherit;font-size:inherit;letter-spacing:inherit;align-self:center;min-height:24px;margin:-4px 0}
+footer .rd-theme-foot:hover,footer .rd-theme-foot[aria-pressed="true"]{color:var(--accent-soft)}
+@media (hover:none),(pointer:coarse){.rd-theme-foot{min-height:44px;margin:-14px 0}}
+
+/* ================= 1b. Chapter pill (smaller screens) ================= */
+.rd-pill{
+  position:fixed;z-index:46;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  display:flex;align-items:center;gap:10px;
+  height:44px;max-width:calc(100vw - 32px);padding:0 18px 0 9px;
+  border:1px solid var(--ink);border-radius:999px;
+  background:var(--paper);color:var(--ink);box-shadow:var(--rd-shadow);
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;line-height:1;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  visibility:hidden;opacity:0;transform:translate(-50%,calc(100% + 24px));
+  transition:transform .5s var(--ease-out,ease),opacity .3s,visibility 0s linear .5s,background-color .2s;
+}
+.rd-pill.is-on{visibility:visible;opacity:1;transform:translate(-50%,0);transition:transform .5s var(--ease-out,ease),opacity .3s,visibility 0s,background-color .2s}
+.rd-pill:hover{background:var(--bg-alt)}
+.rd-pill:active{transform:translate(-50%,0) scale(.98)}
+.rd-pill:focus-visible{outline-offset:3px;border-radius:999px}
+.rd-ring{flex:none;width:26px;height:26px;transform:rotate(-90deg)}
+.rd-ring circle{fill:none;stroke-width:1.5}
+.rd-ring-t{stroke:var(--rd-rule)}
+.rd-ring-f{stroke:var(--accent);stroke-dasharray:1 1;stroke-dashoffset:calc(1 - var(--p,0));stroke-linecap:butt}
+.rd-pill-k{flex:none;white-space:nowrap;color:var(--accent-text,var(--accent))}
+.rd-pill-t{
+  min-width:0;padding-left:10px;border-left:1px solid var(--rd-rule2);
+  font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;font-size:15px;letter-spacing:0;text-transform:none;line-height:1.2;
+  color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ================= 1c. Chapter sheet (dialog) ================= */
+.rd-sheet{position:fixed;inset:0;z-index:66}
+.rd-sheet[hidden]{display:none}
+.rd-sheet-bg{position:absolute;inset:0;background:var(--rd-scrim);opacity:0;transition:opacity .35s var(--ease-io,ease)}
+.rd-sheet.is-open .rd-sheet-bg{opacity:1}
+.rd-sheet-panel{
+  position:absolute;left:0;right:0;bottom:0;
+  max-height:86vh;max-height:86dvh;overflow:auto;overscroll-behavior:contain;
+  background:var(--paper);color:var(--ink);
+  border-top:2px solid var(--ink);
+  padding:6px 20px calc(16px + env(safe-area-inset-bottom,0px));
+  transform:translateY(100%);transition:transform .42s var(--ease-out,ease);
+  outline:none;
+}
+.rd-sheet.is-open .rd-sheet-panel{transform:none}
+@media (min-width:640px){
+  .rd-sheet-panel{left:50%;right:auto;width:560px;margin-left:-280px;border:1px solid var(--ink);border-top-width:2px;border-bottom:0;padding:10px 28px calc(20px + env(safe-area-inset-bottom,0px))}
+}
+.rd-sheet-head{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:6px;padding:4px 0 14px;border-bottom:1px solid var(--ink);margin-bottom:6px}
+.rd-sheet-head .rd-sheet-k{grid-column:1;margin:0}
+.rd-sheet-head .rd-sheet-t{grid-column:1 / -1;margin-top:2px}
+.rd-sheet-k{
+  margin:0 0 6px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent-text,var(--accent));
+}
+.rd-sheet-v{margin-left:4px;font-family:'JetBrains Mono',ui-monospace,monospace;font-style:normal;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);vertical-align:.45em;white-space:nowrap}
+.rd-sheet-t{margin:0;font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;font-size:26px;line-height:1.1;letter-spacing:-.015em;color:var(--ink)}
+.rd-x{
+  flex:none;display:grid;place-items:center;width:44px;height:44px;margin-right:-12px;
+  border:0;background:none;color:var(--ink);cursor:pointer;border-radius:50%;
+}
+.rd-x svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round}
+.rd-x:hover{color:var(--accent-text,var(--accent))}
+.rd-toc-sheet{margin:10px 0 0 4px}
+.rd-toc-sheet .rd-it>a{grid-template-columns:30px minmax(0,1fr);min-height:44px;align-items:center;padding:6px 0 6px 16px}
+.rd-toc-sheet .rd-n{font-size:19px}
+.rd-toc-sheet .rd-l{font-size:11px;letter-spacing:.14em}
+.rd-toc-sheet .rd-grp-l{padding:16px 0 2px 16px}
+.rd-toc-sheet .rd-grp+.rd-it>a{padding-top:16px}
+.rd-toc-sheet .rd-it.is-cur>a::after{width:10px}
+.rd-sheet-links{display:grid;grid-template-columns:1fr 1fr;margin-top:18px;border-top:2px solid var(--ink)}
+.rd-sheet-link{
+  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:10px;
+  min-height:56px;padding:14px 12px 14px 4px;border-bottom:1px solid var(--ink);color:var(--ink);
+  font-family:'Fraunces',Georgia,serif;font-size:17px;font-weight:500;line-height:1.2;letter-spacing:-.01em;
+  transition:background-color .2s;
+}
+.rd-sheet-link+.rd-sheet-link{border-left:1px solid var(--ink);padding-left:14px}
+.rd-sheet-link:hover{background:var(--bg-alt)}
+.rd-sheet-link .rd-n{font-size:22px;color:var(--accent-text,var(--accent))}
+.rd-sheet-link small{display:block;margin-bottom:5px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.rd-theme-sheet{min-height:44px;padding:0 8px}
+html.rd-lock,html.rd-lock body{overflow:hidden}   /* a classic scrollbar's width is padded back by reader.js */
+
+/* ================= 2. Phone masthead tucks away while reading down ================= */
+/* phones upright, and phones on their side (short and touch-only) */
+@media (max-width:780px),(max-height:500px) and (hover:none){
+  /* re-lists site.css's masthead transitions and adds translate. Only the bar's 2px bottom rule stays
+     in view: site.css's accent reading line (bottom:-2px from the padding box) is drawn exactly over
+     that rule, so what is left is the reading progress, in accent, on its ink track */
+  .js .masthead{transition:background-color .35s var(--ease-io),border-color .35s var(--ease-io),translate .35s var(--ease-io)}
+  .js .masthead.is-tucked{translate:0 calc(-100% + 2px)}
+}
+@media (max-width:780px) and (prefers-reduced-motion:reduce),(max-height:500px) and (hover:none) and (prefers-reduced-motion:reduce){
+  .js .masthead{transition:none}
+}
+
+/* ================= 8. Toast ================= */
+.rd-toasts{
+  position:fixed;z-index:68;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));
+  display:grid;justify-items:center;width:max-content;max-width:calc(100vw - 32px);
+  transform:translateX(-50%);pointer-events:none;
+  transition:bottom .35s var(--ease-out,ease);
+}
+html.rd-pill-on .rd-toasts{bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+/* over a full-height banner, above the scene's pointer hint (shown only to a mouse, 32-48px up) */
+@media (hover:hover) and (pointer:fine){html.rd-over-hero .rd-toasts{bottom:calc(62px + env(safe-area-inset-bottom,0px))}}
+.rd-toast{
+  pointer-events:auto;display:flex;align-items:center;gap:14px;max-width:100%;
+  padding:12px 18px;border-radius:2px;
+  background:var(--paper);color:var(--ink);border:1px solid var(--ink);box-shadow:var(--rd-shadow);
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;line-height:1.4;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .22s,transform .4s var(--ease-out,ease);
+}
+.rd-toast.is-in{opacity:1;transform:none}
+.rd-toast-msg{margin:0}
+.rd-toast.has-actions{padding:6px 6px 6px 18px;gap:16px}
+.rd-toast.has-actions .rd-toast-msg{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:15px;font-weight:400;letter-spacing:0;text-transform:none;white-space:nowrap}
+.rd-toast-act{display:flex;align-items:center;gap:2px;flex:none}
+.rd-toast-btn,.rd-toast-x{
+  display:inline-flex;align-items:center;justify-content:center;height:36px;
+  border:0;border-radius:2px;cursor:pointer;
+  font:inherit;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+}
+.rd-toast-btn{padding:0 14px;background:var(--ink);color:var(--paper);transition:background-color .2s,color .2s}
+.rd-toast-btn:hover{background:var(--accent-text,var(--accent));color:var(--paper)}
+.rd-toast-x{width:36px;background:none;color:inherit;opacity:.75}
+.rd-toast-x:hover{opacity:1}
+.rd-toast-x svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.rd-toast button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (hover:none),(pointer:coarse){.rd-toast-btn,.rd-toast-x{height:44px}.rd-toast-x{width:44px}}
+@media (max-width:420px){
+  .rd-toast.has-actions{flex-wrap:wrap;gap:4px 10px;padding:10px 6px 6px 16px}
+  .rd-toast.has-actions .rd-toast-msg{white-space:normal;flex:1 1 auto}
+}
+
+/* ================= 4. Read state on links to an issue ================= */
+/* a mono label over a hairline bar ("Dibaca 62%"), or a ticked "Selesai dibaca" with no bar */
+.rd-readstate{
+  display:inline-grid;grid-template-columns:auto auto;align-items:center;justify-content:start;gap:7px;
+  margin-top:8px;max-width:100%;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:500;font-style:normal;
+  letter-spacing:.16em;text-transform:uppercase;line-height:1.3;white-space:nowrap;
+  color:var(--accent-text,var(--accent));
+}
+.rd-readstate-i{display:none;width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:square}
+.rd-readstate-l{grid-column:1 / -1}
+.rd-readstate-bar{grid-column:1 / -1;position:relative;display:block;width:120px;max-width:100%;height:2px;background:var(--rd-rule);overflow:hidden}
+.rd-readstate-bar::after{content:"";position:absolute;inset:0;background:var(--accent);transform:scaleX(var(--read,0));transform-origin:0 50%}
+.rd-readstate.is-done{color:var(--ink-soft)}
+.rd-readstate.is-done .rd-readstate-i{display:block;color:var(--accent-text,var(--accent))}
+.rd-readstate.is-done .rd-readstate-l{grid-column:2}
+.rd-readstate.is-done .rd-readstate-bar{display:none}
+/* above a call to action (shelf item, the archive's feature): a quiet line between the meta and the link */
+.rd-readstate.is-lead{margin:4px 0 6px}
+.rd-readstate.is-solo{display:grid;width:max-content;margin:24px 0 -8px}
+/* inside the one-line "Baru" flag: inline after the title, separated by a middle dot; on its own
+   line, without the dot, whenever the title's column is too narrow for both (a container query, so
+   it follows the column, not a guess at the window width) */
+.issue-flag .flag-text{container-type:inline-size}
+.rd-readstate.is-inline{display:inline-flex;gap:7px;margin:0 0 0 10px;vertical-align:.08em}
+.rd-readstate.is-inline::before{content:"\00b7";margin-right:3px;color:var(--muted)}
+.rd-readstate.is-inline .rd-readstate-bar{display:none}
+@container (max-width:560px){.rd-readstate.is-inline{display:flex;margin:5px 0 0}.rd-readstate.is-inline::before{display:none}}
+@supports not (container-type:inline-size){@media (max-width:800px){.rd-readstate.is-inline{display:flex;margin:5px 0 0}.rd-readstate.is-inline::before{display:none}}}
+
+/* ================= 5. Pullquote share ================= */
+.pq-share{
+  position:absolute;right:0;top:100%;
+  display:inline-flex;align-items:center;gap:8px;height:40px;padding:4px 0 0;
+  border:0;background:none;cursor:pointer;color:var(--muted);
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-style:normal;font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;line-height:1;
+  opacity:0;transition:opacity .25s,color .2s;
+}
+.pq-share::after{content:attr(data-label)}
+.pq-share svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.pullquote:hover .pq-share,.pq-share:focus-visible{opacity:1}
+.pq-share:hover{color:var(--accent-text,var(--accent))}
+.pq-share:focus-visible{outline-offset:2px}
+.pullquote.minimal .pq-share{right:auto;left:50%;transform:translateX(-50%)}
+.pullquote.side .pq-share{right:auto;left:28px}
+@media (max-width:780px){.pullquote.side .pq-share{left:18px}}
+@media (hover:none),(pointer:coarse){
+  .pq-share{opacity:1;height:44px;padding-top:0}
+  /* the always-there button gets its own room: the quote's usual space stays below it */
+  .pullquote:has(> .pq-share){margin-bottom:92px}
+}
+@media (max-width:600px) and (hover:none),(max-width:600px) and (pointer:coarse){.pullquote:has(> .pq-share){margin-bottom:84px}}
+
+/* ================= 6. Heading anchors ================= */
+/* desktop: in the gutter left of the §, revealed on hover/focus; touch: top-right of the heading, always there.
+   reader.js puts the heading and its link side by side in .h3-wrap (the link is not part of the heading) */
+.h3-wrap{position:relative;max-width:680px}
+.h3-anchor{
+  position:absolute;left:-40px;top:5px;
+  display:flex;align-items:center;justify-content:center;width:26px;height:26px;
+  color:var(--muted);opacity:0;transition:opacity .2s,color .2s;
+}
+.h3-anchor svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.h3-anchor::after{content:"";position:absolute;inset:-9px}
+.h3-wrap:hover .h3-anchor,.h3-anchor:focus-visible{opacity:1}
+.h3-anchor:hover{color:var(--accent-text,var(--accent))}
+/* touch, where it is always shown: it follows the heading's wipe-in, no lone icon before the words */
+@media (prefers-reduced-motion:no-preference) and (hover:none),(prefers-reduced-motion:no-preference) and (pointer:coarse){
+  .h3-wrap:has(> h3.fx) .h3-anchor{transition:opacity .3s .5s,color .2s}
+  .h3-wrap:has(> h3.fx:not(.show)) .h3-anchor{opacity:0;transition:none}
+}
+@media (max-width:980px),(hover:none),(pointer:coarse){
+  .h3-wrap>h3{padding-right:40px}
+  .h3-anchor{left:auto;right:-9px;top:-4px;width:44px;height:44px;opacity:1}
+  .h3-anchor::after{display:none}
+}
+/* a narrow window with a mouse: at the right edge, but still revealed on hover/focus */
+@media (max-width:980px) and (hover:hover) and (pointer:fine){
+  .h3-anchor{opacity:0}
+  .h3-wrap:hover .h3-anchor,.h3-anchor:focus-visible{opacity:1}
+}
+.chapter-body h3[id],.pullquote[id]{scroll-margin-top:110px}
+@media (max-width:780px){.chapter-body h3[id],.pullquote[id]{scroll-margin-top:96px}}
+.rd-flash{animation:rd-flash 2.2s var(--ease-io,ease)}
+@keyframes rd-flash{0%,35%{background-color:var(--highlight)}100%{background-color:transparent}}
+.chapter[tabindex="-1"]:focus,.intro[tabindex="-1"]:focus,.letter[tabindex="-1"]:focus,
+.toolstack[tabindex="-1"]:focus,.portfolio[tabindex="-1"]:focus,.manifesto[tabindex="-1"]:focus{outline:none}
+
+/* ================= 7. Reference popover ================= */
+.rd-pop{
+  position:absolute;z-index:45;top:0;left:0;
+  width:min(350px,90vw);
+  padding:14px 16px 12px 18px;
+  background:var(--paper);color:var(--ink);
+  border:1px solid var(--ink);border-left:3px solid var(--accent);
+  box-shadow:var(--rd-shadow);
+  font-family:'Fraunces',Georgia,serif;font-style:normal;text-align:left;
+  opacity:0;transform:translateY(4px);
+  transition:opacity .18s,transform .3s var(--ease-out,ease);
+}
+.rd-pop[hidden]{display:none}
+.rd-pop.is-above{transform:translateY(-4px)}
+.rd-pop.is-in{opacity:1;transform:none}
+.rd-pop-k{margin:0 0 8px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;line-height:1.4;color:var(--accent-text,var(--accent))}
+.rd-pop-t{margin:0;font-size:16px;font-weight:500;line-height:1.35;letter-spacing:-.005em;color:var(--ink)}
+.rd-pop-d{margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink-soft)}
+.rd-pop-f{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:12px 0 0;padding-top:10px;border-top:1px dotted var(--rd-rule2);
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;line-height:1.3;
+  color:var(--muted);
+}
+.rd-pop-host{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:none;letter-spacing:.04em}
+.rd-pop-host b{font-weight:500;color:var(--ink-soft)}
+.rd-pop-go{flex:none;padding:4px 0;color:var(--ink);border-bottom:1px solid currentColor;white-space:nowrap}
+.rd-pop-go:hover{color:var(--accent-text,var(--accent))}
+@media (hover:none),(pointer:coarse){.rd-pop-go{display:inline-flex;align-items:center;min-height:44px;padding:0;margin:-12px 0 -12px;border-bottom:0;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}}
+
+/* ================= 9c. Mode malam: one flat crossfade ================= */
+/* the page-navigation transition in site.css slides the new page up and morphs named groups
+   (masthead, covers); a theme change is the same page, so it simply dissolves as one image */
+html.rd-theming .masthead,html.rd-theming .hero-stage,html.rd-theming .issue-cover,
+html.rd-theming .shelf-cover,html.rd-theming .issues-next-item .cover{view-transition-name:none}
+html.rd-theming::view-transition-group(root){animation-duration:.32s}
+html.rd-theming::view-transition-old(root){animation:.32s var(--ease-io,ease) both rd-xfade-out}
+html.rd-theming::view-transition-new(root){animation:.32s var(--ease-io,ease) both rd-xfade-in}
+html.rd-theming .masthead,html.rd-theming .masthead *{transition:none !important}   /* no second, slower fade inside it */
+@keyframes rd-xfade-out{to{opacity:0}}
+@keyframes rd-xfade-in{from{opacity:0}}
+
+/* ================= reduced motion: everything above is static or instant ================= */
+@media (prefers-reduced-motion:reduce){
+  .rd-rail,.rd-rail.is-on,.rd-pill,.rd-pill.is-on,.rd-sheet-bg,.rd-sheet-panel,.rd-toast,.rd-toasts,.rd-pop,.rd-it>a::after,.rd-theme-dot{transition:none}
+  .rd-rail{transform:none}
+  .rd-pill{transform:translate(-50%,0)}
+  .rd-toast,.rd-pop,.rd-pop.is-above{transform:none}
+  .rd-flash{animation:none;outline:2px solid var(--accent);outline-offset:6px}
+}
+@media (forced-colors:active){
+  .rd-it>a::before,.rd-readstate-bar::after{background:Highlight}
+  .rd-pill,.rd-pop,.rd-toast{border:1px solid CanvasText}
+}
+
+/* ================= print: the essay on paper, without the reader's tools (and always light) ================= */
+@media print{
+  .rd-rail,.rd-pill,.rd-sheet,.rd-toasts,.rd-pop,.rd-theme,.pq-share,.h3-anchor,.rd-readstate{display:none !important}
+  .js .masthead.is-tucked{translate:none}
+}
+
+/* ===================================================================
+   9b. Low-light reading mode — html[data-theme="dark"].
+   A warm, paper-at-night palette (brown-black, not blue-black). Tokens
+   are redefined on html and body (.issue-0N sets the accent in site.css,
+   so the issue selectors repeat here); the few hard-coded colours in
+   site.css are overridden section by section below. Screen only: a
+   printout is always the light paper edition.
+   =================================================================== */
+@media screen{
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="dark"],html[data-theme="dark"] body{
+  --bg:#1b1814;--bg-alt:#221e19;--paper:#26221c;
+  --ink:#ece4d5;--ink-soft:#d2c9b8;--muted:#a0978a;--rule:#ece4d5;
+  --highlight:#56461b;
+  --accent:#e07a5f;--accent-text:#ee9b80;--accent-soft:#e8a87c;
+  --rd-rule:rgba(236,228,213,.16);--rd-rule2:rgba(236,228,213,.26);
+  --rd-shadow:0 16px 34px -20px rgba(0,0,0,.7);
+  --rd-scrim:rgba(8,7,5,.6);
+  --rd-deep:#110f0c;
+  --rd-line:rgba(236,228,213,.34);         /* section rules: the ink hairlines, softened */
+}
+html[data-theme="dark"] .issue-01{--accent:#e07a5f;--accent-text:#ee9b80;--accent-soft:#e8a87c}
+html[data-theme="dark"] .issue-02{--accent:#8aa4ea;--accent-text:#a6baf1;--accent-soft:#b4c6f3}
+html[data-theme="dark"] ::selection{background:color-mix(in srgb,var(--accent) 42%,transparent);color:var(--ink)}
+/* paper grain: light specks instead of dark ones */
+html[data-theme="dark"] body::before{
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,250,240,.016) 1px,transparent 1px),radial-gradient(circle at 80% 70%,rgba(255,250,240,.02) 1px,transparent 1px);
+}
+/* hairlines between sections and inside lists: warm and softened, the 2px rules stay full ink */
+html[data-theme="dark"] .hero,html[data-theme="dark"] .intro,html[data-theme="dark"] .chapter,html[data-theme="dark"] .portfolio,
+html[data-theme="dark"] .manifesto,html[data-theme="dark"] .letter,html[data-theme="dark"] .issues-next,html[data-theme="dark"] .issue-flag,
+html[data-theme="dark"] .page-archive .archive{border-bottom-color:var(--rd-line)}
+html[data-theme="dark"] .refs ol li{border-bottom-color:rgba(236,228,213,.13)}
+html[data-theme="dark"] ul.notes li{border-bottom-color:rgba(236,228,213,.22)}
+html[data-theme="dark"] .sig-cap{border-top-color:rgba(236,228,213,.16)}
+html[data-theme="dark"] .sig{border-top-color:var(--rd-line)}
+/* inline references keep their accent underline; the hover fill reads on the night ground */
+html[data-theme="dark"] a.ref:hover,html[data-theme="dark"] a.xref:hover{color:var(--accent-text)}
+/* the stack stays the dark rhythm break: a deeper band, cards in the same ground */
+html[data-theme="dark"] .toolstack{background:var(--rd-deep);color:var(--ink);border-top:1px solid rgba(236,228,213,.1);border-bottom-color:rgba(236,228,213,.1)}
+html[data-theme="dark"] .tool-card{background:var(--rd-deep);outline-color:rgba(236,228,213,.12)}
+html[data-theme="dark"] .tool-grid{border-color:rgba(236,228,213,.12)}
+html[data-theme="dark"] .tool-card:hover,html[data-theme="dark"] .tool-card:active{background:#1d1914}
+html[data-theme="dark"] .tool-card p{color:#c3bba9}
+/* work rows */
+html[data-theme="dark"] .project{border-bottom-color:var(--rd-line)}
+html[data-theme="dark"] .project-meta .meta-flag{border-color:rgba(255,255,255,.22)}
+html[data-theme="dark"] .project.spot{--spot:rgba(224,122,95,.08)}
+/* letter */
+html[data-theme="dark"] .contact-strip{border-color:var(--rd-line)}
+/* end of the issue and the archive */
+html[data-theme="dark"] .issues-next-item{border-bottom-color:var(--rd-line)}
+html[data-theme="dark"] .issues-next-item+.issues-next-item{border-left-color:var(--rd-line)}
+html[data-theme="dark"] .issues-next-item .cover,html[data-theme="dark"] .issue-cover,html[data-theme="dark"] .shelf-cover{border-color:rgba(236,228,213,.28)}
+html[data-theme="dark"] .shelf-item{border-top-color:var(--rd-line)}
+html[data-theme="dark"] .issue-featured{border-bottom-color:var(--rd-line)}
+html[data-theme="dark"] a.shelf-item:hover .shelf-cover{box-shadow:0 18px 40px -22px rgba(0,0,0,.8)}
+/* footer: the deepest band, like the stack */
+html[data-theme="dark"] footer{background:var(--rd-deep);color:var(--ink);border-top:1px solid rgba(236,228,213,.1)}
+html[data-theme="dark"] footer .colophon-block p{color:#c3bba9}
+html[data-theme="dark"] footer .footer-bottom{color:#978f80}
+/* masthead once scrolled: the night ground with a softened rule (over the hero it stays transparent) */
+html[data-theme="dark"] .masthead{border-bottom-color:rgba(236,228,213,.5)}
+html[data-theme="dark"].js .has-hero .masthead:not(.is-scrolled){border-bottom-color:transparent}
+html[data-theme="dark"] footer .footer-nav a{color:var(--ink)}
+html[data-theme="dark"] footer .footer-nav a:hover,html[data-theme="dark"] footer .footer-nav a:active{color:var(--accent-soft)}
+}
