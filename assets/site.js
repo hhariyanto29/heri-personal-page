@@ -269,7 +269,7 @@
 })();
 
 /* ===================== ThreeDPaper mount ===================== */
-// ThreeDPaper — vanilla port of src/shaders/3d-paper/ThreeDPaper.tsx (@designcodeio/threeui),
+// ThreeDPaper — vanilla port of ThreeDPaper.tsx from @designcodeio/threeui,
 // grown up for this site. Each `.three-d-paper` host shows a still poster of its sheet (a CSS
 // background) and mounts the live scene in an iframe while it is near the screen. The frame fades
 // in once the scene reports its first real frame, renders only while visible, follows the page
@@ -280,18 +280,9 @@
   // the .html URL; the local python server needs the extension.
   const LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
   const EXT = LOCAL ? '.html' : '';
-  const SOURCES = {
-    'original': '/src/shaders/3d-paper/sources/3d-paper',
-    'site-of-the-year': '/src/shaders/3d-paper/sources/3d-paper-site-of-the-year',
-    'japanese': '/src/shaders/3d-paper/sources/3d-paper-japanese',
-    'certificate': '/src/shaders/3d-paper/sources/3d-paper-certificate'
-  };
-  const TITLES = {
-    'original': '3D Paper',
-    'site-of-the-year': '3D Paper — Site of the Year',
-    'japanese': '3D Paper — 認定証',
-    'certificate': '3D Paper — Certificate'
-  };
+  // only the "original" sheet ships; the other ThreeUI variants were never used and were removed
+  const SOURCES = { 'original': '/src/shaders/3d-paper/sources/3d-paper' };
+  const TITLES = { 'original': '3D Paper' };
   const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // no WebGL (Lockdown Mode, GPU blocklist, disabled by policy): the poster stays; a host
